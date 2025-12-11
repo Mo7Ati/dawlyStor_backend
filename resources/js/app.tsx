@@ -6,7 +6,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import './i18n';
-import { PanelType } from './types/dashboard';
+import { PanelType } from '@/types';
 import { changeLanguage } from 'i18next';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -27,9 +27,9 @@ createInertiaApp({
         document.documentElement.setAttribute('dir', currentLocale === 'ar' ? 'rtl' : 'ltr');
 
         root.render(
-            <StrictMode>
                 <App {...props} />
-            </StrictMode>,
+            // <StrictMode>
+            // </StrictMode>,
         );
     },
     progress: {
