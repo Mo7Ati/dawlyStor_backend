@@ -28,4 +28,17 @@ class Admin extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query) use ($search) {
+            $query->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+        });
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }

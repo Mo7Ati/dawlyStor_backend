@@ -1,27 +1,23 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern'
 import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { Table, MoreHorizontal, MoreVertical, CheckCircle2, XCircle } from 'lucide-react';
-import React, { useMemo } from 'react'
+import { MoreHorizontal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ColumnDef } from "@tanstack/react-table"
 import { Admin, PaginatedResponse } from '@/types/dashboard';
-import { DataTable } from '@/components/data-table';
-
-import { Button } from "@/components/ui/button"
+import { DataTable } from '@/components/data-table/data-table';
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import { t } from 'i18next';
 import { Checkbox } from '@/components/ui/checkbox';
 
-
+import AdminsFilters from './components/admin-filters';
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 
 const columns: ColumnDef<Admin>[] = [
     {
@@ -62,7 +58,9 @@ const columns: ColumnDef<Admin>[] = [
     },
     {
         accessorKey: "created_at",
-        header: "Created At",
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="Created At" />
+        ),
     },
     {
         id: "actions",
@@ -94,6 +92,8 @@ const columns: ColumnDef<Admin>[] = [
 const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
     const { t } = useTranslation('tables');
 
+    console.log(admins);
+
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('admins.title'),
@@ -110,22 +110,13 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
                     columns={columns}
                     data={admins.data}
                     meta={admins.meta}
-                    links={admins.links}
-                    columnFilters={[
-                        {
-                            id: "is_active",
-                            type: "checkbox",
-                            label: "Status",
-                            options: [
-                                { value: "1", label: "Active" },
-                                { value: "0", label: "Inactive" },
-                            ],
-                        }
-                    ]}
+                    filters={<AdminsFilters />}
                 />
             </div>
         </AppLayout>
     )
 }
+
+
 
 export default AdminsIndex

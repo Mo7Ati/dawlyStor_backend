@@ -2,12 +2,11 @@ import admins from '@/routes/admin/admins';
 import { Input } from '@/components/ui/input'
 import { router } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react'
-import { SearchIcon } from 'lucide-react';
 
 const SearchInput = () => {
     const url = new URL(window.location.href);
     const firstRender = useRef(true);
-    const [search, setSearch] = useState(url.searchParams.get('search') || '');
+    const [search, setSearch] = useState(url.searchParams.get('tableSearch') || '');
 
     useEffect(() => {
         if (firstRender.current) {
@@ -16,8 +15,14 @@ const SearchInput = () => {
         }
 
         const timeout = setTimeout(() => {
-            router.get(admins.index.url(),
-                { search, page: 1 },
+            router.get(
+                admins.index({
+                    mergeQuery: {
+                        tableSearch: search || undefined,
+                        page: 1,
+                    },
+                }).url,
+                {},
                 {
                     preserveState: true,
                     preserveScroll: true,
@@ -32,6 +37,7 @@ const SearchInput = () => {
     return (
         <>
             <Input
+                name="tableSearch"
                 type="text"
                 value={search}
                 placeholder="Search admins..."
@@ -41,4 +47,4 @@ const SearchInput = () => {
     )
 }
 
-export default SearchInput
+export default SearchInput;

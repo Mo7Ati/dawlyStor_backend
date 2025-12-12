@@ -29,7 +29,14 @@ export interface MetaType {
         active: boolean;
     }[];
     path: string;
-    per_page: number;
+    per_page: string;
     to: number;
     total: number;
+}
+
+export interface ColumnFilter {
+    id: string
+    label: string
+    type: "radio" | "checkbox" | "select" | "input"
+    options: { value: string; label: string }[]
 }

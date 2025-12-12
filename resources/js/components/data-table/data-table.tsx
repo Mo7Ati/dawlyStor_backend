@@ -22,42 +22,26 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { MetaType } from "@/types/dashboard"
-import { DataTablePagination } from "./ui/pagination"
 import { useState } from "react"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import { Link } from "@inertiajs/react"
-import SearchInput from "./search-input"
-import Filters from "./filters"
-
-interface PaginationLinks {
-    first: string | null
-    last: string | null
-    next: string | null
-    prev: string | null
-}
-
-export interface ColumnFilter {
-    id: string
-    label: string
-    type: "radio" | "checkbox" | "select" | "input"
-    options: { value: string; label: string }[]
-}
+import { MetaType } from "@/types/dashboard"
+import DataTablePagination from "./data-table-pagination"
+import SearchInput from "../search-input"
+import DataTableFilters from "./data-table-filters"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     meta?: MetaType
-    links?: PaginationLinks | PaginationLinks[]
-    columnFilters?: ColumnFilter[]
+    filters?: React.ReactNode
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     meta,
-    links,
-    columnFilters,
+    filters,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -65,9 +49,10 @@ export function DataTable<TData, TValue>({
     const table = useReactTable({
         data,
         columns,
-        manualPagination: true,
         pageCount: meta?.last_page ?? 1,
+        manualPagination: true,
         manualFiltering: true,
+        manualSorting: true,
         state: {
             rowSelection,
             columnVisibility,
@@ -80,9 +65,9 @@ export function DataTable<TData, TValue>({
     return (
         <div className="space-y-4">
             <div className="flex justify-between">
-                <div className="flex gap-2">
-                    {/* <SearchInput /> */}
-                    {columnFilters && columnFilters.length > 0 && <Filters columnFilters={columnFilters} />}
+                <div className="flex items-center  gap-2">
+                    <SearchInput  />
+                    {filters}
                 </div>
                 <div className="flex gap-2">
                     <DropdownMenu>
@@ -165,12 +150,13 @@ export function DataTable<TData, TValue>({
                 </Table>
             </div>
 
-            <div className="text-muted-foreground flex-1 text-sm">
+            {/* <div className="text-muted-foreground flex-1 text-sm">
                 {table.getFilteredSelectedRowModel().rows.length} of{" "}
                 {table.getFilteredRowModel().rows.length} row(s) selected.
             </div>
+            */}
 
-            <DataTablePagination meta={meta} links={links} />
+            {meta && <DataTablePagination meta={meta} table={table} />}
         </div>
     )
 }
