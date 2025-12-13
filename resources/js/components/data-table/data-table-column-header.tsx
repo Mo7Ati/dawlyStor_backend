@@ -13,16 +13,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import admins from "@/routes/admin/admins"
 import { useState } from "react"
+import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder"
 
 interface Props<TData, TValue> {
     column: Column<TData, TValue>
     title: string
+    indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get">
     className?: string
 }
 
 export function DataTableColumnHeader<TData, TValue>({
     column,
     title,
+    indexRoute,
     className,
 }: Props<TData, TValue> & React.HTMLAttributes<HTMLDivElement>) {
     const columnName = column.id;
@@ -36,7 +39,7 @@ export function DataTableColumnHeader<TData, TValue>({
         setDirection(direction);
         setSort(columnName);
 
-        const url = admins.index({
+        const url = indexRoute({
             mergeQuery: {
                 direction,
                 sort: direction ? columnName : undefined,

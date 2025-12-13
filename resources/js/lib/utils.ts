@@ -1,7 +1,7 @@
 import { NavItem, PanelType } from '@/types';
 import { InertiaLinkProps } from '@inertiajs/react';
 import { type ClassValue, clsx } from 'clsx';
-import { LayoutGrid, Users } from 'lucide-react';
+import { LayoutGrid, Shield, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
@@ -41,6 +41,12 @@ export function getAdminPanelNavItems(): NavItem[] {
             href: '/admin/admins',
             icon: Users,
             isActive: isSameUrl('/admin/admins', window.location.pathname),
+        },
+        {
+            title: t('nav_labels.roles'),
+            href: '/admin/roles',
+            icon: Shield,
+            isActive: isSameUrl('/admin/roles', window.location.pathname),
         },
     ];
 }

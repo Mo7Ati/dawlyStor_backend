@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Http\Request;
 require_once __DIR__ . '/../app/Helpers/functions.php';
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -25,7 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        $middleware->redirectUsersTo(fn(Request $request) => route(getPanel() . '.dashboard'));
+        $middleware->redirectUsersTo(function (Request $request) {
+            return route(getPanel() . '.index');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

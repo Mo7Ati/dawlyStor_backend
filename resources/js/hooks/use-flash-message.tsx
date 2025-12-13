@@ -8,6 +8,7 @@ const useFlashMessagesHook = () => {
 
     useEffect(() => {
         if (flash?.success) {
+            console.log(flash.success);
             toast.success(flash.success);
         }
         if (flash?.error) {

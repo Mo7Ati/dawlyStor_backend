@@ -131,6 +131,15 @@ return [
     'ulid' => 'يجب أن يكون :attribute ULID صالحًا.',
     'uuid' => 'يجب أن يكون :attribute UUID صالحًا.',
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => 'الاسم',
+        'email' => 'البريد الإلكتروني',
+        'password' => 'كلمة المرور',
+        'is_active' => 'الحالة',
+        'created_at' => 'تاريخ الإنشاء',
+        'updated_at' => 'تاريخ التحديث',
+        'deleted_at' => 'تاريخ الحذف',
+        'id' => 'المعرف',
+    ],
 
 ];

@@ -14,6 +14,7 @@ export default function AppLayout({ children, breadcrumbs, ...props }: AppLayout
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
             {children}
+            <Toaster position="top-center" />
         </AppLayoutTemplate>
     );
 }

@@ -11,8 +11,7 @@ use Spatie\Translatable\HasTranslations;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 class Admin extends Authenticatable
 {
-    use HasFactory, Notifiable, HasTranslations, TwoFactorAuthenticatable;//, HasRoles, ;
-
+    use HasFactory, Notifiable, HasTranslations, HasRoles, TwoFactorAuthenticatable;
     protected $guard = ['admin'];
     protected $fillable = [
         'name',

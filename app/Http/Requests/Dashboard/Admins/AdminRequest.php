@@ -39,6 +39,7 @@ class AdminRequest extends FormRequest
                 'min:8',
             ],
             'is_active' => 'required|boolean',
+            'roles' => 'nullable|array',
         ];
     }
 
@@ -61,6 +62,8 @@ class AdminRequest extends FormRequest
             'password.min' => __('validation.min', ['attribute' => $attributes['password'], 'min' => 8]),
 
             'is_active.boolean' => __('validation.boolean', ['attribute' => $attributes['is_active']]),
+
+            'roles.array' => __('validation.array', ['attribute' => $attributes['roles']]),
         ];
     }
 
@@ -71,6 +74,7 @@ class AdminRequest extends FormRequest
             'email' => __('validation.attributes.email'),
             'password' => __('validation.attributes.password'),
             'is_active' => __('validation.attributes.is_active'),
+            'roles' => __('validation.attributes.roles'),
         ];
     }
 }

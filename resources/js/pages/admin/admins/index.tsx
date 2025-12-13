@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem, SharedData } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
-import { BadgeCheckIcon, CheckCircleIcon, DeleteIcon, MoreHorizontal, PencilIcon, XCircleIcon } from 'lucide-react';
+import { MoreHorizontal, PencilIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ColumnDef } from "@tanstack/react-table"
 import { Admin, PaginatedResponse } from '@/types/dashboard';
@@ -11,7 +11,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { t } from 'i18next';
@@ -20,8 +19,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import AdminsFilters from './components/admin-filters';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import adminRoutes from '@/routes/admin/admins';
-import admins from '@/routes/admin/admins';
 import { Badge } from '@/components/ui/badge';
+import DeleteAction from '@/components/delete-action';
+import admins from '@/routes/admin/admins';
+
 
 const columns: ColumnDef<Admin>[] = [
     {
@@ -71,7 +72,7 @@ const columns: ColumnDef<Admin>[] = [
     {
         accessorKey: "created_at",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Created At" />
+            <DataTableColumnHeader column={column} title="Created At" indexRoute={admins.index} />
         ),
     },
     {
@@ -91,9 +92,7 @@ const columns: ColumnDef<Admin>[] = [
                             <PencilIcon className="h-4 w-4" /> {t('Edit')}
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={() => router.delete(adminRoutes.destroy({ admin: admin.id }).url)}>
-                            <DeleteIcon className="h-4 w-4" /> {t('Delete')}
-                        </DropdownMenuItem>
+                        <DeleteAction onDelete={() => router.delete(adminRoutes.destroy.url({ admin: admin.id }))} />
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
@@ -111,9 +110,6 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
         },
     ];
 
-    const { flash } = usePage<SharedData>().props;
-    console.log(flash);
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={t('admins.title')} />
@@ -123,8 +119,9 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
                     data={admins.data}
                     meta={admins.meta}
                     filters={<AdminsFilters />}
-                    onRowClick={(admin) => router.visit(adminRoutes.edit({ admin: admin.id }))}
+                    onRowClick={(admin) => router.visit(adminRoutes.edit({ admin: admin.id }), { preserveState: true, preserveScroll: true })}
                     createHref={adminRoutes.create.url()}
+                    indexRoute={adminRoutes.index}
                     showCreateButton={true}
                 />
             </div>

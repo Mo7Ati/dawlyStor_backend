@@ -1,12 +1,4 @@
-export type Admin = {
-    id: number | string;
-    name: string;
-    email: string;
-    password: string;
-    is_active: boolean;
-    created_at: string;
-    updated_at: string;
-}
+
 export interface PaginatedResponse<T> {
     data: T[];
     links: {
@@ -39,4 +31,34 @@ export interface ColumnFilter {
     label: string
     type: "radio" | "checkbox" | "select" | "input"
     options: { value: string; label: string }[]
+}
+
+export type Admin = {
+    id: number | string;
+    name: string;
+    email: string;
+    password: string;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+    roles?: Role[];
+}
+
+export type Role = {
+    id: number | string;
+    name: string;
+    guard_name: string;
+    permissions?: Permission[];
+    permissions_count: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export type GroupedPermissions = {
+    [key: string]: Permission[];
+}
+
+export type Permission = {
+    id: number | string;
+    name: string
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\dashboard\admin\AdminController;
+use App\Http\Controllers\dashboard\admin\RoleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,5 +19,6 @@ Route::middleware(['auth:admin'])
         Route::get('/', fn() => Inertia::render('admin/dashboard'))->name('index');
         Route::resources([
             'admins' => AdminController::class,
+            'roles' => RoleController::class,
         ]);
     });

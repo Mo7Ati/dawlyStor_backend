@@ -19,11 +19,11 @@ import {
 import admins from "@/routes/admin/admins";
 
 import { MetaType } from "@/types/dashboard";
+import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder";
 import { router } from "@inertiajs/react";
-import { Table } from "@tanstack/react-table";
 import { useState } from "react";
 
-export default function DataTablePagination({ meta, table }: { meta: MetaType, table: Table<any> }) {
+export default function DataTablePagination({ meta, indexRoute }: { meta: MetaType, indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get"> }) {
     const [perPage, setPerPage] = useState<string>(meta.per_page || '10');
     const { links } = meta;
 
@@ -44,7 +44,7 @@ export default function DataTablePagination({ meta, table }: { meta: MetaType, t
     };
 
     const handlePageSizeChange = (value: string) => {
-        router.get(admins.index({
+        router.get(indexRoute({
             mergeQuery: {
                 per_page: value,
                 page: 1,
@@ -150,8 +150,3 @@ export default function DataTablePagination({ meta, table }: { meta: MetaType, t
         </Pagination>
     )
 }
-
-
-{/* <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-    Page {meta.current_page} of {meta.last_page}
-</div> */}

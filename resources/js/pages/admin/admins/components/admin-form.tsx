@@ -7,51 +7,52 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { Admin } from '@/types/dashboard'
+import { Admin, Role } from '@/types/dashboard'
 import adminRoutes from '@/routes/admin/admins'
 import IsActive from '@/components/form/is-active'
 import FormInput from '@/components/form/form-input'
 import FormButtons from '@/components/form/form-buttons'
-import { toast } from 'sonner'
+import RoleAssignmentCard from './role-assignment-card'
 
 interface AdminFormProps {
-    admin?: Admin | null
+    admin: Admin
+    roles: Role[]
+    type: 'create' | 'edit'
 }
 
-export default function AdminForm({ admin }: AdminFormProps) {
-    const isEditMode = !!admin
+export default function AdminForm({ admin, roles, type }: AdminFormProps) {
     return (
-        <Card className=" max-w-2xl">
-            <CardHeader>
-                <CardTitle>
-                    {isEditMode ? 'Edit Admin' : 'Create Admin'}
-                </CardTitle>
-                <CardDescription>
-                    {isEditMode
-                        ? 'Update the admin information below.'
-                        : 'Fill in the information to create a new admin.'}
-                </CardDescription>
-            </CardHeader>
+        <Form
+            method={type === 'edit' ? 'put' : 'post'}
+            action={
+                (type === 'edit' && admin.id)
+                    ? adminRoutes.update.url({ admin: admin.id })
+                    : adminRoutes.store.url()
+            }
+            className="space-y-6"
+        >
+            {({ processing, errors }) => (
+                <div className="flex w-full gap-4">
+                    <Card className=" max-w-2xl flex-1">
+                        <CardHeader>
+                            <CardTitle>
+                                {type === 'edit' ? 'Edit Admin' : 'Create Admin'}
+                            </CardTitle>
+                            <CardDescription>
+                                {type === 'edit'
+                                    ? 'Update the admin information below.'
+                                    : 'Fill in the information to create a new admin.'}
+                            </CardDescription>
+                        </CardHeader>
 
-            <CardContent>
-                <Form
-                    method={isEditMode ? 'put' : 'post'}
-                    action={
-                        isEditMode && admin
-                            ? adminRoutes.update.url({ admin: admin.id })
-                            : adminRoutes.store.url()
-                    }
-                    className="space-y-6"
-                >
-                    {({ processing, errors }) => (
-                        <>
+                        <CardContent className="space-y-6">
                             <FormInput
                                 name="name"
                                 label="Name"
                                 type="text"
                                 required={true}
                                 placeholder="Enter admin name"
-                                defaultValue={admin?.name ?? ''}
+                                defaultValue={admin.name}
                                 error={errors.name}
                             />
 
@@ -61,7 +62,7 @@ export default function AdminForm({ admin }: AdminFormProps) {
                                 type="email"
                                 required={true}
                                 placeholder="Enter email address"
-                                defaultValue={admin?.email ?? ''}
+                                defaultValue={admin.email}
                                 error={errors.email}
                             />
 
@@ -69,27 +70,54 @@ export default function AdminForm({ admin }: AdminFormProps) {
                                 name="password"
                                 label="Password"
                                 type="password"
-                                required={!isEditMode}
-                                placeholder={isEditMode ? 'Enter new password (optional)' : 'Enter password (min. 8 characters)'}
-                                hint={isEditMode ? 'Leave blank to keep current' : ''}
-                                defaultValue={admin?.password ?? ''}
+                                required={type === 'create'}
+                                placeholder={type === 'create' ? 'Enter password (min. 8 characters)' : 'Enter new password (optional)'}
+                                hint={type === 'create' ? '' : 'Leave blank to keep current'}
                                 error={errors.password}
                             />
 
-                            <IsActive value={admin?.is_active ?? true} />
+                            <IsActive value={admin.is_active ?? true} />
+                        </CardContent>
 
-                            <CardFooter className="flex justify-end gap-2">
-                                <FormButtons
-                                    processing={processing}
-                                    handleCancel={() => router.visit(adminRoutes.index.url())}
-                                    isEditMode={isEditMode}
-                                />
-                            </CardFooter>
-                        </>
-                    )}
-                </Form>
-            </CardContent>
-        </Card>
+                        <CardFooter className="flex justify-end gap-2">
+                            <FormButtons
+                                processing={processing}
+                                handleCancel={() => router.visit(adminRoutes.index.url())}
+                                isEditMode={type === 'edit'}
+                            />
+                        </CardFooter>
+                    </Card>
+
+
+                    <RoleAssignmentCard
+                        roles={roles}
+                        selectedRoleNames={
+                            admin.roles
+                                ? (() => {
+                                    // Check if roles is an array of IDs (numbers/strings) or Role objects
+                                    if (admin.roles.length === 0) return [];
+                                    const firstItem = admin.roles[0];
+                                    if (typeof firstItem === 'object' && firstItem !== null && 'name' in firstItem) {
+                                        // It's an array of Role objects
+                                        return (admin.roles as Role[]).map((role) => role.name);
+                                    } else {
+                                        // It's an array of IDs (AdminResource returns IDs, not Role objects)
+                                        return (admin.roles as unknown as (number | string)[])
+                                            .map((roleId) => {
+                                                const role = roles.find((r) => r.id === roleId || r.id === String(roleId));
+                                                return role?.name;
+                                            })
+                                            .filter((name): name is string => Boolean(name));
+                                    }
+                                })()
+                                : []
+                        }
+                        errors={errors}
+                    />
+                </div>
+
+            )}
+        </Form>
     )
 }
 

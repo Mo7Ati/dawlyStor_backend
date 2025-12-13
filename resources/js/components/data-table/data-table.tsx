@@ -31,15 +31,17 @@ import DataTablePagination from "./data-table-pagination"
 import SearchInput from "../search-input"
 import { Button } from "../ui/button"
 import { Plus, Pointer, Settings2 } from "lucide-react"
+import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder"
 
 interface DataTableProps<TData extends { id: number | string }, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     meta?: MetaType
     filters?: React.ReactNode
-    onRowClick?: (row: TData) => void
-    createHref?: string
     showCreateButton?: boolean
+    createHref?: string
+    onRowClick?: (row: TData) => void
+    indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get">
 }
 
 export function DataTable<TData extends { id: number | string }, TValue>({
@@ -49,6 +51,7 @@ export function DataTable<TData extends { id: number | string }, TValue>({
     filters,
     onRowClick,
     createHref,
+    indexRoute,
     showCreateButton = false,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = useState({});
@@ -74,7 +77,7 @@ export function DataTable<TData extends { id: number | string }, TValue>({
         <div className="space-y-4">
             <div className="flex justify-between">
                 <div className="flex items-center  gap-2">
-                    <SearchInput />
+                    <SearchInput indexRoute={indexRoute} />
                     {filters}
                 </div>
                 <div className="flex gap-2">
@@ -172,7 +175,7 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                 </Table>
             </div>
 
-            {meta && <DataTablePagination meta={meta} table={table} />}
+            {meta && <DataTablePagination meta={meta} indexRoute={indexRoute} />}
         </div>
     )
 }
