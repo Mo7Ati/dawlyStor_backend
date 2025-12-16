@@ -22,29 +22,19 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        dd($this->all());
         $id = $this->route('store');
-
         return [
-            'name' => 'required|array',
-            'name.*' => 'required|string|max:255',
-            'address' => 'required|array',
-            'address.*' => 'required|string',
-            'description' => 'nullable|array',
-            'description.*' => 'nullable|string',
+            'name' => ['required', 'array'],
+            'name.*' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'array'],
+            'address.*' => ['required', 'string'],
+            'description' => ['nullable', 'array'],
+            'description.*' => ['nullable', 'string'],
             'keywords' => 'nullable|array',
-            'keywords.*' => 'nullable|string',
-            'social_media' => 'nullable|array',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('stores', 'email')->ignore($id),
-            ],
-            'phone' => [
-                'required',
-                'string',
-                Rule::unique('stores', 'phone')->ignore($id),
-            ],
+            'keywords.*' => ['nullable', 'string'],
+            'social_media' => ['nullable', 'array'],
+            'email' => ['required', 'email', Rule::unique('stores', 'email')->ignore($id)],
+            'phone' => ['required', 'string', Rule::unique('stores', 'phone')->ignore($id)],
             'password' => [
                 $id ? 'nullable' : 'required',
                 'string',

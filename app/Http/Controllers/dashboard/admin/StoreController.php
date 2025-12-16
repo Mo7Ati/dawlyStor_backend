@@ -53,7 +53,6 @@ class StoreController extends Controller
     public function edit($id)
     {
         $store = Store::with('category')->findOrFail($id);
-
         return Inertia::render('admin/stores/edit', [
             'store' => $store,
             'categories' => StoreCategoryResource::collection(StoreCategory::all()),
@@ -62,8 +61,8 @@ class StoreController extends Controller
 
     public function update($id, StoreRequest $request)
     {
-        $store = Store::findOrFail($id);
         $validated = $request->validated();
+        $store = Store::findOrFail($id);
 
         $store->update($validated);
 

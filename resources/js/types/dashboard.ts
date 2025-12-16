@@ -65,7 +65,7 @@ export type Permission = {
 
 export type StoreCategory = {
     id: number | string;
-    name: Record<string, string> | string;
+    name: Record<Locale, string> | string;
     description?: Record<string, string> | string;
 }
 
@@ -88,4 +88,26 @@ export type Store = {
     created_at?: string;
     updated_at?: string;
     category?: StoreCategory;
+}
+
+
+// delete late
+
+export interface LocaleData {
+    code: string;
+    label: string;
+}
+
+export interface Field {
+    name: string;
+    label: string;
+    type: 'text' | 'textarea';
+    value: Record<Locale, string>;
+    [key: string]: any;
+}
+
+export interface LocalizedData {
+    [fieldName: string]: {
+        [localeCode: string]: string;
+    };
 }

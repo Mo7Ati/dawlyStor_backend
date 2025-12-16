@@ -57,14 +57,14 @@ export function getAdminPanelNavItems(): NavItem[] {
     ];
 }
 
-export function normalizeFieldValue(value: string | Record<Locale, string> | undefined): Record < Locale, string > {
-    if(!value) {
+export function normalizeFieldValue(value: string | Record<Locale, string> | undefined): Record<Locale, string> {
+    if (!value) {
         return { en: '', ar: '' }
     }
 
-    if(typeof value === 'string') {
-    return { en: value, ar: value }
-}
+    if (typeof value === 'string') {
+        return { en: value, ar: value }
+    }
 
-return value
+    return value
 }
