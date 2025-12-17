@@ -24,6 +24,7 @@ class StoreResource extends JsonResource
             'is_active' => $this->is_active,
             'created_at' => $this->created_at?->format('Y-m-d'),
             'category' => new StoreCategoryResource($this->whenLoaded('category')),
+            'logo' => $this->getFirstMediaUrl('logo'),
         ];
     }
 

@@ -6,7 +6,7 @@ import StoreForm from './components/store-form'
 import stores from '@/routes/admin/stores'
 
 
-const StoresEdit = ({ store, categories }: { store: Store; categories: StoreCategory[] }) => {
+const StoresEdit = ({ store, categories, logo }: { store: Store; categories: StoreCategory[]; logo: string }) => {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Stores',
@@ -22,7 +22,7 @@ const StoresEdit = ({ store, categories }: { store: Store; categories: StoreCate
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Store" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <StoreForm store={store} categories={categories} type="edit" />
+                <StoreForm store={store} categories={categories} type="edit" logo={logo} />
             </div>
         </AppLayout>
     )

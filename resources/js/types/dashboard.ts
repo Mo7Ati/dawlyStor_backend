@@ -88,6 +88,7 @@ export type Store = {
     created_at?: string;
     updated_at?: string;
     category?: StoreCategory;
+    logo?: string;
 }
 
 

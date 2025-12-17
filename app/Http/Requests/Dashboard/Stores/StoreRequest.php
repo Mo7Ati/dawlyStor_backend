@@ -44,6 +44,7 @@ class StoreRequest extends FormRequest
             'delivery_time' => 'required|integer|min:1',
             // 'delivery_area_polygon' => 'nullable|array',
             'is_active' => 'nullable|boolean',
+            'logo_temp_id' => 'nullable|string',
         ];
     }
 

@@ -41,6 +41,16 @@ Route::get('language/{locale}', function ($locale) {
 });
 
 
+// API routes for temporary file uploads
+Route::prefix('api/temp-uploads')
+    ->name('api.temp-uploads.')
+    ->middleware(['web'])
+    ->group(function () {
+        Route::post('/', [App\Http\Controllers\Api\TempUploadController::class, 'store'])->name('store');
+        Route::delete('/', [App\Http\Controllers\Api\TempUploadController::class, 'revert'])->name('revert');
+        Route::get('/', [App\Http\Controllers\Api\TempUploadController::class, 'load'])->name('load');
+    });
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/dashboard/admin.php';
 require __DIR__ . '/dashboard/store.php';

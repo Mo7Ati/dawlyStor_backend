@@ -10,9 +10,9 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 
-class Store extends Authenticatable //implements HasMedia
+class Store extends Authenticatable implements HasMedia
 {
-    use HasFactory, HasTranslations, TwoFactorAuthenticatable; //, InteractsWithMedia;
+    use HasFactory, HasTranslations, TwoFactorAuthenticatable, InteractsWithMedia;
 
     protected $fillable = [
         'name',

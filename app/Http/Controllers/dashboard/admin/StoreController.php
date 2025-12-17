@@ -8,6 +8,7 @@ use App\Http\Resources\StoreCategoryResource;
 use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use App\Models\StoreCategory;
+use App\Models\TempMedia;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -44,18 +45,32 @@ class StoreController extends Controller
 
     public function store(StoreRequest $request)
     {
-        Store::create($request->validated());
+        $store = Store::create($request->validated());
 
-        return to_route('admin.stores.index')
-            ->with('success', __('messages.created_successfully'));
+        if ($request->input('logo_temp_id')) {
+            $tempMedia = TempMedia::findOrFail($request->input('logo_temp_id'))->getFirstMedia('temp');
+            $tempMedia->move($store, 'logo');
+        }
+
+        return to_route('admin.stores.index')->with('success', __('messages.created_successfully'));
+    }
+
+    public function show($id)
+    {
+        $store = Store::with(['category', 'media'])->findOrFail($id);
+        return Inertia::render('admin/stores/show', [
+            'store' => new StoreResource($store),
+            'categories' => StoreCategoryResource::collection(StoreCategory::all()),
+        ]);
     }
 
     public function edit($id)
     {
-        $store = Store::with('category')->findOrFail($id);
+        $store = Store::with(['category', 'media'])->findOrFail($id);
         return Inertia::render('admin/stores/edit', [
             'store' => $store,
             'categories' => StoreCategoryResource::collection(StoreCategory::all()),
+            'logo' => $store->getFirstMediaUrl('logo'),
         ]);
     }
 
@@ -63,6 +78,11 @@ class StoreController extends Controller
     {
         $validated = $request->validated();
         $store = Store::findOrFail($id);
+
+        if ($request->input('logo_temp_id')) {
+            $tempMedia = TempMedia::findOrFail($request->input('logo_temp_id'))->getFirstMedia('temp');
+            $tempMedia->move($store, 'logo');
+        }
 
         $store->update($validated);
 
