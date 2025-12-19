@@ -102,6 +102,37 @@ export type Store = {
     logo: Media[] | null;
 }
 
+export type Order = {
+    id: number | string;
+    status: string;
+    payment_status: string;
+    cancelled_reason?: string | null;
+    customer_id?: number | string | null;
+    customer_data?: Record<string, any> | null;
+    store_id?: number | string | null;
+    address_id?: number | string | null;
+    address_data?: Record<string, any> | null;
+    total: number;
+    total_items_amount: number;
+    delivery_amount: number;
+    tax_amount: number;
+    notes?: string | null;
+    created_at?: string;
+    updated_at?: string;
+    customer?: {
+        id: number | string;
+        name: string;
+        email: string;
+        phone_number: string;
+    } | null;
+    store?: Store | null;
+    address?: {
+        id: number | string;
+        name?: string;
+        location?: string;
+    } | null;
+}
+
 
 
 // delete late

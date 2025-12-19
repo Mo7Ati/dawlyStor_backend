@@ -13,6 +13,11 @@ class Address extends Model
         'fields',
     ];
 
+    protected $casts = [
+        'location' => 'array',
+        'fields' => 'array',
+    ];
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'status',
         'payment_status',
@@ -57,5 +59,23 @@ class Order extends Model
     public function address()
     {
         return $this->belongsTo(Address::class);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query) use ($search) {
+            $query->where('id', 'LIKE', "%{$search}%")
+                ->orWhere('status', 'LIKE', "%{$search}%")
+                ->orWhere('payment_status', 'LIKE', "%{$search}%")
+                ->orWhereHas('customer', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%")
+                        ->orWhere('phone_number', 'LIKE', "%{$search}%");
+                })
+                ->orWhereHas('store', function ($q) use ($search) {
+                    $q->where('email', 'LIKE', "%{$search}%")
+                        ->orWhere('phone', 'LIKE', "%{$search}%");
+                });
+        });
     }
 }
