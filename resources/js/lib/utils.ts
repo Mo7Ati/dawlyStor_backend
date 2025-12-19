@@ -1,7 +1,7 @@
 import { Locale, NavItem, PanelType } from '@/types';
 import { InertiaLinkProps } from '@inertiajs/react';
 import { type ClassValue, clsx } from 'clsx';
-import { LayoutGrid, Shield, Store, Users } from 'lucide-react';
+import { LayoutGrid, List, Shield, Store, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
@@ -53,6 +53,12 @@ export function getAdminPanelNavItems(): NavItem[] {
             href: '/admin/stores',
             icon: Store,
             isActive: isSameUrl('/admin/stores', window.location.pathname),
+        },
+        {
+            title: t('nav_labels.store_categories'),
+            href: '/admin/store-categories',
+            icon: List,
+            isActive: isSameUrl('/admin/store-categories', window.location.pathname),
         },
     ];
 }

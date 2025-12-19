@@ -26,4 +26,11 @@ class StoreCategory extends Model
         return $this->hasMany(Store::class, 'category_id', 'id');
     }
 
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($query) use ($search) {
+            $query->whereLike('name', "%$search%")
+                ->orWhereLike('description', "%$search%");
+        });
+    }
 }

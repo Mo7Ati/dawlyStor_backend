@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboard\admin\AdminController;
 use App\Http\Controllers\dashboard\admin\RoleController;
 use App\Http\Controllers\dashboard\admin\StoreController;
+use App\Http\Controllers\dashboard\admin\StoreCategoryController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,5 +23,6 @@ Route::middleware(['auth:admin'])
             'admins' => AdminController::class,
             'roles' => RoleController::class,
             'stores' => StoreController::class,
+            'store-categories' => StoreCategoryController::class,
         ]);
     });

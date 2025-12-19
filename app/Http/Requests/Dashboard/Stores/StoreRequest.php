@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests\Dashboard\Stores;
 
+use App\Models\Store;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class StoreRequest extends FormRequest
 {
@@ -45,7 +48,24 @@ class StoreRequest extends FormRequest
             'delivery_time' => 'required|integer|min:1',
             // 'delivery_area_polygon' => 'nullable|array',
             'is_active' => 'nullable|boolean',
-            'logo_temp_id' => 'nullable|string',
+            'temp_ids' => [
+                Rule::requiredIf(function () use ($id) {
+                    if ($id) {
+                        $store = Store::find($id);
+                        return !$store->getFirstMedia('logo');
+                    }
+                    return true;
+                }),
+                function (string $attribute, mixed $value, Closure $fail) use ($id) {
+                    if ($value) {
+                        $ids = explode(',', $value);
+                        $media = Media::whereIn('id', $ids)->get();
+                        if ($media->count() !== count($ids)) {
+                            $fail(__('validation.exists', ['attribute' => $attribute]));
+                        }
+                    }
+                },
+            ],
         ];
     }
 
@@ -93,6 +113,8 @@ class StoreRequest extends FormRequest
 
             'delivery_area_polygon.array' => __('validation.array', ['attribute' => $attributes['delivery_area_polygon']]),
 
+            'temp_ids.required' => __('validation.required', ['attribute' => $attributes['logo']]),
+
             'is_active.required' => __('validation.required', ['attribute' => $attributes['is_active']]),
             'is_active.boolean' => __('validation.boolean', ['attribute' => $attributes['is_active']]),
         ];
@@ -113,6 +135,7 @@ class StoreRequest extends FormRequest
             'delivery_time' => __('validation.attributes.delivery_time'),
             'delivery_area_polygon' => __('validation.attributes.delivery_area_polygon'),
             'is_active' => __('validation.attributes.is_active'),
+            'logo' => __('validation.attributes.logo'),
         ];
     }
 }

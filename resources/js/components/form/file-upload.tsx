@@ -1,16 +1,26 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FilePond, registerPlugin } from 'react-filepond'
 import 'filepond/dist/filepond.min.css'
+
+// Import FilePond plugins
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import FilePondPluginImageResize from 'filepond-plugin-image-resize'
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop'
+
+// Import FilePond styles
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+
+
 import { Label } from '@/components/ui/label'
 import InputError from '@/components/input-error'
 import { cn } from '@/lib/utils'
 
-// Register the plugins
-registerPlugin(FilePondPluginImagePreview, FilePondPluginImageResize, FilePondPluginImageCrop)
+// Register the plugins - must be called before using FilePond component
+registerPlugin(
+    FilePondPluginImagePreview,
+    FilePondPluginImageResize,
+    FilePondPluginImageCrop,
+)
 
 interface FileUploadProps {
     name: string
@@ -34,6 +44,7 @@ interface FileUploadProps {
     error?: string
     className?: string
     required?: boolean
+    aspectRatio?: string
 }
 
 const getCsrfToken = () => {
@@ -49,17 +60,14 @@ export default function FileUpload({
     acceptedFileTypes = ['image/*'],
     maxFiles = 10,
     maxFileSize = '10MB',
+    aspectRatio = '1:1',
     files: initialFiles = [],
     error,
     className,
     required = false,
 }: FileUploadProps) {
-    console.log(multiple);
-
     const [files, setFiles] = useState<any[]>(initialFiles);
     const [tempFileIds, setTempFileIds] = useState<string[]>([]);
-
-    console.log(files, tempFileIds);
 
     const handleProcessFile = useCallback((error: any, file: any) => {
         if (file.serverId) {
@@ -81,13 +89,12 @@ export default function FileUpload({
             )}
             <FilePond
                 name={name}
-                required={required}
                 files={files}
                 allowMultiple={multiple}
                 onprocessfile={handleProcessFile}
                 onupdatefiles={setFiles}
                 onremovefile={handleRemoveFile}
-                maxFiles={10}
+                maxFiles={maxFiles}
                 acceptedFileTypes={acceptedFileTypes}
                 server={{
                     url: '/api/temp-uploads',
@@ -118,7 +125,6 @@ export default function FileUpload({
                     },
 
                     load: (source, load, error) => {
-                        console.log(source)
                         fetch(`/api/temp-uploads/${source.split('/')[0]}/${source.split('/')[1]}`, {
                             method: 'GET',
                             headers: {
@@ -128,10 +134,9 @@ export default function FileUpload({
                         })
                             .then(response => {
                                 return response.blob()
-
                             })
                             .then(blob => {
-                                load(new Blob([blob], { type: 'image/jpeg' }))
+                                load(new Blob([blob], { type: blob.type }))
                             })
                             .catch(error => {
                                 console.error('File loading error:', error)
@@ -154,7 +159,6 @@ export default function FileUpload({
                                 return response.json()
                             })
                             .then(data => {
-                                console.log('File removed successfully', data)
                                 load();
                             })
                             .catch(error => {
@@ -178,14 +182,34 @@ export default function FileUpload({
                 labelButtonAbortItemProcessing='Cancel'
                 labelButtonUndoItemProcessing='Undo'
                 labelButtonProcessItem='Upload'
+
+                styleButtonRemoveItemPosition="right"
+                styleButtonProcessItemPosition="right"
+
+                // Enable image preview, resize, and crop
+                // Note: These plugins process images automatically on upload
+                // They don't show interactive edit buttons - images are processed according to settings below
+                allowImagePreview={true}
+                allowImageResize={true}
+                allowImageCrop={true}
+
+                // Image preview settings
                 imagePreviewHeight={200}
-                imageCropAspectRatio={"1"}
+                imagePreviewMinHeight={100}
+                imagePreviewMaxHeight={300}
+
+                // Image crop settings
+                // Leave imageCropAspectRatio undefined for free cropping
+                // Or set to "1:1", "16:9", etc. for fixed aspect ratio
+                imageCropAspectRatio={aspectRatio}
+
+                // Image resize settings
+                // Images will be resized to these dimensions before upload
                 imageResizeTargetWidth={1200}
                 imageResizeTargetHeight={1200}
                 imageResizeMode="contain"
-                // stylePanelLayout="integrated"
-                styleButtonRemoveItemPosition="right"
-                styleButtonProcessItemPosition="right"
+                imageResizeUpscale={false}
+
                 credits={false}
             />
 

@@ -122,7 +122,7 @@ export default function StoreForm({ store, categories, type }: StoreFormProps) {
 
 
                             <Card>
-                                <CardHeader>
+                            <CardHeader className='relative'>
                                     <CardTitle>Store Images</CardTitle>
                                     <CardDescription>
                                         Upload store logo and gallery images
@@ -132,7 +132,7 @@ export default function StoreForm({ store, categories, type }: StoreFormProps) {
                                     <FileUpload
                                         name="logo_temp_id"
                                         label="Store Logo"
-                                        multiple={true}
+                                        multiple={false}
                                         required
                                         acceptedFileTypes={['image/*']}
                                         maxFiles={1}
