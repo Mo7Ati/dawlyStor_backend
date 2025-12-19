@@ -1,12 +1,20 @@
 {
     "nav_labels": {
-        "dashboard": "الرئيسية",
+        "dashboard": "لوحة التحكم",
         "users": "المستخدمين",
         "admins": "المشرفين",
+        "roles": "الأدوار",
+        "stores": "المتاجر",
+        "store_categories": "فئات المتاجر",
         "products": "المنتجات",
         "orders": "الطلبات",
         "settings": "الإعدادات",
         "logout": "تسجيل الخروج"
+    },
+    "nav_groups": {
+        "overview": "نظرة عامة",
+        "users_permissions": "المستخدمين والصلاحيات",
+        "commerce": "التجارة"
     },
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج",

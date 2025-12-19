@@ -34,7 +34,7 @@ const footerNavItems: NavItem[] = [
 export function AppSidebar() {
     const page = usePage<SharedData>();
     const { panel, currentLocale } = page.props;
-    const mainNavItems: NavItem[] = getPanelNavItems(panel);
+    const mainNavGroups = getPanelNavItems(panel);
 
     const isRTL = currentLocale === 'ar';
 
@@ -53,7 +53,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain groups={mainNavGroups} />
             </SidebarContent>
 
             <SidebarFooter>

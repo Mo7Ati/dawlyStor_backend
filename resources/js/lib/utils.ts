@@ -1,4 +1,11 @@
-import { Locale, NavItem, PanelType } from '@/types';
+import admin from '@/routes/admin';
+import admins from '@/routes/admin/admins';
+import orders from '@/routes/admin/orders';
+import products from '@/routes/admin/products';
+import roles from '@/routes/admin/roles';
+import storeCategories from '@/routes/admin/store-categories';
+import stores from '@/routes/admin/stores';
+import { Locale, NavGroup, NavItem, PanelType } from '@/types';
 import { InertiaLinkProps } from '@inertiajs/react';
 import { type ClassValue, clsx } from 'clsx';
 import { LayoutGrid, List, Package, Shield, ShoppingCart, Store, Users } from 'lucide-react';
@@ -20,57 +27,65 @@ export function resolveUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
 
-export function getPanelNavItems(panel: PanelType): NavItem[] {
+export function getPanelNavItems(panel: PanelType): NavGroup[] {
     switch (panel) {
         case PanelType.ADMIN: return getAdminPanelNavItems();
         default: return [];
     }
 }
 
-export function getAdminPanelNavItems(): NavItem[] {
+export function getAdminPanelNavItems(): NavGroup[] {
     const { t } = useTranslation("common");
     return [
         {
-            title: t('nav_labels.dashboard'),
-            href: '/admin',
-            icon: LayoutGrid,
-            isActive: isSameUrl('/admin', window.location.pathname),
+            title: t('nav_groups.overview'),
+            items: [
+                {
+                    title: t('nav_labels.dashboard'),
+                    href: '/admin',
+                    icon: LayoutGrid,
+                },
+            ],
         },
         {
-            title: t('nav_labels.admins'),
-            href: '/admin/admins',
-            icon: Users,
-            isActive: isSameUrl('/admin/admins', window.location.pathname),
+            title: t('nav_groups.users_permissions'),
+            items: [
+                {
+                    title: t('nav_labels.admins'),
+                    href: admins.index.url(),
+                    icon: Users,
+                },
+                {
+                    title: t('nav_labels.roles'),
+                    href: roles.index.url(),
+                    icon: Shield,
+                },
+            ],
         },
         {
-            title: t('nav_labels.roles'),
-            href: '/admin/roles',
-            icon: Shield,
-            isActive: isSameUrl('/admin/roles', window.location.pathname),
-        },
-        {
-            title: t('nav_labels.stores'),
-            href: '/admin/stores',
-            icon: Store,
-            isActive: isSameUrl('/admin/stores', window.location.pathname),
-        },
-        {
-            title: t('nav_labels.store_categories'),
-            href: '/admin/store-categories',
-            icon: List,
-            isActive: isSameUrl('/admin/store-categories', window.location.pathname),
-        },
-        {
-            title: t('nav_labels.orders'),
-            href: '/admin/orders',
-            icon: ShoppingCart,
-            isActive: isSameUrl('/admin/orders', window.location.pathname),
-        },
-        {
-            title: t('nav_labels.products'),
-            href: '/admin/products',
-            icon: Package,
-            isActive: isSameUrl('/admin/products', window.location.pathname),
+            title: t('nav_groups.commerce'),
+            items: [
+                {
+                    title: t('nav_labels.stores'),
+                    href: stores.index.url(),
+                    icon: Store,
+                },
+                {
+                    title: t('nav_labels.store_categories'),
+                    href: storeCategories.index.url(),
+                    icon: List,
+                },
+                {
+                    title: t('nav_labels.orders'),
+                    href: orders.index.url(),
+                    icon: ShoppingCart,
+                },
+                {
+                    title: t('nav_labels.products'),
+                    href: products.index.url(),
+                    icon: Package,
+                },
+            ],
         },
     ];
 }

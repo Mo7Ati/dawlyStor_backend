@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\dashboard\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Admins\AdminRequest;
+use App\Http\Requests\Dashboard\AdminRequest;
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\RoleResource;
 use App\Models\Admin;

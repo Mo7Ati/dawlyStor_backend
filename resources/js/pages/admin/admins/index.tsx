@@ -22,8 +22,8 @@ import { Badge } from '@/components/ui/badge';
 import DeleteAction from '@/components/delete-action';
 import admins from '@/routes/admin/admins';
 
-const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
-    const { t: tTabels } = useTranslation('tabels');
+const AdminsIndex = ({ admins: adminsData }: { admins: PaginatedResponse<Admin> }) => {
+    const { t: tTables } = useTranslation('tables');
     const { t: tDashboard } = useTranslation('dashboard');
     const { t: tForms } = useTranslation('forms');
 
@@ -37,36 +37,36 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
                         (table.getIsSomePageRowsSelected() && "indeterminate")
                     }
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label={tTabels('common.select_all')}
+                    aria-label={tTables('common.select_all')}
                 />
             ),
             cell: ({ row }) => (
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label={tTabels('common.select_row')}
+                    aria-label={tTables('common.select_row')}
                 />
             ),
             enableHiding: false,
         },
         {
             accessorKey: "name",
-            header: tTabels('admins.name'),
+            header: tTables('admins.name'),
             enableHiding: false,
         },
         {
             accessorKey: "email",
-            header: tTabels('admins.email'),
+            header: tTables('admins.email'),
             enableHiding: false,
         },
         {
             accessorKey: "is_active",
-            header: tTabels('admins.status'),
+            header: tTables('admins.status'),
             cell: ({ row }) => {
                 const isActive = row.original.is_active
                 return (
                     <Badge variant={isActive ? "secondary" : "default"}>
-                        {isActive ? tTabels('common.active') : tTabels('common.inactive')}
+                        {isActive ? tTables('common.active') : tTables('common.inactive')}
                     </Badge>
                 )
             },
@@ -75,7 +75,7 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
         {
             accessorKey: "created_at",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTabels('admins.created_at')} indexRoute={admins.index} />
+                <DataTableColumnHeader column={column} title={tTables('admins.created_at')} indexRoute={admins.index} />
             ),
         },
         {
@@ -86,7 +86,7 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">{tTabels('common.open_menu')}</span>
+                                <span className="sr-only">{tTables('common.open_menu')}</span>
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
@@ -107,7 +107,7 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: tDashboard('admins.title'),
-            href: '/admin/admins',
+            href: adminRoutes.index.url(),
         },
     ];
 
@@ -117,8 +117,8 @@ const AdminsIndex = ({ admins }: { admins: PaginatedResponse<Admin> }) => {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <DataTable
                     columns={columns}
-                    data={admins.data}
-                    meta={admins.meta}
+                    data={adminsData.data}
+                    meta={adminsData.meta}
                     filters={<AdminsFilters />}
                     onRowClick={(admin) => router.visit(adminRoutes.edit({ admin: admin.id }), { preserveState: true, preserveScroll: true })}
                     createHref={adminRoutes.create.url()}

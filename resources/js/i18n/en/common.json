@@ -3,10 +3,18 @@
         "dashboard": "Dashboard",
         "users": "Users",
         "admins": "Admins",
+        "roles": "Roles",
+        "stores": "Stores",
+        "store_categories": "Store Categories",
         "products": "Products",
         "orders": "Orders",
         "settings": "Settings",
         "logout": "Logout"
+    },
+    "nav_groups": {
+        "overview": "Overview",
+        "users_permissions": "Users & Permissions",
+        "commerce": "Commerce"
     },
     "settings": "Settings",
     "log_out": "Log out",

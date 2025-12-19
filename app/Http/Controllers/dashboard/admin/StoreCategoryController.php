@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\dashboard\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\StoreCategories\StoreCategoryRequest;
+use App\Http\Requests\Dashboard\StoreCategoryRequest;
 use App\Http\Resources\StoreCategoryResource;
 use App\Models\StoreCategory;
 use Illuminate\Http\Request;

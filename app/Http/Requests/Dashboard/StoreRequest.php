@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Dashboard\Stores;
+namespace App\Http\Requests\Dashboard;
 
 use App\Models\Store;
 use Closure;

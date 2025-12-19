@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\dashboard\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\Roles\RoleRequest;
+use App\Http\Requests\Dashboard\RoleRequest;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
