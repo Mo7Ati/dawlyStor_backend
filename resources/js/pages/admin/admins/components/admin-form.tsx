@@ -4,16 +4,17 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
 import { Admin, Role } from '@/types/dashboard'
 import adminRoutes from '@/routes/admin/admins'
-import IsActive from '@/components/form/is-active'
-import FormInput from '@/components/form/form-input'
 import RoleAssignmentCard from './role-assignment-card'
 import FormButtons from '@/components/form/form-buttons'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import InputError from '@/components/input-error'
+import IsActiveFormField from '@/components/form/is-active'
 
 interface AdminFormProps {
     admin: Admin
@@ -35,7 +36,8 @@ export default function AdminForm({ admin, roles, type }: AdminFormProps) {
         >
             {({ processing, errors }) => (
                 <>
-                    <div className="flex flex-col gap-4 max-w-2xl">
+                    <div className="space-y-4 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0">
+                        {/* Left column – main admin form */}
                         <Card>
                             <CardHeader>
                                 <CardTitle>
@@ -49,40 +51,54 @@ export default function AdminForm({ admin, roles, type }: AdminFormProps) {
                             </CardHeader>
 
                             <CardContent className="space-y-4 md:space-y-6">
-                                <FormInput
-                                    name="name"
-                                    label={t('admins.name')}
-                                    type="text"
-                                    required={true}
-                                    placeholder={t('admins.enter_admin_name')}
-                                    defaultValue={admin.name}
-                                    error={errors.name}
-                                />
+                                <div>
+                                    <Label htmlFor="name">{t('common.name')}</Label>
+                                    <Input
+                                        name="name"
+                                        type="text"
+                                        required={true}
+                                        placeholder={t('admins.enter_admin_name')}
+                                        defaultValue={admin.name}
+                                        aria-invalid={errors.name ? 'true' : 'false'}
+                                    />
+                                    <InputError message={errors.name} />
+                                </div>
 
-                                <FormInput
-                                    name="email"
-                                    label={t('admins.email')}
-                                    type="email"
-                                    required={true}
-                                    placeholder={t('admins.enter_email')}
-                                    defaultValue={admin.email}
-                                    error={errors.email}
-                                />
+                                <div>
+                                    <Label htmlFor="email">{t('common.email')}</Label>
+                                    <Input
+                                        name="email"
+                                        type="email"
+                                        required={true}
+                                        placeholder={t('admins.enter_email')}
+                                        defaultValue={admin.email}
+                                        aria-invalid={errors.email ? 'true' : 'false'}
+                                    />
+                                    <InputError message={errors.email} />
+                                </div>
 
-                                <FormInput
-                                    name="password"
-                                    label={t('admins.password')}
-                                    type="password"
-                                    required={type === 'create'}
-                                    placeholder={type === 'create' ? t('admins.enter_password') : t('admins.enter_new_password')}
-                                    hint={type === 'create' ? '' : t('admins.leave_blank')}
-                                    error={errors.password}
-                                />
+                                <div>
+                                    <Label htmlFor="password">{t('common.password')}</Label>
+                                    <Input
+                                        name="password"
+                                        type="password"
+                                        required={type === 'create'}
+                                        placeholder={type === 'create' ? t('admins.enter_password') : t('admins.enter_new_password')}
+                                        aria-invalid={errors.password ? 'true' : 'false'}
+                                    />
+                                    <InputError message={errors.password} />
+                                    {type === 'create' && (
+                                        <span className="text-sm text-muted-foreground">
+                                            {t('admins.leave_blank')}
+                                        </span>
+                                    )}
+                                </div>
 
-                                <IsActive value={admin.is_active ?? true} />
+                                <IsActiveFormField value={admin.is_active ?? true} />
                             </CardContent>
                         </Card>
 
+                        {/* Right column – roles assignment */}
                         <RoleAssignmentCard
                             roles={roles}
                             selectedRoleNames={admin.roles?.map((role) => role.name) ?? []}

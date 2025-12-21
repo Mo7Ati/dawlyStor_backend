@@ -2,7 +2,8 @@ import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Auth {
-    user: User;
+    user: User | null;
+    permissions: Record<number, string> | string[];
 }
 
 export interface BreadcrumbItem {
@@ -20,6 +21,7 @@ export interface NavItem {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon | string | null;
     isActive?: boolean;
+    visible?: boolean; // if false, the item will not be shown in the sidebar
 }
 
 export interface Flash {
@@ -30,7 +32,7 @@ export interface Flash {
 export interface EnumOption {
     value: string;
     label: string;
-    color: string;
+    color?: string;
 }
 
 export interface SharedData {
@@ -46,6 +48,7 @@ export interface SharedData {
     enums: {
         orderStatus: EnumOption[];
         paymentStatus: EnumOption[];
+        permissions: EnumOption[];
     };
     [key: string]: unknown;
 }

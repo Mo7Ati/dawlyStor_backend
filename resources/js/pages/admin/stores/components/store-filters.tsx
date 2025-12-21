@@ -1,8 +1,8 @@
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
-import FilterDropdown from '@/components/filters-dropdown'
-import StatusFilter from '@/components/data-table/status-filter'
+import FilterDropdown from '@/components/data-table/table-filters/filters-dropdown'
+import StatusFilter from '@/components/data-table/table-filters/status-filter'
 import stores from '@/routes/admin/stores'
 import { useFilters } from '@/hooks/use-filters'
 

@@ -7,7 +7,7 @@ import { Order, PaginatedResponse, Store } from '@/types/dashboard';
 import { DataTable } from '@/components/data-table/data-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-import { StatusBadge } from '@/components/status-badge';
+import { StatusBadge } from '@/pages/admin/orders/components/status-badge';
 import orders from '@/routes/admin/orders';
 import OrderFilters from './components/order-filters';
 
@@ -93,6 +93,7 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
                     data={ordersData.data}
                     meta={ordersData.meta}
                     indexRoute={orders.index}
+                    model="orders"
                     filters={<OrderFilters />}
                 />
             </div>

@@ -9,13 +9,9 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { Field, Locale, Store, StoreCategory } from '@/types/dashboard'
+import { Store, StoreCategory } from '@/types/dashboard'
 import FormButtons from '@/components/form/form-buttons'
-import TranslatableFieldsCard from '@/components/form/translatable-tabs'
 import { normalizeFieldValue } from '@/lib/utils'
-import AlertError from '@/components/alert-error'
-import FormInput from '@/components/form/form-input'
-import { LocalizedInputCard } from '@/components/form/test';
 import TranslatableTabs from '@/components/form/translatable-tabs'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'

@@ -6,8 +6,8 @@ import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import FilterDropdown from "@/components/filters-dropdown";
-import StatusFilter from "@/components/data-table/status-filter";
+import FilterDropdown from "@/components/data-table/table-filters/filters-dropdown";
+import StatusFilter from "@/components/data-table/table-filters/status-filter";
 import { useFilters } from "@/hooks/use-filters";
 
 export default function AdminsFilters() {

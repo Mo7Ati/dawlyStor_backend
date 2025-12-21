@@ -20,8 +20,9 @@ import { DataTableColumnHeader } from '@/components/data-table/data-table-column
 import { Badge } from '@/components/ui/badge';
 import DeleteAction from '@/components/delete-action';
 import stores from '@/routes/admin/stores';
-import IsActiveBadge from '@/components/is-active-badge';
-import { ActionsColumn } from '@/components/data-table/actions/column-actions';
+import IsActiveBadge from '@/components/data-table/badges/is-active-badge';
+import { DeleteActionButton } from '@/components/data-table/column-actions/delete-action-button';
+import { EditAction } from '@/components/data-table/column-actions/edit-action';
 
 const StoresIndex = ({ stores: storesData }: { stores: PaginatedResponse<Store> }) => {
     const { t: tTables } = useTranslation('tables');
@@ -86,10 +87,16 @@ const StoresIndex = ({ stores: storesData }: { stores: PaginatedResponse<Store> 
             enableHiding: false,
             cell: ({ row }: any) => {
                 return (
-                    <ActionsColumn
-                        EditRoute={stores.edit.url({ store: row.original.id })}
-                        DeleteRoute={stores.destroy.url({ store: row.original.id })}
-                    />
+                    <div className="flex items-center gap-2">
+                        <EditAction
+                            editRoute={stores.edit.url({ store: row.original.id })}
+                            permission="stores.update"
+                        />
+                        <DeleteActionButton
+                            deleteRoute={stores.destroy.url({ store: row.original.id })}
+                            permission="stores.destroy"
+                        />
+                    </div>
                 )
             },
         },
@@ -111,6 +118,7 @@ const StoresIndex = ({ stores: storesData }: { stores: PaginatedResponse<Store> 
                     data={storesData.data}
                     meta={storesData.meta}
                     filters={<StoresFilters />}
+                    model="stores"
                     onRowClick={(store) => router.visit(stores.edit.url({ store: store.id }), { preserveState: true, preserveScroll: true })}
                     createHref={stores.create.url()}
                     indexRoute={stores.index}

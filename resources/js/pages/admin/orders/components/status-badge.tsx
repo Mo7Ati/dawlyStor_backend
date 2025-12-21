@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge } from './ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { useEnums } from '@/hooks/use-enums';
 import { cn } from '@/lib/utils';
 
@@ -67,8 +67,8 @@ export function StatusBadge({ type, value, className }: StatusBadgeProps) {
         }
     };
 
-    const variant = getBadgeVariant(status.color);
-    const colorClasses = getColorClasses(status.color);
+    const variant = getBadgeVariant(status.color!);
+    const colorClasses = getColorClasses(status.color!);
 
     return (
         <Badge

@@ -1,3 +1,4 @@
+import { usePermissions } from '@/hooks/use-permissions';
 import admin from '@/routes/admin';
 import admins from '@/routes/admin/admins';
 import orders from '@/routes/admin/orders';
@@ -36,6 +37,7 @@ export function getPanelNavItems(panel: PanelType): NavGroup[] {
 
 export function getAdminPanelNavItems(): NavGroup[] {
     const { t } = useTranslation("common");
+    const { hasPermission } = usePermissions();
     return [
         {
             title: t('nav_groups.overview'),
@@ -44,6 +46,7 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.dashboard'),
                     href: '/admin',
                     icon: LayoutGrid,
+                    visible: hasPermission('dashboard.index'),
                 },
             ],
         },
@@ -54,11 +57,13 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.admins'),
                     href: admins.index.url(),
                     icon: Users,
+                    visible: hasPermission('admins.index'),
                 },
                 {
                     title: t('nav_labels.roles'),
                     href: roles.index.url(),
                     icon: Shield,
+                    visible: hasPermission('roles.index'),
                 },
             ],
         },
@@ -69,21 +74,25 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.stores'),
                     href: stores.index.url(),
                     icon: Store,
+                    visible: hasPermission('stores.index'),
                 },
                 {
                     title: t('nav_labels.store_categories'),
                     href: storeCategories.index.url(),
                     icon: List,
+                    visible: hasPermission('store-categories.index'),
                 },
                 {
                     title: t('nav_labels.orders'),
                     href: orders.index.url(),
                     icon: ShoppingCart,
+                    visible: hasPermission('orders.index'),
                 },
                 {
                     title: t('nav_labels.products'),
                     href: products.index.url(),
                     icon: Package,
+                    visible: hasPermission('products.index'),
                 },
             ],
         },

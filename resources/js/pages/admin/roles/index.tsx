@@ -19,7 +19,8 @@ import rolesRoutes from '@/routes/admin/roles';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import roles from '@/routes/admin/roles';
-import { ActionsColumn } from '@/components/data-table/actions/column-actions';
+import { DeleteActionButton } from '@/components/data-table/column-actions/delete-action-button';
+import { EditAction } from '@/components/data-table/column-actions/edit-action';
 
 const RolesIndex = ({ roles: rolesData }: { roles: PaginatedResponse<Role> }) => {
     const { t: tTables } = useTranslation('tables');
@@ -76,10 +77,16 @@ const RolesIndex = ({ roles: rolesData }: { roles: PaginatedResponse<Role> }) =>
             enableHiding: false,
             cell: ({ row }: any) => {
                 return (
-                    <ActionsColumn
-                        EditRoute={roles.edit.url({ role: row.original.id })}
-                        DeleteRoute={roles.destroy.url({ role: row.original.id })}
-                    />
+                    <div className="flex items-center gap-2">
+                        <EditAction
+                            editRoute={roles.edit.url({ role: row.original.id })}
+                            permission="roles.update"
+                        />
+                        <DeleteActionButton
+                            deleteRoute={roles.destroy.url({ role: row.original.id })}
+                            permission="roles.destroy"
+                        />
+                    </div>
                 )
             },
         },
@@ -101,6 +108,7 @@ const RolesIndex = ({ roles: rolesData }: { roles: PaginatedResponse<Role> }) =>
                     data={rolesData.data}
                     meta={rolesData.meta}
                     createHref={rolesRoutes.create.url()}
+                    model="roles"
                     indexRoute={rolesRoutes.index}
                     onRowClick={(role) => router.visit(rolesRoutes.edit({ role: role.id }), { preserveState: true, preserveScroll: true })}
                 />

@@ -28,16 +28,18 @@ import { useState } from "react";
 import { Link, router } from "@inertiajs/react";
 import { MetaType } from "@/types/dashboard";
 import DataTablePagination from "./data-table-pagination";
-import SearchInput from "../search-input";
+import SearchInput from "./search-input";
 import { Button } from "../ui/button";
 import { Plus, Pointer, Settings2 } from "lucide-react";
 import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder";
-import Filters from "../filters-dropdown";
+import Filters from "./table-filters/filters-dropdown";
+import { usePermissions } from "@/hooks/use-permissions";
 
 interface DataTableProps<TData extends { id: number | string }, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     meta?: MetaType
+    model: string
     filters?: React.ReactNode
     createHref?: string
     onRowClick?: (row: TData) => void
@@ -49,12 +51,15 @@ export function DataTable<TData extends { id: number | string }, TValue>({
     data,
     meta,
     filters,
+    model,
     onRowClick,
     createHref,
     indexRoute,
 }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
+    const { hasAnyPermission, hasPermission } = usePermissions();
 
     const table = useReactTable({
         data,
@@ -77,8 +82,8 @@ export function DataTable<TData extends { id: number | string }, TValue>({
             <div className="flex justify-between">
 
                 <div id="create-button">
-                    {createHref && (
-                        <Button variant="outline" size="sm" onClick={() => router.visit(createHref, { preserveState: true, preserveScroll: true })}>
+                    {createHref && hasPermission(`${model}.create`) && (
+                        <Button variant="outline" className="cursor-pointer" size="sm" onClick={() => router.visit(createHref, { preserveState: true, preserveScroll: true })}>
                             <Plus /> Create
                         </Button>
                     )}
@@ -155,11 +160,13 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={(e) => {
-                                        const target = e.target as HTMLElement;
-                                        if (target.closest('button, a, [role="menuitem"]')) return;
-                                        onRowClick?.(row.original);
+                                        if (hasPermission(`${model}.update`) && onRowClick) {
+                                            const target = e.target as HTMLElement;
+                                            if (target.closest('button, a, [role="menuitem"]')) return;
+                                            onRowClick?.(row.original);
+                                        }
                                     }}
-                                    className={onRowClick ? "cursor-pointer" : ""}
+                                    className={onRowClick && hasPermission(`${model}.update`) ? "cursor-pointer" : ""}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

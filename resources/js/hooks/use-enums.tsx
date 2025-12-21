@@ -11,6 +11,7 @@ export function useEnums() {
     return {
         orderStatus: enums.orderStatus,
         paymentStatus: enums.paymentStatus,
+        permissions: enums.permissions,
         /**
          * Get enum option by value
          */
@@ -22,6 +23,12 @@ export function useEnums() {
          */
         getPaymentStatus: (value: string) => {
             return enums.paymentStatus.find((option) => option.value === value);
+        },
+        /**
+         * Get enum option by value
+         */
+        getPermission: (value: string) => {
+            return enums.permissions.find((option) => option.value === value);
         },
     };
 }

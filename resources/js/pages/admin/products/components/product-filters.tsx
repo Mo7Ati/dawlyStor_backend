@@ -1,5 +1,5 @@
-import StatusFilter from '@/components/data-table/status-filter'
-import FilterDropdown from '@/components/filters-dropdown'
+import StatusFilter from '@/components/data-table/table-filters/status-filter'
+import FilterDropdown from '@/components/data-table/table-filters/filters-dropdown'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useFilters } from '@/hooks/use-filters'

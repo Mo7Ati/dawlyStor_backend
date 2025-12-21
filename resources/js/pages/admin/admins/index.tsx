@@ -1,35 +1,21 @@
 import AppLayout from '@/layouts/app-layout'
-import { BreadcrumbItem, SharedData } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
-import { MoreHorizontal, PencilIcon } from 'lucide-react';
+import { BreadcrumbItem } from '@/types';
+import { Head, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { ColumnDef } from "@tanstack/react-table"
 import { Admin, PaginatedResponse } from '@/types/dashboard';
 import { DataTable } from '@/components/data-table/data-table';
-import { Button } from "@/components/ui/button";
-
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
 import { Checkbox } from '@/components/ui/checkbox';
-
 import AdminsFilters from './components/admin-filters';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-import { Badge } from '@/components/ui/badge';
-import DeleteAction from '@/components/delete-action';
 import admins from '@/routes/admin/admins';
-import IsActiveBadge from '@/components/is-active-badge';
-import { ActionsColumn } from '@/components/data-table/actions/column-actions';
+import { EditAction } from '@/components/data-table/column-actions/edit-action';
+import { DeleteActionButton } from '@/components/data-table/column-actions/delete-action-button';
+import IsActiveTableColumn from '@/components/data-table/badges/is-active-badge';
 
 const AdminsIndex = ({ admins: adminsData }: { admins: PaginatedResponse<Admin> }) => {
     const { t: tTables } = useTranslation('tables');
     const { t: tDashboard } = useTranslation('dashboard');
-    const { t: tForms } = useTranslation('forms');
-
 
     const columns: ColumnDef<Admin>[] = [
         {
@@ -66,7 +52,7 @@ const AdminsIndex = ({ admins: adminsData }: { admins: PaginatedResponse<Admin> 
         {
             accessorKey: "is_active",
             header: tTables('admins.status'),
-            cell: ({ row }) => <IsActiveBadge isActive={row.original.is_active} />,
+            cell: ({ row }) => <IsActiveTableColumn isActive={row.original.is_active} />,
             enableHiding: false,
         },
         {
@@ -80,15 +66,20 @@ const AdminsIndex = ({ admins: adminsData }: { admins: PaginatedResponse<Admin> 
             enableHiding: false,
             cell: ({ row }: any) => {
                 return (
-                    <ActionsColumn
-                        EditRoute={admins.edit.url({ admin: row.original.id })}
-                        DeleteRoute={admins.destroy.url({ admin: row.original.id })}
-                    />
-                )
+                    <div className="flex items-center gap-2">
+                        <EditAction
+                            editRoute={admins.edit.url({ admin: row.original.id })}
+                            permission="admins.update"
+                        />
+                        <DeleteActionButton
+                            deleteRoute={admins.destroy.url({ admin: row.original.id })}
+                            permission="admins.destroy"
+                        />
+                    </div>
+                );
             },
         },
     ]
-
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -105,6 +96,7 @@ const AdminsIndex = ({ admins: adminsData }: { admins: PaginatedResponse<Admin> 
                     columns={columns}
                     data={adminsData.data}
                     meta={adminsData.meta}
+                    model="admins"
                     filters={<AdminsFilters />}
                     onRowClick={(admin) => router.visit(admins.edit({ admin: admin.id }), { preserveState: true, preserveScroll: true })}
                     createHref={admins.create.url()}
@@ -115,6 +107,4 @@ const AdminsIndex = ({ admins: adminsData }: { admins: PaginatedResponse<Admin> 
     )
 }
 
-
-
-export default AdminsIndex
+export default AdminsIndex;

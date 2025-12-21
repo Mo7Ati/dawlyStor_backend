@@ -11,13 +11,13 @@ import {
 } from '@/components/ui/card'
 import { GroupedPermissions, Permission, Role } from '@/types/dashboard'
 import rolesRoutes from '@/routes/admin/roles'
-import FormInput from '@/components/form/form-input'
 import FormButtons from '@/components/form/form-buttons'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import InputError from '@/components/input-error'
 import PermissionList from './permission-list'
+import { Input } from '@/components/ui/input'
 
 
 interface RoleFormProps {
@@ -55,17 +55,18 @@ export default function RoleForm({ role, permissions, type }: RoleFormProps) {
                 >
                     {({ processing, errors }) => (
                         <>
-                            <FormInput
-                                name="name"
-                                label={t('roles.name')}
-                                type="text"
-                                required={true}
-                                placeholder={t('roles.enter_role_name')}
-                                defaultValue={role.name}
-                                error={errors.name}
-                                className="max-w-100"
-                            />
-
+                            <div>
+                                <Label htmlFor="name">{t('roles.name')}</Label>
+                                <Input
+                                    name="name"
+                                    type="text"
+                                    required={true}
+                                    placeholder={t('roles.enter_role_name')}
+                                    defaultValue={role.name}
+                                    aria-invalid={errors.name ? 'true' : 'false'}
+                                />
+                                <InputError message={errors.name} />
+                            </div>
                             <div className="space-y-6">
                                 <div>
                                     <Label className="text-base font-semibold">

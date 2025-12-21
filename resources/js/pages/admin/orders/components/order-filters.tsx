@@ -1,4 +1,4 @@
-import FilterDropdown from '@/components/filters-dropdown';
+import FilterDropdown from '@/components/data-table/table-filters/filters-dropdown';
 import { Select, SelectValue, SelectTrigger, SelectItem, SelectContent } from '@/components/ui/select';
 import { useFilters } from '@/hooks/use-filters';
 import { useEnums } from '@/hooks/use-enums';

@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
 import products from '@/routes/admin/products';
-import IsActiveBadge from '@/components/is-active-badge';
+import IsActiveBadge from '@/components/data-table/badges/is-active-badge';
 import ProductsFilters from './components/product-filters';
 
 const ProductsIndex = ({ products: productsData }: { products: PaginatedResponse<Product> }) => {
@@ -117,6 +117,7 @@ const ProductsIndex = ({ products: productsData }: { products: PaginatedResponse
                     meta={productsData.meta}
                     indexRoute={products.index}
                     filters={<ProductsFilters />}
+                    model="products"
                 />
             </div>
         </AppLayout>

@@ -5,9 +5,9 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from './ui/button';
-import { Label } from './ui/label';
-import { Badge } from './ui/badge';
+import { Button } from '../../ui/button';
+import { Label } from '../../ui/label';
+import { Badge } from '../../ui/badge';
 
 
 interface FilterDropdownProps {

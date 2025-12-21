@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 
-const IsActive = ({ value }: { value: boolean }) => {
+const IsActiveFormField = ({ value }: { value: boolean }) => {
     const [isActive, setIsActive] = useState(value);
     return (
         <div className="flex items-center space-x-2">
@@ -15,4 +15,4 @@ const IsActive = ({ value }: { value: boolean }) => {
     )
 }
 
-export default IsActive;
+export default IsActiveFormField;

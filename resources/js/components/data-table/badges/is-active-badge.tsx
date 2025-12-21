@@ -1,9 +1,9 @@
 import React from 'react'
-import { Badge } from './ui/badge'
+import { Badge } from '@/components/ui/badge'
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
-const IsActiveBadge = ({ isActive }: { isActive: boolean }) => {
+const IsActiveTableColumn = ({ isActive }: { isActive: boolean }) => {
     const { t: tTables } = useTranslation('tables');
 
     // Color classes for active/inactive states
@@ -19,4 +19,4 @@ const IsActiveBadge = ({ isActive }: { isActive: boolean }) => {
         </Badge>
     )
 }
-export default IsActiveBadge
+export default IsActiveTableColumn
