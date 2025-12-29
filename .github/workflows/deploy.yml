@@ -38,7 +38,7 @@ jobs:
         SOURCE: "."
         REMOTE_HOST: ${{ secrets.VPS_HOST }}
         REMOTE_USER: ${{ secrets.VPS_USER }}
-        TARGET: "/htdocs/dawly.store/last1"
+        TARGET: "/"
 
     - name: Run Remote/Artisan Commands
       uses: appleboy/ssh-action@v0.1.6
