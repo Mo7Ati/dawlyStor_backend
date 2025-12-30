@@ -18,7 +18,7 @@ jobs:
         php-version: 8.4
 
     - name: Install Composer Dependencies
-      run: composer install --optimize-autoloader --no-dev --no-progress --no-interaction --prefer-dist
+      run: composer install --optimize-autoloader  --no-progress --no-interaction --prefer-dist #--no-dev
 
     # - name: Install Node
     #   uses: actions/setup-node@v3
@@ -38,8 +38,7 @@ jobs:
         SOURCE: "."
         REMOTE_HOST: ${{ secrets.VPS_HOST }}
         REMOTE_USER: ${{ secrets.VPS_USER }}
-        TARGET: "/home/${{ secrets.VPS_USER }}/htdocs/dawly.store/last1"
-        ARGS: "-rlgoDzvc -i --delete"
+        TARGET: "/home/${{ secrets.VPS_USER }}"
 
     - name: Run Remote/Artisan Commands
       uses: appleboy/ssh-action@v0.1.6
@@ -48,6 +47,6 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /home/${{ secrets.VPS_USER }}/htdocs/dawly.store/last1
+          cd htdocs/dawly.store/last1
           php artisan migrate --force
           php artisan optimize
