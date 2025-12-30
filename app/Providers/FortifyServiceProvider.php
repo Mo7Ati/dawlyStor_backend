@@ -20,16 +20,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $panel = getPanel();
-
-        if ($panel) {
-            config([
-                'fortify.guard' => $panel,
-                'fortify.home' => $panel,
-                'fortify.passwords' => $panel,
-                'fortify.prefix' => $panel,
-            ]);
-        }
+        //
     }
 
     /**
@@ -37,9 +28,30 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configurePanel();
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
+    }
+
+    /**
+     * Configure Fortify based on the current panel.
+     * This works even when config is cached because config() changes apply at runtime.
+     */
+    private function configurePanel(): void
+    {
+        $panel = getPanel();
+
+        if ($panel) {
+            // Set config at runtime (works even with cached config)
+            // These changes are applied per-request and override cached config values
+            config([
+                'fortify.guard' => $panel,
+                'fortify.home' => "/{$panel}",
+                'fortify.passwords' => $panel,
+                'fortify.prefix' => $panel,
+            ]);
+        }
     }
 
     /**
