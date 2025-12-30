@@ -37,7 +37,7 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         REMOTE_HOST: ${{ secrets.VPS_HOST }}
         REMOTE_USER: ${{ secrets.VPS_USER }}
-        TARGET: "/htdocs/${{ secrets.VPS_HOST }}/last1"
+        TARGET: "/home/multivendor/htdocs/dawly.store/last1"
 
     - name: Run Remote/Artisan Commands
       uses: appleboy/ssh-action@v0.1.6
