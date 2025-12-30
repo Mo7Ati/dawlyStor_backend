@@ -49,7 +49,7 @@ class ProductRequest extends FormRequest
     {
         $id = $this->route('product');
         $store = $this->user('store');
-dd($this->all());
+        // dd($this->all());
         return [
             'name' => ['required', 'array'],
             'name.*' => ['required', 'string', 'max:255'],

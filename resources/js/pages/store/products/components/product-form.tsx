@@ -39,8 +39,11 @@ interface ProductFormProps {
 
 export default function ProductForm({ product, categories, additionsData = [], optionsData = [], type }: ProductFormProps) {
     const { t } = useTranslation('forms');
-    const [additions, setAdditions] = useState<ProductAddition[]>(product.additions ?? [])
-    console.log(additions)
+
+    const [additions, setAdditions] = useState<ProductAddition[]>(product.additions ?? []);
+    const [options, setOptions] = useState<ProductOption[]>(product.options ?? []);
+
+
     return (
         <Form
             method={type === 'edit' ? 'put' : 'post'}
@@ -49,6 +52,11 @@ export default function ProductForm({ product, categories, additionsData = [], o
                     ? products.update.url({ product: Number(product.id) })
                     : products.store.url()
             }
+            transform={data => ({
+                ...data,
+                additions,
+                options,
+            })}
         >
             {({ processing, errors }) => (
                 <>
@@ -251,16 +259,98 @@ export default function ProductForm({ product, categories, additionsData = [], o
                                                 onValueChange={(v) =>
                                                     update({ addition_id: v })
                                                 }
+                                                required
                                             >
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Addition" />
+                                                    <SelectValue placeholder={t('products.select_addition')} />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {additionsData.map((a) => (
-                                                        <SelectItem key={a.id} value={String(a.id)}>
-                                                            {a.name as string}
-                                                        </SelectItem>
-                                                    ))}
+                                                    {additionsData
+                                                        .filter(
+                                                            addition => {
+                                                                // Check if this addition is selected in any OTHER row (not current row)
+                                                                const isSelectedInOtherRow = additions.some(
+                                                                    (productAddition, idx) =>
+                                                                        idx !== index &&
+                                                                        productAddition.addition_id &&
+                                                                        String(productAddition.addition_id) === String(addition.id)
+                                                                )
+                                                                // Include if not selected in other rows
+                                                                return !isSelectedInOtherRow
+                                                            }
+                                                        )
+                                                        .map(addition => (
+                                                            <SelectItem key={addition.id} value={String(addition.id)}>
+                                                                {addition.name as string}
+                                                            </SelectItem>
+                                                        ))
+                                                    }
+                                                </SelectContent>
+                                            </Select>
+                                            <Input
+                                                required
+                                                type="number"
+                                                value={item.price}
+                                                onChange={(e) =>
+                                                    update({ price: Number(e.target.value) })
+                                                }
+                                            />
+                                        </div>
+                                    )}
+                                />
+                            </CardContent>
+                        </Card>
+
+
+                        {/* Options */}
+                        <Card className='w-1/2 h-auto'>
+                            <CardHeader>
+                                <CardTitle>{t('products.options')}</CardTitle>
+                                <CardDescription>
+                                    {t('products.options_desc')}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className='min-h-fit'>
+                                <Repeater
+                                    name="options[]"
+                                    value={options}
+                                    onChange={(e) => setOptions(e.target.value)}
+                                    createItem={() => ({
+                                        option_id: "",
+                                        price: 0,
+                                    })}
+                                    renderRow={(item, index, update) => (
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <Select
+                                                value={String(item.option_id)}
+                                                onValueChange={(v) =>
+                                                    update({ option_id: v })
+                                                }
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder={t('products.select_option')} />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {optionsData
+                                                        .filter(
+                                                            option => {
+                                                                // Check if this addition is selected in any OTHER row (not current row)
+                                                                const isSelectedInOtherRow = options.some(
+                                                                    (productOption, idx) =>
+                                                                        idx !== index &&
+                                                                        productOption.option_id &&
+                                                                        String(productOption.option_id) === String(option.id)
+                                                                )
+                                                                // Include if not selected in other rows
+                                                                return !isSelectedInOtherRow
+                                                            }
+                                                        )
+                                                        .map(option => (
+                                                            <SelectItem key={option.id} value={String(option.id)}>
+                                                                {option.name as string}
+                                                            </SelectItem>
+                                                        ))
+                                                    }
                                                 </SelectContent>
                                             </Select>
                                             <Input
@@ -276,17 +366,6 @@ export default function ProductForm({ product, categories, additionsData = [], o
                             </CardContent>
                         </Card>
 
-                        {/* <Card className='w-1/2 h-auto'>
-                            <CardHeader>
-                                <CardTitle>{t('products.options')}</CardTitle>
-                                <CardDescription>
-                                    {t('products.options_desc')}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className='min-h-fit'>
-
-                            </CardContent>
-                        </Card> */}
                     </div>
 
                     {/* <input type="hidden" name="additions[]" value={JSON.stringify(additions)} /> */}

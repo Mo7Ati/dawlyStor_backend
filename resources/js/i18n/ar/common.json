@@ -9,12 +9,15 @@
         "products": "المنتجات",
         "orders": "الطلبات",
         "settings": "الإعدادات",
-        "logout": "تسجيل الخروج"
+        "logout": "تسجيل الخروج",
+        "additions": "الإضافات",
+        "options": "الخيارات"
     },
     "nav_groups": {
         "overview": "نظرة عامة",
         "users_permissions": "المستخدمين والصلاحيات",
-        "commerce": "التجارة"
+        "commerce": "التجارة",
+        "settings": "إعدادات المنتجات"
     },
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج",

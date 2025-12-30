@@ -4,7 +4,6 @@ namespace App\Http\Controllers\dashboard\store;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
-use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Addition;
 use App\Models\Category;
@@ -98,7 +97,14 @@ class ProductController extends Controller
     {
         $store = $request->user('store');
         $product = Product::query()
-            ->with(['additions', 'options'])
+            ->with([
+                'additions' => function ($query) {
+                    $query->where('is_active', true);
+                },
+                'options' => function ($query) {
+                    $query->where('is_active', true);
+                },
+            ])
             ->where('store_id', $store->id)
             ->findOrFail($id);
 

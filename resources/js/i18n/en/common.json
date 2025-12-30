@@ -9,12 +9,15 @@
         "products": "Products",
         "orders": "Orders",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "additions": "Additions",
+        "options": "Options"
     },
     "nav_groups": {
         "overview": "Overview",
         "users_permissions": "Users & Permissions",
-        "commerce": "Commerce"
+        "commerce": "Commerce",
+        "settings": "Products Settings"
     },
     "settings": "Settings",
     "log_out": "Log out",
