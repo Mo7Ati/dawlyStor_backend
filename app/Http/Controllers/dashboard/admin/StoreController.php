@@ -55,7 +55,7 @@ class StoreController extends Controller
         abort_unless($request->user('admin')->can('stores.create'), 403);
 
         $store = Store::create($request->validated());
-        $this->storeMedia($request, $store, 'logo');
+        $this->syncMedia($request, $store, 'logo');
         return to_route('admin.stores.index')->with('success', __('messages.created_successfully'));
     }
 
@@ -87,7 +87,7 @@ class StoreController extends Controller
         $validated = $request->validated();
         $store = Store::findOrFail($id);
 
-        $this->storeMedia($request, $store, 'logo');
+        $this->syncMedia($request, $store, 'logo');
         $store->update($validated);
 
         return redirect()

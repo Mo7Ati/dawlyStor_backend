@@ -7,7 +7,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 trait MediaSyncTrait
 {
-    public function storeMedia(Request $request, $model, $collection)
+    public function syncMedia(Request $request, $model, $collection)
     {
         $temp_ids = $request->input('temp_ids', null);
 

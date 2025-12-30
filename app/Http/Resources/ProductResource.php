@@ -21,15 +21,12 @@ class ProductResource extends JsonResource
             'is_active' => $this->is_active,
             'is_accepted' => $this->is_accepted,
             'quantity' => $this->quantity,
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'store' => new StoreResource($this->whenLoaded('Store')),
-            'category' => $this->whenLoaded('Category', function () {
-                return $this->Category ? [
-                    'id' => $this->Category->id,
-                    'name' => $this->Category->name,
-                ] : null;
-            }),
+            'created_at' => $this->created_at?->format('Y-m-d'),
+            'updated_at' => $this->updated_at?->format('Y-m-d'),
+            'store' => StoreResource::make($this->whenLoaded('Store')),
+            'category' => CategoryResource::make($this->whenLoaded('Category')),
+            'additions' => AdditionResource::collection($this->whenLoaded('additions')),
+            'options' => OptionResource::collection($this->whenLoaded('options')),
         ];
     }
 
@@ -42,7 +39,6 @@ class ProductResource extends JsonResource
             'keywords' => $this->keywords,
             'price' => $this->price,
             'compare_price' => $this->compare_price,
-            'store_id' => $this->store_id,
             'category_id' => $this->category_id,
             'is_active' => $this->is_active,
             'quantity' => $this->quantity,

@@ -52,10 +52,6 @@ const ProductsIndex = ({ products: productsData }: { products: PaginatedResponse
             header: tTables('common.name'),
         },
         {
-            accessorKey: "store.name",
-            header: tTables('products.store'),
-        },
-        {
             accessorKey: "category.name",
             header: tTables('products.category'),
         },

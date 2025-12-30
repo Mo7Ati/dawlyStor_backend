@@ -23,7 +23,7 @@ class StoreResource extends JsonResource
             'delivery_area_polygon' => $this->delivery_area_polygon,
             'is_active' => $this->is_active,
             'created_at' => $this->created_at?->format('Y-m-d'),
-            'category' => new StoreCategoryResource($this->whenLoaded('category')),
+            'category' => StoreCategoryResource::make($this->whenLoaded('category')),
             'logo' => $this->getFirstMediaUrl('logo'),
         ];
     }
