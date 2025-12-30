@@ -31,13 +31,6 @@ class FortifyServiceProvider extends ServiceProvider
                 'fortify.prefix' => $panel,
             ]);
         }
-        Log::info('FortifyServiceProvider: Configured panel', [
-            'guard' => config('fortify.guard'),
-            'home' => config('fortify.home'),
-            'passwords' => config('fortify.passwords'),
-            'prefix' => config('fortify.prefix'),
-        ]);
-        
     }
 
     /**
