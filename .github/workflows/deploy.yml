@@ -39,6 +39,7 @@ jobs:
         REMOTE_USER: ${{ secrets.VPS_USER }}
         TARGET: "/home/${{ secrets.VPS_USER }}/htdocs/${{ secrets.VPS_HOST }}/last1"
 
+        
     # - name: Run Remote/Artisan Commands
     #   uses: appleboy/ssh-action@v0.1.6
     #   with:
