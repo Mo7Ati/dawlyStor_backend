@@ -37,6 +37,7 @@ class FortifyServiceProvider extends ServiceProvider
             'passwords' => config('fortify.passwords'),
             'prefix' => config('fortify.prefix'),
         ]);
+        
     }
 
     /**
