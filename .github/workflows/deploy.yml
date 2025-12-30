@@ -38,7 +38,8 @@ jobs:
         SOURCE: "."
         REMOTE_HOST: ${{ secrets.VPS_HOST }}
         REMOTE_USER: ${{ secrets.VPS_USER }}
-        TARGET: "/home/${{ secrets.VPS_USER }}"
+        TARGET: "/home/${{ secrets.VPS_USER }}/htdocs/dawly.store/last1"
+        ARGS: "-rlgoDzvc -i --delete"
 
     - name: Run Remote/Artisan Commands
       uses: appleboy/ssh-action@v0.1.6
@@ -47,6 +48,6 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd htdocs/dawly.store/last1
+          cd /home/${{ secrets.VPS_USER }}/htdocs/dawly.store/last1
           php artisan migrate --force
           php artisan optimize
