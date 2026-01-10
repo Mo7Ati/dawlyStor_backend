@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import InputError from '@/components/input-error'
 import IsActiveFormField from '@/components/form/is-active'
+import { useState } from 'react'
 
 interface AdminFormProps {
     admin: Admin
@@ -24,6 +25,7 @@ interface AdminFormProps {
 
 export default function AdminForm({ admin, roles, type }: AdminFormProps) {
     const { t } = useTranslation('forms');
+    const [currentAdminRoles, setCurrentAdminRoles] = useState(admin.roles?.map((role) => role.name) ?? []);
 
     return (
         <Form
@@ -33,6 +35,7 @@ export default function AdminForm({ admin, roles, type }: AdminFormProps) {
                     ? adminRoutes.update.url({ admin: admin.id })
                     : adminRoutes.store.url()
             }
+            transform={data => ({ ...data, roles: currentAdminRoles })}
         >
             {({ processing, errors }) => (
                 <>
@@ -100,8 +103,9 @@ export default function AdminForm({ admin, roles, type }: AdminFormProps) {
 
                         {/* Right column – roles assignment */}
                         <RoleAssignmentCard
-                            roles={roles}
-                            selectedRoleNames={admin.roles?.map((role) => role.name) ?? []}
+                            allRoles={roles}
+                            currentAdminRoles={currentAdminRoles}
+                            onChange={(roles) => setCurrentAdminRoles(roles)}
                             errors={errors}
                         />
                     </div>

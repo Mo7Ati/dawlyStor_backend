@@ -31,7 +31,10 @@ Route::middleware(['auth:admin'])
             'roles' => RoleController::class,
             'stores' => StoreController::class,
             'store-categories' => StoreCategoryController::class,
+            'sections' => SectionController::class,
         ]);
+
+        Route::post('sections/reorder', [SectionController::class, 'reorder'])->name('sections.reorder');
 
 
         Route::prefix('settings')->name('settings.')->group(function () {

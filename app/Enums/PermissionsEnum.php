@@ -63,7 +63,6 @@ enum PermissionsEnum: string
     case SECTIONS_UPDATE = 'sections.update';
     case SECTIONS_DESTROY = 'sections.destroy';
 
-
     public function label(): string
     {
         return match ($this) {

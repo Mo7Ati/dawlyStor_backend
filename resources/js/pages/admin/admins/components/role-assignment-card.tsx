@@ -12,27 +12,27 @@ import { Role } from '@/types/dashboard'
 import InputError from '@/components/input-error'
 
 interface RoleAssignmentCardProps {
-    roles: Role[]
-    selectedRoleNames: string[]
+    allRoles: Role[]
+    currentAdminRoles: string[]
     className?: string
+    onChange: (roles: string[]) => void
     errors?: {
         roles?: string
     }
 }
 
 export default function RoleAssignmentCard({
-    roles,
-    selectedRoleNames,
+    allRoles,
+    currentAdminRoles,
     errors,
+    onChange,
     className,
 }: RoleAssignmentCardProps) {
     const { t } = useTranslation('forms');
-    const [selectedRoles, setSelectedRoles] = useState<string[]>(selectedRoleNames);
 
-    const options = roles.map((role) => ({
+    const options = allRoles.map((role) => ({
         label: role.name,
         value: role.name,
-        permissions_count: role.permissions_count,
     }))
 
     return (
@@ -46,31 +46,18 @@ export default function RoleAssignmentCard({
 
             <CardContent>
                 <div>
-                    {roles.length === 0 ? (
+                    {allRoles.length === 0 ? (
                         <p className="text-sm text-muted-foreground">
                             {t('admins.no_roles_available')}
                         </p>
                     ) : (
                         <>
                             <MultiSelect
+                                name="roles"
                                 options={options}
-                                selected={selectedRoles}
-                                onSelectedChange={(selected) => {
-                                    setSelectedRoles(selected as string[]);
-                                }}
-                                placeholder={t('admins.select_roles')}
-                                searchPlaceholder={t('admins.search_roles')}
-                                emptyMessage={t('admins.no_roles_found')}
+                                onValueChange={onChange}
+                                defaultValue={currentAdminRoles}
                             />
-
-                            {selectedRoles.map((roleName) => (
-                                <input
-                                    key={roleName}
-                                    type="hidden"
-                                    name="roles[]"
-                                    value={roleName}
-                                />
-                            ))}
                         </>
                     )}
                     {errors?.roles && (

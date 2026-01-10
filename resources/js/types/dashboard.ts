@@ -200,13 +200,48 @@ export type Section = {
     id: number | string;
     title: Record<Locale, string> | string;
     description?: Record<Locale, string> | string;
-    type: string;
-    data: any;
-    ordered: number;
+    type: 'hero' | 'features' | 'products' | 'categories' | 'stores' | 'vendor_cta';
     is_active: boolean;
-    items?: SectionItem[];
+    order: number;
+    data: any;
     created_at?: string;
     updated_at?: string;
+    products?: Product[];
+    categories?: Category[];
+    stores?: Store[];
+}
+
+export type SectionData =
+    | StaticSectionData
+    | ProductsSectionData
+    | CategoriesSectionData
+    | StoresSectionData
+    | HeroSectionData;
+
+export type StaticSectionData = Record<string, any>;
+
+export type ProductsSectionData = {
+    source: 'latest' | 'best_seller' | 'manual';
+    limit: number;
+    product_ids?: number[];
+}
+
+export type CategoriesSectionData = {
+    source: 'featured_only' | 'manual';
+    limit: number;
+    category_ids?: number[];
+}
+
+export type StoresSectionData = {
+    source: 'trendy' | 'manual';
+    limit: number;
+    store_ids?: number[];
+}
+
+export type HeroSectionData = {
+    title: Record<Locale, string> | string;
+    sub_title: Record<Locale, string> | string;
+    image: Media | null;
 }
 
 export type SectionItem = {
@@ -229,6 +264,7 @@ export interface Field {
     label: string;
     type: 'text' | 'textarea';
     value: Record<Locale, string>;
+    onChange?: (value: any) => void;
     [key: string]: any;
 }
 
