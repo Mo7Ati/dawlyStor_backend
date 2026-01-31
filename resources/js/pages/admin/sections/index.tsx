@@ -10,6 +10,7 @@ import sections from '@/routes/admin/sections';
 import { EditAction } from '@/components/data-table/column-actions/edit-action';
 import { DeleteAction } from '@/components/data-table/column-actions/delete-action-button';
 import { toast } from 'sonner';
+import IsActiveBadge from '@/components/data-table/badges/is-active-badge';
 
 const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: PaginatedResponse<Section>; sectionTypes: Record<string, string> }) => {
     const { t: tTables } = useTranslation('tables');
@@ -32,35 +33,15 @@ const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: Pag
 
     const columns: ColumnDef<Section>[] = [
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label={tTables('common.select_all')}
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label={tTables('common.select_row')}
-                />
-            ),
-            enableHiding: false,
-        },
-        {
             accessorKey: 'type',
-            header: tTables('sections.type'),
+            header: tTables('common.type'),
             enableHiding: false,
         },
         {
             accessorKey: 'is_active',
-            header: tTables('sections.is_active'),
+            header: tTables('common.status'),
             enableHiding: false,
+            cell: ({ row }) => <IsActiveBadge isActive={row.original.is_active} />,
         },
         {
             id: 'actions',

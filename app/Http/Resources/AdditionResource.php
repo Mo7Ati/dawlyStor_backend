@@ -14,6 +14,7 @@ class AdditionResource extends JsonResource
             'name' => $this->name,
             'store_id' => $this->store_id,
             'is_active' => $this->is_active,
+            'price' => $this->pivot?->price,
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
             'store' => new StoreResource($this->whenLoaded('store')),

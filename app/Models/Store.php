@@ -52,9 +52,22 @@ class Store extends Authenticatable implements HasMedia
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function ($query) use ($search) {
-            $query->where('email', 'LIKE', "%{$search}%")
-                ->orWhere('phone', 'LIKE', "%{$search}%")
-                ->orWhereJsonContains('name', $search);
+            $query->whereAny([
+                'name',
+                'description',
+                'address',
+                'keywords',
+                'social_media',
+            ], 'like', "%{$search}%");
+        });
+    }
+    public function scopeCategory($query, $category)
+    {
+        return $query->when($category, function ($query) use ($category) {
+            $query->whereHas('category', function ($query) use ($category) {
+                $query->whereLike('name', "%{$category}%")
+                    ->orWhereLike('description', "%{$category}%");
+            });
         });
     }
 

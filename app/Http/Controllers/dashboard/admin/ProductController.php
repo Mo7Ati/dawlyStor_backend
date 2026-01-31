@@ -15,18 +15,8 @@ class ProductController extends Controller
         abort_unless($request->user('admin')->can('products.index'), 403);
 
         $products = Product::query()
-            ->with(['Store', 'Category'])
-            ->search($request->get('tableSearch'))
-            ->when($request->get('is_active') !== null, function ($query) use ($request) {
-                $query->where('is_active', $request->get('is_active'));
-            })
-            ->when($request->get('is_accepted') !== null, function ($query) use ($request) {
-                $query->where('is_accepted', $request->get('is_accepted'));
-            })
-            ->when($request->get('store_id'), function ($query) use ($request) {
-                $query->where('store_id', $request->get('store_id'));
-            })
-            ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
+            ->with(['store', 'category'])
+            ->applyFilters($request->all())
             ->paginate($request->get('per_page', 10))
             ->withQueryString();
 

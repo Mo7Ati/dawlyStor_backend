@@ -12,7 +12,8 @@
         "select_row": "تحديد الصف",
         "open_menu": "فتح القائمة",
         "active": "نشط",
-        "inactive": "غير نشط"
+        "inactive": "غير نشط",
+        "type": "النوع"
     },
     "admins": {
         "title": "المشرفين",

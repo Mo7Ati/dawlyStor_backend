@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 
-class StoreCategory extends Model
+class StoreCategory extends Model implements HasMedia
 {
-    use HasTranslations, HasFactory;
+    use HasTranslations, HasFactory, InteractsWithMedia;
     protected $fillable = [
         'name',
         'description',

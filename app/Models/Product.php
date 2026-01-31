@@ -48,21 +48,16 @@ class Product extends Model implements HasMedia
     public array $translatable = ['name', 'description'];
 
 
-    public function Store()
+    public function store()
     {
         return $this->belongsTo(Store::class, 'store_id', 'id');
     }
 
-    public function Category()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id')
             ->withDefault(['name' => 'No Category']);
     }
-
-    // public function Cart()
-    // {
-    //     return $this->hasMany(Cart::class, 'product_id', 'id');
-    // }
 
     public function orders()
     {
@@ -71,11 +66,14 @@ class Product extends Model implements HasMedia
 
     public function additions()
     {
-        return $this->belongsToMany(Addition::class, 'product_additions', 'product_id', 'addition_id')
-            ->withPivot('price')
-            ->active();
+        return $this->belongsToMany(
+            Addition::class,
+            'product_additions',
+            'product_id',
+            'addition_id'
+        )
+            ->withPivot(['price']);
     }
-
     public function options()
     {
         return $this->belongsToMany(Option::class, 'product_options', 'product_id', 'option_id')
@@ -93,7 +91,7 @@ class Product extends Model implements HasMedia
         return $query->where('store_id', auth()->guard('store')->id());
     }
 
-    public function scopeApplyFilters(Builder $query, array $filters): Builder
+    public function scopeApplyFilters(Builder $query, array $filters)
     {
         return $query
             ->when(
@@ -149,6 +147,14 @@ class Product extends Model implements HasMedia
                     $item['option_id'] => ['price' => $item['price']],
                 ])
         );
+    }
+
+    public function getDiscountPercentageAttribute(): float|null
+    {
+        if ($this->compare_price && $this->compare_price > $this->price) {
+            return round((($this->compare_price - $this->price) / $this->compare_price) * 100);
+        }
+        return null;
     }
 
 }

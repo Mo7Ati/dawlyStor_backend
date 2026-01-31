@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Plus, Trash2 } from "lucide-react"
-import { ReactNode } from "react"
+import { ReactNode, useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 interface RepeaterProps<T> {
@@ -23,7 +23,7 @@ interface RepeaterProps<T> {
     maxItems?: number
 }
 
-export function Repeater<T>({
+export function Repeater<T extends { _repeaterId?: string }>({
     name,
     value = [],
     onChange,
@@ -32,6 +32,8 @@ export function Repeater<T>({
     minItems = 0,
     maxItems,
 }: RepeaterProps<T>) {
+    const idCounter = useRef(0);
+
     const emitChange = (val: T[]) => {
         onChange({
             target: {
@@ -41,9 +43,23 @@ export function Repeater<T>({
         })
     }
 
+    // Ensure all items have unique IDs (for existing items loaded from server)
+    useEffect(() => {
+        const itemsWithoutId = value.filter(item => !item._repeaterId);
+        if (itemsWithoutId.length > 0) {
+            const updatedValue = value.map(item =>
+                item._repeaterId
+                    ? item
+                    : { ...item, _repeaterId: `repeater-${++idCounter.current}-${Date.now()}` }
+            );
+            emitChange(updatedValue);
+        }
+    }, []); // Only run once on mount
+
     const addItem = () => {
         if (maxItems && value.length >= maxItems) return
-        emitChange([...value, createItem()])
+        const newItem = { ...createItem(), _repeaterId: `repeater-${++idCounter.current}-${Date.now()}` };
+        emitChange([...value, newItem])
     }
 
     const removeItem = (index: number) => {
@@ -68,7 +84,7 @@ export function Repeater<T>({
                 <div className="space-y-3">
                     {value.map((item, index) => (
                         <Card
-                            key={index}
+                            key={item._repeaterId || index}
                             className={cn(
                                 "group relative overflow-hidden transition-all duration-200",
                                 "border-border/50 hover:border-border hover:shadow-md",

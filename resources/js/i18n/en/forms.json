@@ -1,6 +1,8 @@
 {
     "common": {
         "name": "Name",
+        "description": "Description",
+        "title": "Title",
         "email": "Email",
         "password": "Password",
         "status": "Status",
@@ -152,5 +154,43 @@
         "category_settings": "Category Settings",
         "images": "Images",
         "category_images": "Category Images"
+    },
+    "sections": {
+        "title": "Home Page Sections",
+        "create_section": "Create Section",
+        "edit_section": "Edit Section",
+        "create_section_info": "Fill in the information to create a new section.",
+        "edit_section_info": "Update the section information below.",
+        "type": "Section Type",
+        "select_section_type": "Select Section Type",
+        "section_type_details": "Section Details",
+        "section_type_details_info": "Update the section details below.",
+        "types": {
+            "hero": "Hero",
+            "features": "Features",
+            "products": "Products",
+            "categories": "Categories",
+            "stores": "Stores",
+            "vendor_cta": "Vendor CTA"
+        },
+        "source": "Source",
+        "select_source": "Select Source",
+        "select_products": "Select Products",
+        "select_products_placeholder": "Select products to display in this section",
+        "select_categories": "Select Categories",
+        "select_categories_placeholder": "Select categories to display in this section",
+        "select_stores": "Select Stores",
+        "select_stores_placeholder": "Select stores to display in this section",
+        "manual_selection": "Manual Selection",
+        "products": {
+            "latest": "Latest",
+            "best_seller": "Best Seller"
+        },
+        "categories": {
+            "featured_only": "Featured Only"
+        },
+        "stores": {
+            "trendy": "Trendy"
+        }
     }
 }

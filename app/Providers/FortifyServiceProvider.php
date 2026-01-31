@@ -29,6 +29,7 @@ class FortifyServiceProvider extends ServiceProvider
                 'fortify.home' => $panel,
                 'fortify.passwords' => $panel,
                 'fortify.prefix' => $panel,
+                'fortify.middleware' => ['web'],
             ]);
         }
     }

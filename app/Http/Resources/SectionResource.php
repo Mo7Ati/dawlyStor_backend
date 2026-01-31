@@ -3,9 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Enums\HomePageSectionsType;
-use App\Models\Category;
 use App\Models\Product;
 use App\Models\Store;
+use App\Models\StoreCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,35 +27,69 @@ class SectionResource extends JsonResource
         ];
     }
 
-    private function getSectionData(): array
+    private function getSectionData()
     {
         return match ($this->type) {
+            HomePageSectionsType::HERO => $this->resolveHero(),
+            HomePageSectionsType::FEATURES => $this->resolveFeatures(),
             HomePageSectionsType::PRODUCTS => $this->resolveProducts(),
             HomePageSectionsType::CATEGORIES => $this->resolveCategories(),
             HomePageSectionsType::STORES => $this->resolveStores(),
+            HomePageSectionsType::VENDOR_CTA => $this->resolveVendorCta(),
             default => [],
         };
     }
+    private function resolveHero(): array
+    {
+        return [
+            'title' => getByLocale($this->data['title']),
+            'description' => getByLocale($this->data['description']),
+        ];
+    }
+
+    private function resolveFeatures()
+    {
+        $features = collect($this->data['features'] ?? [])->map(function ($item) {
+            return [
+                'title' => getByLocale($item['title']),
+                'description' => getByLocale($item['description']),
+            ];
+        });
+
+        return $features;
+    }
+
+    private function resolveVendorCta()
+    {
+        return [
+            'title' => getByLocale($this->data['title']),
+            'description' => getByLocale($this->data['description']),
+        ];
+    }
+
 
     /**
      * Resolve products based on section data source
      */
-    private function resolveProducts(): array
+    private function resolveProducts()
     {
         $source = $this->data['source'] ?? 'latest';
-        $limit = $this->data['limit'] ?? 10;
+        $limit = 8;
+
+        $products_query = Product::query()
+            ->with(['store:id,name'])
+            ->active()
+            ->accepted();
 
         $products = match ($source) {
-            'latest' => Product::active()
-                ->accepted()
+            'latest' => $products_query
                 ->latest()
                 ->limit($limit)
                 ->get(),
 
             'best_seller' => collect([]), // Placeholder - to be implemented later
 
-            'manual' => Product::active()
-                ->accepted()
+            'manual' => $products_query
                 ->whereIn('id', $this->data['product_ids'] ?? [])
                 ->limit($limit)
                 ->get(),
@@ -63,9 +97,7 @@ class SectionResource extends JsonResource
             default => collect([]),
         };
 
-        return [
-            'products' => ProductResource::collection($products)
-        ];
+        return ProductResource::collection($products);
     }
 
     /**
@@ -74,12 +106,12 @@ class SectionResource extends JsonResource
     private function resolveCategories(): array
     {
         $source = $this->data['source'] ?? null;
-        $limit = $this->data['limit'] ?? 10;
+        $limit = 7;
 
         $categories = match ($source) {
             'featured_only' => collect([]), // Placeholder - to be implemented later
 
-            'manual' => Category::active()
+            'manual' => StoreCategory::query()
                 ->whereIn('id', $this->data['category_ids'] ?? [])
                 ->limit($limit)
                 ->get(),
@@ -87,23 +119,24 @@ class SectionResource extends JsonResource
             default => collect([]),
         };
 
-        return [
-            'categories' => CategoryResource::collection($categories)
-        ];
+        return $categories->map(function ($category) {
+            return StoreCategoryResource::make($category)->serializeForHomePage();
+        })->toArray();
     }
 
     /**
      * Resolve stores based on section data source
      */
-    private function resolveStores(): array
+    private function resolveStores()
     {
         $source = $this->data['source'] ?? null;
-        $limit = $this->data['limit'] ?? 10;
+        $limit = 10;
 
         $stores = match ($source) {
             'trendy' => collect([]), // Placeholder - to be implemented later based on rating
 
             'manual' => Store::where('is_active', true)
+                ->with(['category'])
                 ->whereIn('id', $this->data['store_ids'] ?? [])
                 ->limit($limit)
                 ->get(),
@@ -111,9 +144,7 @@ class SectionResource extends JsonResource
             default => collect([]),
         };
 
-        return [
-            'stores' => StoreResource::collection($stores)
-        ];
+        return StoreResource::collection($stores);
     }
 
     /**

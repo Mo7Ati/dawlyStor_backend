@@ -12,7 +12,8 @@
         "select_row": "Select row",
         "open_menu": "Open menu",
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "type": "Type"
     },
     "admins": {
         "title": "Admins",

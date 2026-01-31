@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PanelsEnum;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 function getPanel()
@@ -35,4 +36,14 @@ function errorResponse($message = 'Error', $status = 400)
         'success' => false,
         'message' => $message,
     ], $status);
+}
+
+function locale()
+{
+    return app()->getLocale();
+}
+
+function getByLocale($array)
+{
+    return Arr::get($array, locale(), $array['en']);
 }

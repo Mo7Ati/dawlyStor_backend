@@ -40,5 +40,10 @@
         "title": "Categories",
         "create": "Create Category",
         "edit": "Edit Category"
+    },
+    "sections": {
+        "title": "Sections",
+        "create": "Create Section",
+        "edit": "Edit Section"
     }
 }

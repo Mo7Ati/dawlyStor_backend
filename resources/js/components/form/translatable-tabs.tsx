@@ -18,6 +18,8 @@ const TranslatableTabs = ({ fields, errors }: { fields: Field[], errors: Record<
     const [values, setValues] = useState<LocalizedData>({});
 
     useEffect(() => {
+        console.log(Object.keys(errors));
+
         if (errors && Object.keys(errors).length > 0) {
             const errorLocale = locales.find(locale =>
                 Object.keys(errors).some(key => key.includes(`.${locale.code}`))
@@ -57,7 +59,9 @@ const TranslatableTabs = ({ fields, errors }: { fields: Field[], errors: Record<
                             className={cn(activeTab.code === locale.code ? "block" : "hidden", "space-y-4")}
                         >
                             {fields.map(field => {
-                                const errorKey = `${field.name}.${locale.code}`;
+                                // Normalize field name: convert brackets to dots (e.g., "data[title]" -> "data.title")
+                                const normalizedFieldName = field.name.replace(/\[/g, '.').replace(/\]/g, '');
+                                const errorKey = `${normalizedFieldName}.${locale.code}`;
                                 const errorMessage = errors[errorKey];
 
                                 return (

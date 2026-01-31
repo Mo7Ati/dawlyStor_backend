@@ -56,8 +56,7 @@ export default function SectionForm({
         }
     }, [sectionType, type]);
 
-
-
+    console.log(sectionData);
 
     return (
         <Form
@@ -67,36 +66,52 @@ export default function SectionForm({
                     ? sections.update.url({ section: section.id })
                     : sections.store.url()
             }
-            transform={prev => ({ ...prev, data: { ...(prev.data as any), ...sectionData } })}
+            transform={prev => {
+                // Preserve form-collected data from inputs (formData takes precedence)
+                const formData = prev.data as any || {};
+                // Merge sectionData for non-input fields (like source, product_ids, etc.)
+                // but form-collected data (from inputs) takes precedence
+                return {
+                    ...prev,
+                    data: {
+                        ...sectionData,
+                        ...formData  // Form inputs override sectionData
+                    }
+                };
+            }}
         >
             {({ processing, errors }) => (
-                <div className="space-y-4">
+                <div className="space-y-4 max-w-2xl">
+                    {/* <>
+                        {console.log(errors['data'])}
+                    </> */}
                     <Card>
                         <CardHeader>
                             <CardTitle>
-                                {type === 'create' ? 'Create Section' : 'Edit Section'}
+                                {type === 'create' ? t('sections.create_section') : t('sections.edit_section')}
                             </CardTitle>
                             <CardDescription>
-                                {type === 'create' ? 'Add a new section to the landing page' : 'Update section information'}
+                                {type === 'create' ? t('sections.create_section_info') : t('sections.edit_section_info')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {/* Type Selector */}
                             <div className="space-y-2">
-                                <Label htmlFor="type">Type *</Label>
+                                <Label htmlFor="type">{t('sections.type')}</Label>
                                 <Select
-                                    defaultValue={sectionType}
+                                    defaultValue={sectionType || undefined}
                                     onValueChange={(value) => setSectionType(value as Section['type'])}
                                     name='type'
                                     aria-invalid={errors.type ? 'true' : 'false'}
+                                    required={true}
                                 >
                                     <SelectTrigger id="type">
-                                        <SelectValue placeholder="Select section type" />
+                                        <SelectValue placeholder={t('sections.select_section_type')} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {Object.entries(sectionTypes).map(([value, label]) => (
                                             <SelectItem key={value} value={value}>
-                                                {label}
+                                                {t(`sections.types.${value}`)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -110,38 +125,36 @@ export default function SectionForm({
                     </Card>
 
 
-                    <Card>
+                    <Card hidden={sectionType === null}>
                         <CardHeader>
                             <CardTitle>
-                                Section Type Details
+                                {t('sections.section_type_details')}
                             </CardTitle>
                             <CardDescription>
-                                update the details of the section type to display on the home page
+                                {t('sections.section_type_details_info')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {/* Hero Section Fields */}
                             {sectionType === 'hero' && (
-                                <>
-                                    <TranslatableTabs
-                                        fields={[
-                                            {
-                                                name: 'data[title]',
-                                                label: t('sections.title') || 'Title',
-                                                type: 'text',
-                                                value: normalizeFieldValue(section.data?.title),
-                                                required: true,
-                                            },
-                                            {
-                                                name: 'data[sub_title]',
-                                                label: t('sections.subtitle') || 'Subtitle',
-                                                type: 'text',
-                                                value: normalizeFieldValue(section.data?.sub_title),
-                                            },
-                                        ]}
-                                        errors={errors}
-                                    />
-                                </>
+                                <TranslatableTabs
+                                    fields={[
+                                        {
+                                            name: 'data[title]',
+                                            label: t('common.title'),
+                                            type: 'text',
+                                            value: normalizeFieldValue(section.data?.title),
+                                            required: true,
+                                        },
+                                        {
+                                            name: 'data[description]',
+                                            label: t('common.description'),
+                                            type: 'text',
+                                            value: normalizeFieldValue(section.data?.description),
+                                        },
+                                    ]}
+                                    errors={errors}
+                                />
                             )}
                             {/* Features Section Fields */}
                             {sectionType === 'features' && (
@@ -150,64 +163,76 @@ export default function SectionForm({
                                         name="data[features]"
                                         value={features}
                                         onChange={e => {
-                                            setFeatures(e.target.value)
+                                            setFeatures(e.target.value);
                                         }}
+                                        minItems={1}
+                                        maxItems={4}
                                         createItem={() => ({
-                                            icon: '',
                                             title: { en: '', ar: '' },
                                             description: { en: '', ar: '' },
                                         })}
                                         renderRow={(item, index, update) => (
-                                            <div className="space-y-4">
-                                                <div className="space-y-2">
-                                                    <Label>Icon Name</Label>
-                                                    <Input
-                                                        defaultValue={item.icon || ''}
-                                                        onChange={(e) => update({ icon: e.target.value })}
-                                                        placeholder="e.g., LayoutGrid, BookOpen"
-                                                        name={`data.features.${index}.icon`}
-                                                    />
-                                                    <InputError message={errors['data.features.icon']} />
-                                                </div>
-                                                <TranslatableTabs
-                                                    fields={[
-                                                        {
-                                                            name: `data.features.${index}.title`,
-                                                            label: t('sections.title') || 'Title',
-                                                            type: 'text',
-                                                            value: normalizeFieldValue(item.title || {}),
-                                                            required: true,
-                                                        },
-                                                        {
-                                                            name: `data.features.${index}.description`,
-                                                            label: t('sections.description') || 'Description',
-                                                            type: 'textarea',
-                                                            value: normalizeFieldValue(item.description || {}),
-                                                        },
-                                                    ]}
-                                                    errors={errors}
-                                                />
-                                            </div>
+                                            <TranslatableTabs
+                                                key={index}
+                                                fields={[
+                                                    {
+                                                        name: `data[features][${index}][title]`,
+                                                        label: t('common.title'),
+                                                        type: 'text',
+                                                        value: normalizeFieldValue(item.title || {}),
+                                                        required: true,
+                                                    },
+                                                    {
+                                                        name: `data[features][${index}][description]`,
+                                                        label: t('common.description'),
+                                                        type: 'textarea',
+                                                        value: normalizeFieldValue(item.description || {}),
+                                                        required: true,
+                                                    },
+                                                ]}
+                                                errors={errors}
+                                            />
                                         )}
                                     />
+                                    {errors['data.features'] && (
+                                        <InputError message={errors['data.features']} />
+                                    )}
                                 </div>
                             )}
                             {/* Products Section Fields */}
                             {sectionType === 'products' && (
                                 <div className="space-y-4">
+                                    <TranslatableTabs
+                                        fields={[
+                                            {
+                                                name: 'data[title]',
+                                                label: t('common.title'),
+                                                type: 'text',
+                                                value: normalizeFieldValue(section.data?.title),
+                                                required: true,
+                                            },
+                                            {
+                                                name: 'data[description]',
+                                                label: t('common.description'),
+                                                type: 'text',
+                                                value: normalizeFieldValue(section.data?.description),
+                                            },
+                                        ]}
+                                        errors={errors}
+                                    />
                                     <div className="space-y-2">
-                                        <Label htmlFor="sectionData.source">{t('sections.source') || 'Source'}</Label>
+                                        <Label htmlFor="sectionData.source">{t('sections.source')}</Label>
                                         <Select
                                             onValueChange={value => setSectionData((prev: any) => ({ ...prev, source: value }))}
-                                            defaultValue={section.data?.source || 'latest'}
+                                            defaultValue={section.data?.source || undefined}
                                         >
                                             <SelectTrigger id="sectionData.source">
-                                                <SelectValue />
+                                                <SelectValue placeholder={t('sections.select_source')} />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="latest">Latest</SelectItem>
-                                                <SelectItem value="best_seller">Best Seller</SelectItem>
-                                                <SelectItem value="manual">Manual Selection</SelectItem>
+                                                <SelectItem value="latest">{t('sections.products.latest')}</SelectItem>
+                                                <SelectItem value="best_seller">{t('sections.products.best_seller')}</SelectItem>
+                                                <SelectItem value="manual">{t('sections.manual_selection')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <InputError message={errors['data.source']} />
@@ -215,7 +240,7 @@ export default function SectionForm({
 
                                     {sectionData?.source === 'manual' && (
                                         <div className="space-y-2">
-                                            <Label>{t('sections.products') || 'Products'} *</Label>
+                                            <Label>{t('sections.select_products')} *</Label>
                                             <MultiSelect
                                                 defaultValue={section.data?.product_ids || []}
                                                 options={products.map(p => ({
@@ -223,6 +248,7 @@ export default function SectionForm({
                                                     label: typeof p.name === 'string' ? p.name : (p.name.en || p.name.ar || String(p.id))
                                                 }))}
                                                 onValueChange={(value) => setSectionData((prev: any) => ({ ...prev, product_ids: value }))}
+                                                placeholder={t('sections.select_products_placeholder')}
                                             />
                                             <InputError message={errors['data.product_ids']} />
                                         </div>
@@ -232,20 +258,38 @@ export default function SectionForm({
                             {/* Categories Section Fields */}
                             {sectionType === 'categories' && (
                                 <div className="space-y-4">
+                                    <TranslatableTabs
+                                        fields={[
+                                            {
+                                                name: 'data[title]',
+                                                label: t('common.title'),
+                                                type: 'text',
+                                                value: normalizeFieldValue(section.data?.title),
+                                                required: true,
+                                            },
+                                            {
+                                                name: 'data[description]',
+                                                label: t('common.description'),
+                                                type: 'text',
+                                                value: normalizeFieldValue(section.data?.description),
+                                            },
+                                        ]}
+                                        errors={errors}
+                                    />
                                     <div className="space-y-2">
-                                        <Label htmlFor="sectionData.source">{t('sections.source') || 'Source'}</Label>
+                                        <Label htmlFor="sectionData.source">{t('sections.source')}</Label>
                                         <Select
-                                            defaultValue={section.data?.source || 'featured_only'}
+                                            defaultValue={section.data?.source || undefined}
                                             onValueChange={(value) => {
                                                 setSectionData((prev: any) => ({ ...prev, source: value }));
                                             }}
                                         >
                                             <SelectTrigger id="sectionData.source">
-                                                <SelectValue />
+                                                <SelectValue placeholder={t('sections.select_source')} />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="featured_only">Featured Only</SelectItem>
-                                                <SelectItem value="manual">Manual Selection</SelectItem>
+                                                <SelectItem value="featured_only">{t('sections.categories.featured_only')}</SelectItem>
+                                                <SelectItem value="manual">{t('sections.manual_selection')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <InputError message={errors['data.source']} />
@@ -253,7 +297,7 @@ export default function SectionForm({
 
                                     {sectionData?.source === 'manual' && (
                                         <div className="space-y-2">
-                                            <Label>{t('sections.categories') || 'Categories'} *</Label>
+                                            <Label>{t('sections.select_categories')} *</Label>
                                             <MultiSelect
                                                 defaultValue={section.data?.category_ids || []}
                                                 options={categories.map(c => ({
@@ -261,31 +305,48 @@ export default function SectionForm({
                                                     label: typeof c.name === 'string' ? c.name : (c.name.en || c.name.ar || String(c.id))
                                                 }))}
                                                 onValueChange={(value) => setSectionData((prev: any) => ({ ...prev, category_ids: value }))}
-                                                placeholder={t('sections.select_categories') || 'Select categories...'}
+                                                placeholder={t('sections.select_categories_placeholder')}
                                             />
                                             <InputError message={errors['data.category_ids']} />
                                         </div>
                                     )}
                                 </div>
                             )}
-
                             {/* Stores Section Fields */}
                             {sectionType === 'stores' && (
                                 <div className="space-y-4">
+                                    <TranslatableTabs
+                                        fields={[
+                                            {
+                                                name: 'data[title]',
+                                                label: t('common.title'),
+                                                type: 'text',
+                                                value: normalizeFieldValue(section.data?.title),
+                                                required: true,
+                                            },
+                                            {
+                                                name: 'data[description]',
+                                                label: t('common.description'),
+                                                type: 'text',
+                                                value: normalizeFieldValue(section.data?.description),
+                                            },
+                                        ]}
+                                        errors={errors}
+                                    />
                                     <div className="space-y-2">
-                                        <Label htmlFor="sectionData.source">{t('sections.source') || 'Source'}</Label>
+                                        <Label htmlFor="sectionData.source">{t('sections.source')}</Label>
                                         <Select
-                                            defaultValue={section.data?.source || 'trendy'}
+                                            defaultValue={section.data?.source || undefined}
                                             onValueChange={(value) => {
                                                 setSectionData((prev: any) => ({ ...prev, source: value }));
                                             }}
                                         >
                                             <SelectTrigger id="sectionData.source">
-                                                <SelectValue />
+                                                <SelectValue placeholder={t('sections.select_source')} />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="trendy">Trendy</SelectItem>
-                                                <SelectItem value="manual">Manual Selection</SelectItem>
+                                                <SelectItem value="trendy">{t('sections.stores.trendy')}</SelectItem>
+                                                <SelectItem value="manual">{t('sections.manual_selection')}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <InputError message={errors['data.source']} />
@@ -293,7 +354,7 @@ export default function SectionForm({
 
                                     {sectionData?.source === 'manual' && (
                                         <div className="space-y-2">
-                                            <Label>{t('sections.stores') || 'Stores'} *</Label>
+                                            <Label>{t('sections.select_stores')} *</Label>
                                             <MultiSelect
                                                 options={stores.map(s => ({
                                                     value: String(s.id),
@@ -301,14 +362,13 @@ export default function SectionForm({
                                                 }))}
                                                 defaultValue={section.data?.store_ids || []}
                                                 onValueChange={(value) => setSectionData((prev: any) => ({ ...prev, store_ids: value }))}
-                                                placeholder={t('sections.select_stores') || 'Select stores...'}
+                                                placeholder={t('sections.select_stores_placeholder')}
                                             />
                                             <InputError message={errors['data.store_ids']} />
                                         </div>
                                     )}
                                 </div>
                             )}
-
                             {/* Vendor CTA Section Fields */}
                             {sectionType === 'vendor_cta' && (
                                 <div className="space-y-4">
@@ -316,45 +376,20 @@ export default function SectionForm({
                                         fields={[
                                             {
                                                 name: 'data.title',
-                                                label: t('sections.title') || 'Title',
+                                                label: t('common.title'),
                                                 type: 'text',
                                                 value: normalizeFieldValue(sectionData.title || {}),
                                                 required: true,
                                             },
                                             {
                                                 name: 'data.description',
-                                                label: t('sections.description') || 'Description',
+                                                label: t('common.description'),
                                                 type: 'textarea',
                                                 value: normalizeFieldValue(sectionData.description || {}),
                                             },
                                         ]}
                                         errors={errors}
                                     />
-                                    <div className="space-y-2">
-                                        <Label htmlFor="data.button_text">{t('sections.button_text') || 'Button Text'}</Label>
-                                        <Input
-                                            id="data.button_text"
-                                            name="data[button_text]"
-                                            defaultValue={sectionData.button_text || ''}
-                                            onChange={(e) => {
-                                                setSectionData((prev: any) => ({ ...prev, button_text: e.target.value }));
-                                            }}
-                                        />
-                                        <InputError message={errors['data.button_text']} />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="data.button_link">{t('sections.button_link') || 'Button Link'}</Label>
-                                        <Input
-                                            id="data.button_link"
-                                            name="data[button_link]"
-                                            type="url"
-                                            defaultValue={sectionData.button_link || ''}
-                                            onChange={(e) => {
-                                                setSectionData((prev: any) => ({ ...prev, button_link: e.target.value }));
-                                            }}
-                                        />
-                                        <InputError message={errors['data.button_link']} />
-                                    </div>
                                 </div>
                             )}
                         </CardContent>

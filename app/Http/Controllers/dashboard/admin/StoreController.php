@@ -59,15 +59,6 @@ class StoreController extends Controller
         return to_route('admin.stores.index')->with('success', __('messages.created_successfully'));
     }
 
-    // public function show($id)
-    // {
-    //     $store = Store::with(['category', 'media'])->findOrFail($id);
-    //     return Inertia::render('admin/stores/show', [
-    //         'store' => new StoreResource($store),
-    //         'categories' => StoreCategoryResource::collection(StoreCategory::all()),
-    //     ]);
-    // }
-
     public function edit($id)
     {
         abort_unless(request()->user('admin')->can('stores.update'), 403);

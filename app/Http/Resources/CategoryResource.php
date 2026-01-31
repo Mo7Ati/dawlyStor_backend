@@ -32,5 +32,8 @@ class CategoryResource extends JsonResource
             'images' => $this->getMedia('images'),
         ];
     }
+
+
+
 }
 

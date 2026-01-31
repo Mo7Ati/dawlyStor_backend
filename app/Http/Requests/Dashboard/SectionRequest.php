@@ -36,91 +36,60 @@ class SectionRequest extends FormRequest
             $rules['data.title'] = ['required', 'array:en,ar'];
             $rules['data.title.*'] = ['required', 'string'];
 
-            $rules['data.sub_title'] = ['required', 'array:en,ar'];
-            $rules['data.sub_title.*'] = ['required', 'string'];
+            $rules['data.description'] = ['required', 'array:en,ar'];
+            $rules['data.description.*'] = ['required', 'string'];
         } elseif ($type === HomePageSectionsType::PRODUCTS->value) {
             $rules['data.source'] = ['required', 'string', Rule::in(['latest', 'best_seller', 'manual'])];
+
+            $rules['data.title'] = ['required', 'array:en,ar'];
+            $rules['data.title.*'] = ['required_with:data.title', 'string'];
+
+            $rules['data.description'] = ['required', 'array:en,ar'];
+            $rules['data.description.*'] = ['required_with:data.description', 'string'];
+
             $rules['data.product_ids'] = ['required_if:data.source,manual', 'array'];
             $rules['data.product_ids.*'] = ['required_with:data.product_ids', 'exists:products,id'];
         } elseif ($type === HomePageSectionsType::CATEGORIES->value) {
             $rules['data.source'] = ['required', 'string', Rule::in(['featured_only', 'manual'])];
+
+            $rules['data.title'] = ['required', 'array:en,ar'];
+            $rules['data.title.*'] = ['required_with:data.title', 'string'];
+
+            $rules['data.description'] = ['required', 'array:en,ar'];
+            $rules['data.description.*'] = ['required_with:data.description', 'string'];
+
             $rules['data.category_ids'] = ['required_if:data.source,manual', 'array'];
             $rules['data.category_ids.*'] = ['required_with:data.category_ids', 'exists:store_categories,id'];
         } elseif ($type === HomePageSectionsType::STORES->value) {
             $rules['data.source'] = ['required', 'string', Rule::in(['trendy', 'manual'])];
+
+            $rules['data.title'] = ['required', 'array:en,ar'];
+            $rules['data.title.*'] = ['required_with:data.title', 'string'];
+
+            $rules['data.description'] = ['required', 'array:en,ar'];
+            $rules['data.description.*'] = ['required_with:data.description', 'string'];
+
             $rules['data.store_ids'] = ['required_if:data.source,manual', 'array'];
             $rules['data.store_ids.*'] = ['required_with:data.store_ids', 'exists:stores,id'];
         } elseif ($type === HomePageSectionsType::FEATURES->value) {
-            $rules['data.features'] = ['required', 'array'];
+            $rules['data.features'] = ['required', 'array', 'min:1'];
             // $rules['data.features.*.icon'] = ['required', 'string'];
             $rules['data.features.*.title'] = ['required', 'array:en,ar'];
             $rules['data.features.*.title.*'] = ['required', 'string'];
             $rules['data.features.*.description'] = ['required', 'array:en,ar'];
             $rules['data.features.*.description.*'] = ['required', 'string'];
         } elseif ($type === HomePageSectionsType::VENDOR_CTA->value) {
-            $rules['data.vendor_cta'] = ['required', 'array'];
-            $rules['data.vendor_cta.title'] = ['required', 'array:en,ar'];
-            $rules['data.vendor_cta.title.*'] = ['required', 'string'];
+            $rules['data.title'] = ['required', 'array:en,ar'];
+            $rules['data.title.*'] = ['required_with:data.title', 'string'];
 
-            $rules['data.vendor_cta.description'] = ['required', 'array:en,ar'];
-            $rules['data.vendor_cta.description.*'] = ['required', 'string'];
+            $rules['data.description'] = ['required', 'array:en,ar'];
+            $rules['data.description.*'] = ['required_with:data.description', 'string'];
         }
         // hero, features, vendor_cta are static - no additional validation needed
         // Unknown fields will be rejected in after hook
 
         return $rules;
     }
-
-    /**
-     * Configure the validator instance.
-     */
-    // public function withValidator(Validator $validator): void
-    // {
-    //     $validator->after(function (Validator $validator) {
-    //         $type = $this->input('type');
-    //         $data = $this->input('data', []);
-
-    //         // For static sections (hero, features, vendor_cta), reject unknown fields
-    //         if (
-    //             in_array($type, [
-    //                 HomePageSectionsType::HERO->value,
-    //                 HomePageSectionsType::FEATURES->value,
-    //                 HomePageSectionsType::VENDOR_CTA->value,
-    //             ])
-    //         ) {
-    //             // Allow any fields for static sections - they're just JSON data
-    //             // No strict validation needed as per requirements
-    //         }
-
-    //         // For dynamic sections, ensure only allowed fields exist
-    //         if ($type === HomePageSectionsType::PRODUCTS->value) {
-    //             $allowedFields = ['source', 'limit', 'product_ids'];
-    //             $unknownFields = array_diff(array_keys($data), $allowedFields);
-    //             if (!empty($unknownFields)) {
-    //                 foreach ($unknownFields as $field) {
-    //                     $validator->errors()->add("data.{$field}", "Unknown field '{$field}' is not allowed for products section.");
-    //                 }
-    //             }
-    //         } elseif ($type === HomePageSectionsType::CATEGORIES->value) {
-    //             $allowedFields = ['source', 'limit', 'category_ids'];
-    //             $unknownFields = array_diff(array_keys($data), $allowedFields);
-    //             if (!empty($unknownFields)) {
-    //                 foreach ($unknownFields as $field) {
-    //                     $validator->errors()->add("data.{$field}", "Unknown field '{$field}' is not allowed for categories section.");
-    //                 }
-    //             }
-    //         } elseif ($type === HomePageSectionsType::STORES->value) {
-    //             $allowedFields = ['source', 'limit', 'store_ids'];
-    //             $unknownFields = array_diff(array_keys($data), $allowedFields);
-    //             if (!empty($unknownFields)) {
-    //                 foreach ($unknownFields as $field) {
-    //                     $validator->errors()->add("data.{$field}", "Unknown field '{$field}' is not allowed for stores section.");
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
-
     public function messages(): array
     {
         $attributes = $this->attributes();
@@ -128,9 +97,12 @@ class SectionRequest extends FormRequest
         return [
             'type.required' => __('validation.required', ['attribute' => $attributes['type']]),
             'type.enum' => __('validation.enum', ['attribute' => $attributes['type']]),
+
             'is_active.boolean' => __('validation.boolean', ['attribute' => $attributes['is_active']]),
+
             'order.integer' => __('validation.integer', ['attribute' => $attributes['order']]),
             'data.required' => __('validation.required', ['attribute' => $attributes['data']]),
+
             'data.array' => __('validation.array', ['attribute' => $attributes['data']]),
             'data.source.required' => __('validation.required', ['attribute' => $attributes['data.source'] ?? 'source']),
             'data.source.in' => __('validation.in', ['attribute' => $attributes['data.source'] ?? 'source']),

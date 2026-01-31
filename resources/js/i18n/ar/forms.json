@@ -2,6 +2,7 @@
     "common": {
         "name": "الاسم",
         "description": "الوصف",
+        "title": "العنوان",
         "keywords": "الكلمات الرئيسية",
         "email": "البريد الإلكتروني",
         "password": "كلمة المرور",
@@ -141,5 +142,43 @@
         "name": "الاسم",
         "enter_name": "أدخل اسم الخيار",
         "option_settings": "إعدادات الخيار"
+    },
+    "sections": {
+        "title": "الأقسام",
+        "create_section": "إنشاء قسم",
+        "edit_section": "تعديل قسم",
+        "create_section_info": "أدخل المعلومات الأساسية لإنشاء قسم جديد.",
+        "edit_section_info": "قم بتحديث معلومات القسم أدناه.",
+        "type": "نوع القسم",
+        "select_section_type": "حدد نوع القسم",
+        "section_type_details": "تفاصيل القسم",
+        "section_type_details_info": "قم بتحديث تفاصيل القسم أدناه.",
+        "types": {
+            "hero": "القسم الرئيسي",
+            "features": "الميزات",
+            "products": "المنتجات",
+            "categories": "الفئات",
+            "stores": "المتاجر",
+            "vendor_cta": "القسم التعريفي للمتاجر"
+        },
+        "source": "المصدر",
+        "select_source": "حدد المصدر",
+        "select_products": "حدد المنتجات",
+        "select_products_placeholder": "حدد المنتجات التي سوف تظهر في هذا القسم",
+        "select_categories": "حدد الفئات",
+        "select_categories_placeholder": "حدد الفئات التي سوف تظهر في هذا القسم",
+        "select_stores": "حدد المتاجر",
+        "select_stores_placeholder": "حدد المتاجر التي سوف تظهر في هذا القسم",
+        "manual_selection": "اختيار من القائمة",
+        "products": {
+            "latest": "الأحدث",
+            "best_seller": "الأكثر مبيعاً"
+        },
+        "categories": {
+            "featured_only": "الفئات المميزة"
+        },
+        "stores": {
+            "trendy": "المتاجر الأكثر شعبية"
+        }
     }
 }

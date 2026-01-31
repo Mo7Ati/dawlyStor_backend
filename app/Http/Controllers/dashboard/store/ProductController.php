@@ -25,7 +25,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = Product::query()
-            ->with(['Category'])
+            ->with(['category'])
             ->forAuthStore()
             ->applyFilters($request->all())
             ->paginate($request->get('per_page', 10))
@@ -51,7 +51,6 @@ class ProductController extends Controller
         $store = Auth::guard('store')->user();
 
         DB::transaction(function () use ($request, $store) {
-
             $product = Product::create(
                 $request->safe()->except([
                     'additions',

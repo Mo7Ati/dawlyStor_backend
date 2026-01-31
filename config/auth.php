@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'customers',
         ],
         'admin' => [
             'driver' => 'session',
@@ -47,10 +47,6 @@ return [
         'store' => [
             'driver' => 'session',
             'provider' => 'stores',
-        ],
-        'customer' => [
-            'driver' => 'session',
-            'provider' => 'customers',
         ],
     ],
 
@@ -72,11 +68,10 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'customers' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', App\Models\Customer::class),
         ],
-
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
@@ -84,10 +79,6 @@ return [
         'stores' => [
             'driver' => 'eloquent',
             'model' => App\Models\Store::class,
-        ],
-        'customers' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Customer::class,
         ],
         // 'users' => [
         //     'driver' => 'database',
@@ -115,8 +106,8 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'customers' => [
+            'provider' => 'customers',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
@@ -129,12 +120,6 @@ return [
         ],
         'stores' => [
             'provider' => 'stores',
-            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-        'customers' => [
-            'provider' => 'customers',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

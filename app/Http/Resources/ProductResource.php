@@ -16,45 +16,31 @@ class ProductResource extends JsonResource
             'keywords' => $this->keywords,
             'price' => $this->price,
             'compare_price' => $this->compare_price,
+            'discount_percentage' => $this->discount_percentage,
             'store_id' => $this->store_id,
             'category_id' => $this->category_id,
             'is_active' => $this->is_active,
             'is_accepted' => $this->is_accepted,
+            'image_url' => "https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=",
             'quantity' => $this->quantity,
+            'rating' => ['value' => '4.8', 'count' => '100',],
+            'trending' => true,
             'created_at' => $this->created_at?->format('Y-m-d'),
             'updated_at' => $this->updated_at?->format('Y-m-d'),
-            'store' => StoreResource::make($this->whenLoaded('Store')),
-            'category' => CategoryResource::make($this->whenLoaded('Category')),
-            'additions' => AdditionResource::collection($this->whenLoaded('additions')),
-            'options' => OptionResource::collection($this->whenLoaded('options')),
+            'store' => $this->whenLoaded('store', fn($store) => new StoreResource($store)),
+            'category' => $this->whenLoaded('category', fn($category) => new CategoryResource($category)),
+            'additions' => $this->whenLoaded('additions', fn($additions) => AdditionResource::collection($additions)),
+            'options' => $this->whenLoaded('options', fn($options) => OptionResource::collection($options)),
+            'store_category' => $this->whenLoaded('store.category', fn($storeCategory) => new StoreCategoryResource($storeCategory)),
         ];
     }
 
     public function serializeForForm(): array
     {
         return [
-            'id' => $this->id,
+            ...$this->toArray(request()),
             'name' => $this->getTranslations('name'),
             'description' => $this->getTranslations('description'),
-            'keywords' => $this->keywords,
-            'price' => $this->price,
-            'compare_price' => $this->compare_price,
-            'category_id' => $this->category_id,
-            'is_active' => $this->is_active,
-            'quantity' => $this->quantity,
-            'images' => $this->getMedia('images'),
-            'additions' => $this->additions->map(function ($addition) {
-                return [
-                    'addition_id' => $addition->id,
-                    'price' => $addition->pivot->price ?? 0,
-                ];
-            })->toArray(),
-            'options' => $this->options->map(function ($option) {
-                return [
-                    'option_id' => $option->id,
-                    'price' => $option->pivot->price ?? 0,
-                ];
-            })->toArray(),
         ];
     }
 }
