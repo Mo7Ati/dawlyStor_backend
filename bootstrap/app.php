@@ -19,8 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->statefulApi();
-
         $middleware->encryptCookies(except: ['admin_appearance', 'sidebar_state', 'locale']);
 
         $middleware->web(append: [
