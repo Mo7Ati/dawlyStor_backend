@@ -13,12 +13,6 @@ class StoreController extends Controller
 {
     public function index()
     {
-        Log::error('StoreController index', [
-            // 'file' => $e->getFile(),
-            // 'line' => $e->getLine(),
-            // 'trace' => $e->getTraceAsString(),
-            'request' => request()
-        ]);
         $stores = Store::with('category')
             ->category(request()->get('category'))
             ->search(request()->get('search'))
@@ -43,21 +37,6 @@ class StoreController extends Controller
         return successResponse(
             StoreResource::make($store),
             __('messages.store_fetched_successfully'),
-        );
-    }
-
-    public function getStoreCategories()
-    {
-        $categories = StoreCategory::all();
-
-        return successResponse(
-            $categories->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                ];
-            })->toArray(),
-            __('messages.store_categories_fetched_successfully'),
         );
     }
 }

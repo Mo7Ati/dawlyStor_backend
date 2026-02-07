@@ -21,7 +21,7 @@ class AddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('addresses', 'name')->ignore($this->route('address'))],
+            'name' => ['required', 'string', 'max:255'],
             'location' => ['required', 'array'],
         ];
     }

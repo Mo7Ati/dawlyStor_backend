@@ -44,21 +44,12 @@ enum PaymentStatusEnum: string
         return array_column(self::cases(), 'value');
     }
 
-    /**
-     * Get all enum cases as an array with value, label, and color
-     *
-     * @return array<array{value: string, label: string, color: string}>
-     */
-    public static function toArray(): array
+    public function toArray(): array
     {
-        return array_map(
-            fn(self $case) => [
-                'value' => $case->value,
-                'label' => $case->label(),
-                'color' => $case->color(),
-            ],
-            self::cases()
-        );
+        return [
+            'value' => $this->value,
+            'label' => $this->label(),
+        ];
     }
 }
 

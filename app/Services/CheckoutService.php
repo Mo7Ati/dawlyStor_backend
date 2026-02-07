@@ -67,12 +67,22 @@ class CheckoutService
 
                     // Calculate the per-unit price (base + options + additions)
                     $unitPrice = $this->calculateUnitPrice($item, $product);
+                    $snapshot = $this->buildProductSnapshot($item, $product);
+                    $optionsData = $snapshot['options'] ?? null;
+                    $additionsData = $snapshot['additions'] ?? null;
+                    $optionsAmount = $optionsData ? (float) array_sum(array_column($optionsData, 'price')) : 0;
+                    $additionsAmount = $additionsData ? (float) array_sum(array_column($additionsData, 'price')) : 0;
 
                     $orderItemsData[] = [
                         'product_id' => $product->id,
                         'unit_price' => $unitPrice,
                         'quantity' => $item['quantity'],
-                        'product_data' => $this->buildProductSnapshot($item, $product),
+                        'product_data' => $snapshot,
+                        'options_amount' => $optionsAmount,
+                        'options_data' => $optionsData,
+                        'additions_amount' => $additionsAmount,
+                        'additions_data' => $additionsData,
+                        'total_price' => $itemTotal,
                     ];
                 }
 

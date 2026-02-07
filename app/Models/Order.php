@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use App\Enums\OrderStatusEnum;
+use App\Enums\PaymentStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,6 +37,8 @@ class Order extends Model
         'tax_amount' => 'float',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'status' => OrderStatusEnum::class,
+        'payment_status' => PaymentStatusEnum::class,
     ];
 
     /*
@@ -54,8 +57,8 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id')
             ->using(orderItems::class)
-            ->withPivot('quantity', 'price', 'product_name')
-        ;
+            ->withPivot('quantity', 'unit_price', 'product_data', 'options_amount', 'options_data', 'additions_amount', 'additions_data', 'total_price')
+            ->withTimestamps();
     }
     public function items()
     {

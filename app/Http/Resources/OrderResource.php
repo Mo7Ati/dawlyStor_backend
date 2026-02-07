@@ -11,8 +11,9 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'status' => $this->status,
-            'payment_status' => $this->payment_status,
+            'status' => $this->status->toArray(),
+            'payment_status' => $this->payment_status->toArray(),
+            'checkout_group_id' => $this->checkout_group_id,
             'cancelled_reason' => $this->cancelled_reason,
             'customer_id' => $this->customer_id,
             'customer_data' => $this->customer_data,
@@ -24,24 +25,12 @@ class OrderResource extends JsonResource
             'delivery_amount' => $this->delivery_amount,
             'tax_amount' => $this->tax_amount,
             'notes' => $this->notes,
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
-            'customer' => $this->whenLoaded('customer', function () {
-                return [
-                    'id' => $this->customer->id,
-                    'name' => $this->customer->name,
-                    'email' => $this->customer->email,
-                    'phone_number' => $this->customer->phone_number,
-                ];
-            }),
+            'created_at' => $this->created_at?->format('Y-m-d'),
+            'updated_at' => $this->updated_at?->format('Y-m-d'),
+            'customer' => new CustomerResource($this->whenLoaded('customer')),
             'store' => new StoreResource($this->whenLoaded('store')),
-            'address' => $this->whenLoaded('address', function () {
-                return $this->address ? [
-                    'id' => $this->address->id,
-                    'name' => $this->address->name,
-                    'location' => $this->address->location,
-                ] : null;
-            }),
+            'address' => new AddressResource($this->whenLoaded('address')),
+            'items' => OrderItemResource::collection($this->whenLoaded('items')),
         ];
     }
 }
