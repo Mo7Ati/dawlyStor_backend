@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'api'),
+        'guard' => env('AUTH_GUARD', 'web'),
         'passwords' => env('AUTH_PASSWORD_BROKER', 'customers'),
     ],
 
@@ -48,10 +48,7 @@ return [
             'driver' => 'session',
             'provider' => 'stores',
         ],
-        'api' => [
-            'driver' => 'jwt',
-            'provider' => 'customers',
-        ],
+
     ],
 
     /*
@@ -84,10 +81,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Store::class,
         ],
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

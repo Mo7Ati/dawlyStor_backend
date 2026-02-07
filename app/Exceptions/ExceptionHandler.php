@@ -22,9 +22,10 @@ class ExceptionHandler
     {
         // Log detailed exception if needed
         Log::error('API Exception: ' . $e->getMessage(), [
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => $e->getTraceAsString()
+            // 'file' => $e->getFile(),
+            // 'line' => $e->getLine(),
+            // 'trace' => $e->getTraceAsString(),
+            'request' => request()
         ]);
 
         // Handle Laravel Authentication Exceptions

@@ -21,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['admin_appearance', 'sidebar_state', 'locale']);
 
+        $middleware->statefulApi();
+
+
         $middleware->web(append: [
             HandleLocale::class,
             HandleAppearance::class,
@@ -37,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptionHandler = new \App\Exceptions\ExceptionHandler();
 
         $exceptions->render(function (Throwable $e) use ($exceptionHandler) {
+
             Log::error('API Exception', [
                 'message' => $e->getMessage(),
             ]);

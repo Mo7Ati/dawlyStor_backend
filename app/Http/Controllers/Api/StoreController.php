@@ -6,12 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use App\Models\StoreCategory;
+use Illuminate\Support\Facades\Log;
 
 
 class StoreController extends Controller
 {
     public function index()
     {
+        Log::error('StoreController index', [
+            // 'file' => $e->getFile(),
+            // 'line' => $e->getLine(),
+            // 'trace' => $e->getTraceAsString(),
+            'request' => request()
+        ]);
         $stores = Store::with('category')
             ->category(request()->get('category'))
             ->search(request()->get('search'))
