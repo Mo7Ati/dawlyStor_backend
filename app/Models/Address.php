@@ -3,19 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Address extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'customer_id',
         'location',
-        'fields',
     ];
 
     protected $casts = [
         'location' => 'array',
-        'fields' => 'array',
     ];
 
     public function customer()

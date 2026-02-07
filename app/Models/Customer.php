@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     protected $fillable = [
         'name',
@@ -21,8 +22,24 @@ class Customer extends Authenticatable
         'two_factor_confirmed_at',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'last_seen_at' => 'datetime',
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'last_seen_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }

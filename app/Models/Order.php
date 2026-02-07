@@ -15,7 +15,6 @@ class Order extends Model
         'cancelled_reason',
         'customer_id',
         'customer_data',
-        'cancelled_reason',
         'store_id',
         'address_id',
         'address_data',
@@ -24,6 +23,8 @@ class Order extends Model
         'delivery_amount',
         'tax_amount',
         'notes',
+        'stripe_session_id',
+        'checkout_group_id',
     ];
 
     protected $casts = [
@@ -56,6 +57,11 @@ class Order extends Model
             ->withPivot('quantity', 'price', 'product_name')
         ;
     }
+    public function items()
+    {
+        return $this->hasMany(orderItems::class, 'order_id');
+    }
+
     public function address()
     {
         return $this->belongsTo(Address::class);
