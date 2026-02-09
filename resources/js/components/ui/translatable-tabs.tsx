@@ -4,8 +4,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect } from 'react';
 import { Field, LocalizedData } from '@/types/dashboard';
-import InputError from '../input-error';
-import { Textarea } from './textarea';
+import InputError from '@/components/shared/input-error';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
 type Locale = {

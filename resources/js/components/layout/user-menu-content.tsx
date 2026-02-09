@@ -4,7 +4,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { UserInfo } from '@/components/user-info';
+import { UserInfo } from './user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { SharedData, type User } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
@@ -51,7 +51,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
                 <Link
-                    method='post'
+                    method="post"
                     className="flex w-full items-center"
                     href={`/${panel}/logout`}
                     as="button"

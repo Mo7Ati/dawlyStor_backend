@@ -1,4 +1,4 @@
-import { ChartAreaInteractive } from '@/components/orders-chart';
+import { ChartAreaInteractive } from '@/components/charts/orders-chart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { SharedData, type BreadcrumbItem } from '@/types';

@@ -6,10 +6,10 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import AlertError from '@/components/shared/alert-error';
 import { Form } from '@inertiajs/react';
 import { Eye, EyeOff, LockKeyhole, RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import AlertError from './alert-error';
 
 interface TwoFactorRecoveryCodesProps {
     recoveryCodesList: string[];
@@ -30,9 +30,7 @@ export default function TwoFactorRecoveryCodes({
         if (!codesAreVisible && !recoveryCodesList.length) {
             await fetchRecoveryCodes();
         }
-
         setCodesAreVisible(!codesAreVisible);
-
         if (!codesAreVisible) {
             setTimeout(() => {
                 codesSectionRef.current?.scrollIntoView({
@@ -77,7 +75,6 @@ export default function TwoFactorRecoveryCodes({
                         />
                         {codesAreVisible ? 'Hide' : 'View'} Recovery Codes
                     </Button>
-
                     {canRegenerateCodes && (
                         <Form
                             method="post"
@@ -142,7 +139,6 @@ export default function TwoFactorRecoveryCodes({
                                         </div>
                                     )}
                                 </div>
-
                                 <div className="text-xs text-muted-foreground select-none">
                                     <p id="regenerate-warning">
                                         Each recovery code can be used once to

@@ -6,13 +6,13 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Product, PaginatedResponse } from '@/types/dashboard';
 import { DataTable } from '@/components/table/data-table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
 import products from '@/routes/store/products';
-import IsActiveBadge from '@/components/data-table/badges/is-active-badge';
-import ProductsFilters from '@/components/data-table/table-filters/product-filters';
-import { EditAction } from '@/components/data-table/column-actions/edit-action';
-import { DeleteAction } from '@/components/data-table/column-actions/delete-action-button';
+import IsActiveBadge from '@/components/table/badges/is-active-badge';
+import ProductsFilters from '@/components/table/table-filters/product-filters';
+import { EditAction } from '@/components/table/column-actions/edit-action';
+import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
 
 const ProductsIndex = ({ products: productsData }: { products: PaginatedResponse<Product> }) => {
     const { t: tTables } = useTranslation('tables');

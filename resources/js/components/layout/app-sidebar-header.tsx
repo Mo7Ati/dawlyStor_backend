@@ -1,7 +1,7 @@
-import { Breadcrumbs } from '@/components/breadcrumbs';
+import { Breadcrumbs } from './breadcrumbs';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
-import LanguageSwitch from './ui/language-switch';
+import LanguageSwitch from '@/components/ui/language-switch';
 
 export function AppSidebarHeader({
     breadcrumbs = [],

@@ -6,15 +6,15 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Option, PaginatedResponse } from '@/types/dashboard';
 import { DataTable } from '@/components/table/data-table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 import options from '@/routes/store/options';
-import IsActiveBadge from '@/components/data-table/badges/is-active-badge';
-import StatusFilter from '@/components/data-table/table-filters/status-filter';
-import FilterDropdown from '@/components/data-table/table-filters/filters-dropdown';
+import IsActiveBadge from '@/components/table/badges/is-active-badge';
+import StatusFilter from '@/components/table/table-filters/status-filter';
+import FilterDropdown from '@/components/table/table-filters/filters-dropdown';
 import { useFilters } from '@/hooks/use-filters';
 import { RouteQueryOptions, RouteDefinition } from '@/wayfinder';
-import { EditAction } from '@/components/data-table/column-actions/edit-action';
-import { DeleteAction } from '@/components/data-table/column-actions/delete-action-button';
+import { EditAction } from '@/components/table/column-actions/edit-action';
+import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
 
 const OptionsFilters = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get"> }) => {
     const {

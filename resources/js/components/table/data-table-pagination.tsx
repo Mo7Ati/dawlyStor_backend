@@ -16,7 +16,6 @@ import {
     SelectValue,
 
 } from "@/components/ui/select";
-import admins from "@/routes/admin/admins";
 
 import { MetaType } from "@/types/dashboard";
 import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder";
@@ -45,8 +44,6 @@ export default function DataTablePagination({ meta, indexRoute }: { meta: MetaTy
     };
 
     const handlePageSizeChange = (value: string) => {
-        console.log(value);
-
         router.get(indexRoute({
             mergeQuery: {
                 per_page: value,
@@ -145,8 +142,6 @@ export default function DataTablePagination({ meta, indexRoute }: { meta: MetaTy
                         </SelectContent>
                     </Select>
                 </div>
-
-
 
                 <PaginationContent>
                     {links.map((link, index) => renderLink(link, index))}

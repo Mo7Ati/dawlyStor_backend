@@ -1,13 +1,11 @@
-import StatusFilter from '@/components/data-table/table-filters/status-filter'
-import FilterDropdown from '@/components/data-table/table-filters/filters-dropdown'
+import StatusFilter from '@/components/table/table-filters/status-filter'
+import FilterDropdown from '@/components/table/table-filters/filters-dropdown'
 import { useFilters } from '@/hooks/use-filters'
 import IsAcceptedFilter from './is-accepted-filter'
 import { RouteQueryOptions } from '@/wayfinder';
 import { RouteDefinition } from '@/wayfinder';
 
 const ProductsFilters = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get"> }) => {
-    console.log(indexRoute);
-
     const {
         filters,
         activeFiltersCount,

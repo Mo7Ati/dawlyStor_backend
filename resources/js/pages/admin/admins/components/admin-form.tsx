@@ -13,7 +13,7 @@ import RoleAssignmentCard from './role-assignment-card'
 import FormButtons from '@/components/form/form-buttons'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 import IsActiveFormField from '@/components/form/is-active'
 import { useState } from 'react'
 

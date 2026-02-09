@@ -1,12 +1,9 @@
-import FilterDropdown from '@/components/data-table/table-filters/filters-dropdown';
+import FilterDropdown from '@/components/table/table-filters/filters-dropdown';
 import { Select, SelectValue, SelectTrigger, SelectItem, SelectContent } from '@/components/ui/select';
 import { useFilters } from '@/hooks/use-filters';
 import { useEnums } from '@/hooks/use-enums';
-import orders from '@/routes/admin/orders';
 import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
 import { RouteQueryOptions } from '@/wayfinder';
 import { RouteDefinition } from '@/wayfinder';
 

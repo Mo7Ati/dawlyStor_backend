@@ -10,7 +10,6 @@ use App\Http\Resources\RoleResource;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
@@ -49,8 +48,8 @@ class AdminController extends Controller
         $admin = Admin::create($request->validated());
         $admin->assignRole($request->get('roles', []));
 
-        return to_route('admin.admins.index')
-            ->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('admin.admins.index');
     }
     public function edit($id)
     {

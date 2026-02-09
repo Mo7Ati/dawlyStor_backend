@@ -142,7 +142,6 @@ export function Repeater<T extends { _repeaterId?: string }>({
                 disabled={!canAdd}
                 className={cn(
                     "w-full transition-all duration-200",
-                    // "border-dashed border-2",
                     "hover:border-primary/50 hover:bg-primary/5",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
                     value.length === 0 && "mt-0"

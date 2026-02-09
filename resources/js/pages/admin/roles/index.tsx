@@ -7,10 +7,10 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import rolesRoutes from '@/routes/admin/roles';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 import roles from '@/routes/admin/roles';
-import { EditAction } from '@/components/data-table/column-actions/edit-action';
-import { DeleteAction } from '@/components/data-table/column-actions/delete-action-button';
+import { EditAction } from '@/components/table/column-actions/edit-action';
+import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
 
 const RolesIndex = ({ roles: rolesData }: { roles: PaginatedResponse<Role> }) => {
     const { t: tTables } = useTranslation('tables');

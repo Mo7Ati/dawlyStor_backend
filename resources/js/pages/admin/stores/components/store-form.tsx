@@ -15,7 +15,7 @@ import { normalizeFieldValue } from '@/lib/utils'
 import TranslatableTabs from '@/components/ui/translatable-tabs'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 import {
     Select,
     SelectContent,

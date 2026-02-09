@@ -63,4 +63,3 @@ export function DeleteAction({ deleteRoute, permission, className }: DeleteActio
         </AlertDialog>
     );
 }
-

@@ -7,11 +7,11 @@ import { Store, PaginatedResponse } from '@/types/dashboard';
 import { DataTable } from '@/components/table/data-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import StoresFilters from './components/store-filters';
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 import stores from '@/routes/admin/stores';
-import IsActiveBadge from '@/components/data-table/badges/is-active-badge';
-import { EditAction } from '@/components/data-table/column-actions/edit-action';
-import { DeleteAction } from '@/components/data-table/column-actions/delete-action-button';
+import IsActiveBadge from '@/components/table/badges/is-active-badge';
+import { EditAction } from '@/components/table/column-actions/edit-action';
+import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
 
 const StoresIndex = ({ stores: storesData }: { stores: PaginatedResponse<Store> }) => {
     const { t: tTables } = useTranslation('tables');

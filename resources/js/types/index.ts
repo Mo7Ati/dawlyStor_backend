@@ -43,7 +43,7 @@ export interface SharedData {
     currentLocale: Locale;
     navigationItems: NavItem[];
     sidebarOpen: boolean;
-    flash?: Flash;
+    // flash?: Flash;
     enums: {
         orderStatus: EnumOption[];
         paymentStatus: EnumOption[];

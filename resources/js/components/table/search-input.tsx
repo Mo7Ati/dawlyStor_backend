@@ -1,4 +1,3 @@
-import admins from '@/routes/admin/admins';
 import { Input } from '@/components/ui/input'
 import { router } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react'

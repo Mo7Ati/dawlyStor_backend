@@ -15,7 +15,7 @@ import FormButtons from '@/components/form/form-buttons'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 import PermissionList from './permission-list'
 import { Input } from '@/components/ui/input'
 

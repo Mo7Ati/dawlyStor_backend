@@ -7,10 +7,10 @@ import { Section, PaginatedResponse } from '@/types/dashboard';
 import { ReorderableDataTable } from '@/components/table/reorderable-data-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import sections from '@/routes/admin/sections';
-import { EditAction } from '@/components/data-table/column-actions/edit-action';
-import { DeleteAction } from '@/components/data-table/column-actions/delete-action-button';
+import { EditAction } from '@/components/table/column-actions/edit-action';
+import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
 import { toast } from 'sonner';
-import IsActiveBadge from '@/components/data-table/badges/is-active-badge';
+import IsActiveBadge from '@/components/table/badges/is-active-badge';
 
 const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: PaginatedResponse<Section>; sectionTypes: Record<string, string> }) => {
     const { t: tTables } = useTranslation('tables');

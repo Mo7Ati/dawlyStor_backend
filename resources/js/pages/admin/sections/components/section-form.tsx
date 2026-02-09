@@ -20,12 +20,12 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { MultiSelect } from '@/components/ui/multi-select'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 import sections from '@/routes/admin/sections'
 import IsActiveFormField from '@/components/form/is-active'
 import TranslatableTabs from '@/components/ui/translatable-tabs'
 import { normalizeFieldValue } from '@/lib/utils'
-import { Repeater } from '@/components/repeater'
+import { Repeater } from '@/components/shared/repeater'
 
 interface SectionFormProps {
     section: Section;

@@ -2,8 +2,8 @@ import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { type BreadcrumbItem } from '@/types';
 import { type ReactNode } from 'react';
 import { Toaster } from '@/components/ui/sonner';
-import useFlashMessagesHook from '@/hooks/use-flash-message';
-import { Head } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 interface AppLayoutProps {
     children: ReactNode;
@@ -12,7 +12,6 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children, breadcrumbs, title, ...props }: AppLayoutProps) {
-    useFlashMessagesHook();
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
             <Head title={title} />

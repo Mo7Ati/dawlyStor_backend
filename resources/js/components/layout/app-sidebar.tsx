@@ -1,6 +1,6 @@
-import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
+import { NavFooter } from './nav-footer';
+import { NavMain } from './nav-main';
+import { NavUser } from './nav-user';
 import {
     Sidebar,
     SidebarContent,
@@ -18,18 +18,7 @@ import { getPanelNavItems } from '@/lib/utils';
 import { PanelType } from '@/types';
 
 
-const footerNavItems: NavItem[] = [
-    // {
-    //     title: 'Repository',
-    //     href: 'https://github.com/laravel/react-starter-kit',
-    //     icon: Folder,
-    // },
-    // {
-    //     title: 'Documentation',
-    //     href: 'https://laravel.com/docs/starter-kits#react',
-    //     icon: BookOpen,
-    // },
-];
+const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     const page = usePage<SharedData>();

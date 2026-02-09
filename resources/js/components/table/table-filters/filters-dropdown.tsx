@@ -1,13 +1,13 @@
-import React, { useState, useMemo } from 'react';
-import { ChevronDown, Filter, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Filter, X } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../../ui/button';
-import { Label } from '../../ui/label';
-import { Badge } from '../../ui/badge';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import { useTranslation } from 'react-i18next';
 
 

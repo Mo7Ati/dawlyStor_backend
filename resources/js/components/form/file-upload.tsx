@@ -12,7 +12,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
 
 import { Label } from '@/components/ui/label'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 import { cn } from '@/lib/utils'
 
 // Register the plugins - must be called before using FilePond component

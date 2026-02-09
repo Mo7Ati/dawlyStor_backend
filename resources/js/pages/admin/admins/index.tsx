@@ -7,11 +7,11 @@ import { Admin, PaginatedResponse } from '@/types/dashboard';
 import { DataTable } from '@/components/table/data-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import AdminsFilters from './components/admin-filters';
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 import admins from '@/routes/admin/admins';
-import { EditAction } from '@/components/data-table/column-actions/edit-action';
-import { DeleteAction } from '@/components/data-table/column-actions/delete-action-button';
-import IsActiveTableColumn from '@/components/data-table/badges/is-active-badge';
+import { EditAction } from '@/components/table/column-actions/edit-action';
+import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
+import IsActiveTableColumn from '@/components/table/badges/is-active-badge';
 
 const AdminsIndex = ({ admins: adminsData }: { admins: PaginatedResponse<Admin> }) => {
     const { t: tTables } = useTranslation('tables');

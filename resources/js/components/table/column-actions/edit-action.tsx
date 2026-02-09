@@ -30,4 +30,3 @@ export function EditAction({ editRoute, permission, className }: EditActionProps
         </Button>
     );
 }
-

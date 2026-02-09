@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card'
 import { MultiSelect } from '@/components/ui/multi-select'
 import { Role } from '@/types/dashboard'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 
 interface RoleAssignmentCardProps {
     allRoles: Role[]

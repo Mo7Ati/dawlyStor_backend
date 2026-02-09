@@ -5,10 +5,10 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Order, PaginatedResponse, Store } from '@/types/dashboard';
 import { DataTable } from '@/components/table/data-table';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-import { StatusBadge } from '@/components/data-table/table-filters/status-badge';
+import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
+import { StatusBadge } from '@/components/table/table-filters/status-badge';
 import orders from '@/routes/admin/orders';
-import OrderFilters from '@/components/data-table/table-filters/order-filters';
+import OrderFilters from '@/components/table/table-filters/order-filters';
 
 const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> }) => {
     const { t: tTables } = useTranslation('tables');

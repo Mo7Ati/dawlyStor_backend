@@ -1,5 +1,5 @@
 import { Column } from "@tanstack/react-table"
-import { ArrowDown, ArrowDownUp, ArrowUp, ChevronsUpDown, EyeOff, X } from "lucide-react"
+import { ArrowDown, ArrowDownUp, ArrowUp, ChevronsUpDown, EyeOff } from "lucide-react"
 import { router } from "@inertiajs/react"
 
 import { cn } from "@/lib/utils"
@@ -11,7 +11,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import admins from "@/routes/admin/admins"
 import { useState } from "react"
 import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder"
 

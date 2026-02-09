@@ -1,4 +1,4 @@
-import HeadingSmall from '@/components/heading-small'
+import HeadingSmall from '@/components/shared/heading-small'
 import React, { useState } from 'react'
 import { Form, router } from '@inertiajs/react'
 import AppLayout from '@/layouts/app-layout'
@@ -7,7 +7,7 @@ import { type BreadcrumbItem } from '@/types'
 import { Store, StoreCategory } from '@/types/dashboard'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 import {
     Select,
     SelectContent,
@@ -138,16 +138,15 @@ const StoreProfileSettings = ({ store, storeCategories }: StoreProfileSettingsPr
 
                                     {/* Keywords */}
                                     <div className="space-y-2">
+                                        <Label htmlFor="keywords">{tForms('products.keywords')}</Label>
                                         <MultiInput
+                                            id="keywords"
                                             name="keywords"
-                                            label={tForms('products.keywords')}
                                             placeholder={tForms('products.enter_keywords')}
                                             value={keywords}
-                                            hint={tForms('products.keywords_hint')}
                                             onChange={setKeywords}
-                                            error={errors.keywords}
-                                            required
                                         />
+                                        <InputError message={errors.keywords as string} />
                                     </div>
 
                                     {/* Store Logo */}

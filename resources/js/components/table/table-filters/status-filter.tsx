@@ -1,10 +1,6 @@
-import { useState } from "react";
-import { router } from "@inertiajs/react";
 import { useTranslation } from 'react-i18next';
 import { Label } from "@/components/ui/label";
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-
 
 interface StatusFilterProps {
     value: string | undefined;

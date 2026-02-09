@@ -14,7 +14,7 @@ import { normalizeFieldValue } from '@/lib/utils'
 import TranslatableTabs from '@/components/ui/translatable-tabs'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import InputError from '@/components/input-error'
+import InputError from '@/components/shared/input-error'
 import {
     Select,
     SelectContent,
@@ -26,9 +26,9 @@ import IsActive from '@/components/form/is-active'
 import FileUpload from '@/components/form/file-upload'
 import products from '@/routes/store/products'
 import IsActiveFormField from '@/components/form/is-active'
-import { Repeater } from '@/components/repeater'
+import { Repeater } from '@/components/shared/repeater'
 import MultiInput from '@/components/form/multi-input'
-// import { Repeater } from '@/components/repeater'
+// import { Repeater } from '@/components/shared/repeater'
 
 interface ProductFormProps {
     product: Product

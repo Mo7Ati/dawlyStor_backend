@@ -24,9 +24,9 @@ import {
 import { useState, useEffect, useMemo } from "react";
 import { router } from "@inertiajs/react";
 import { MetaType } from "@/types/dashboard";
-import DataTablePagination from "../data-table/data-table-pagination";
-import SearchInput from "../data-table/search-input";
-import { Button } from "../ui/button";
+import DataTablePagination from "./data-table-pagination";
+import SearchInput from "./search-input";
+import { Button } from "@/components/ui/button";
 import { Plus, Settings2, GripVertical } from "lucide-react";
 import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder";
 import { usePermissions } from "@/hooks/use-permissions";
