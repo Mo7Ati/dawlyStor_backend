@@ -3,7 +3,9 @@ import { BreadcrumbItem } from '@/types'
 import { useTranslation } from 'react-i18next'
 import SectionForm from './components/section-form'
 import { Section } from '@/types/dashboard'
-import sections from '@/routes/admin/sections'
+import SectionController from '@/wayfinder/App/Http/Controllers/dashboard/admin/SectionController'
+import { App } from '@/wayfinder/types';
+import { SectionEnum } from "@/wayfinder/App/Enums/SectionEnum";
 
 const SectionsCreate = ({
     section,
@@ -12,22 +14,22 @@ const SectionsCreate = ({
     categories,
     stores,
 }: {
-    section: Section
-    sectionTypes: Record<string, string>
-    products?: Array<{ id: number | string; name: string | Record<string, string> }>
-    categories?: Array<{ id: number | string; name: string | Record<string, string> }>
-    stores?: Array<{ id: number | string; name: string | Record<string, string> }>
+    section: App.Models.Section
+    sectionTypes: typeof SectionEnum
+    products?: App.Models.Product[]
+    categories?: App.Models.Category[]
+    stores?: App.Models.Store[]
 }) => {
     const { t } = useTranslation('dashboard');
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('sections.title') || 'Sections',
-            href: sections.index.url(),
+            href: SectionController.index.url(),
         },
         {
             title: t('sections.create') || 'Create Section',
-            href: sections.create.url(),
+            href: SectionController.create.url(),
         },
     ]
 

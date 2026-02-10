@@ -1,21 +1,21 @@
 import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem } from '@/types'
-import { Store, PaginatedResponse, StoreCategory } from '@/types/dashboard'
+import { App } from '@/wayfinder/types';
 import { useTranslation } from 'react-i18next'
 import StoreForm from './components/store-form'
-import stores from '@/routes/admin/stores'
-
-const StoresEdit = ({ store, categories }: { store: Store; categories: StoreCategory[] }) => {
+import StoreController from '@/wayfinder/App/Http/Controllers/dashboard/admin/StoreController'
+    
+const StoresEdit = ({ store, categories }: { store: App.Models.Store; categories: App.Models.StoreCategory[] }) => {
     const { t } = useTranslation('dashboard');
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('stores.title'),
-            href: stores.index.url(),
+            href: StoreController.index.url(),
         },
         {
             title: t('stores.edit'),
-            href: stores.edit.url({ store: store.id }),
+            href: StoreController.edit.url({ store: store.id.toString() }),
         },
     ];
 

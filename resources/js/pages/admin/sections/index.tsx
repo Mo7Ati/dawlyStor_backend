@@ -3,23 +3,24 @@ import { BreadcrumbItem } from '@/types';
 import { router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { ColumnDef } from "@tanstack/react-table"
-import { Section, PaginatedResponse } from '@/types/dashboard';
+import { PaginatedResponse } from '@/types/dashboard';
 import { ReorderableDataTable } from '@/components/table/reorderable-data-table';
-import { Checkbox } from '@/components/ui/checkbox';
-import sections from '@/routes/admin/sections';
+import SectionController from '@/wayfinder/App/Http/Controllers/dashboard/admin/SectionController';
 import { EditAction } from '@/components/table/column-actions/edit-action';
 import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
 import { toast } from 'sonner';
 import IsActiveBadge from '@/components/table/badges/is-active-badge';
+import { SectionEnum } from '@/wayfinder/App/Enums/SectionEnum';
+import { App } from '@/wayfinder/types';
 
-const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: PaginatedResponse<Section>; sectionTypes: Record<string, string> }) => {
+const SectionsIndex = ({ sections: sectionsData }: { sections: PaginatedResponse<App.Models.Section> }) => {
     const { t: tTables } = useTranslation('tables');
     const { t: tDashboard } = useTranslation('dashboard');
 
-    const handleReorder = (newOrder: Section[]) => {
+    const handleReorder = (newOrder: App.Models.Section[]) => {
         // Send to backend
         router.post(
-            sections.reorder.url(),
+            SectionController.reorder.url(),
             { sections: newOrder.map((section) => ({ id: section.id, order: section.order })) }, {
             preserveScroll: true,
             onSuccess: () => {
@@ -31,7 +32,7 @@ const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: Pag
         });
     };
 
-    const columns: ColumnDef<Section>[] = [
+    const columns: ColumnDef<App.Models.Section>[] = [
         {
             accessorKey: 'type',
             header: tTables('common.type'),
@@ -50,11 +51,11 @@ const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: Pag
                 return (
                     <div className="flex items-center gap-2">
                         <EditAction
-                            editRoute={sections.edit.url({ section: row.original.id })}
+                            editRoute={SectionController.edit.url({ section: row.original.id })}
                             permission="sections.update"
                         />
                         <DeleteAction
-                            deleteRoute={sections.destroy.url({ section: row.original.id })}
+                            deleteRoute={SectionController.destroy.url({ section: row.original.id })}
                             permission="sections.destroy"
                         />
                     </div>
@@ -67,7 +68,7 @@ const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: Pag
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: tDashboard('sections.title') || 'Sections',
-            href: sections.index.url(),
+            href: SectionController.index.url(),
         },
     ];
 
@@ -78,8 +79,8 @@ const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: Pag
                 data={sectionsData.data}
                 meta={sectionsData.meta}
                 model="sections"
-                createHref={sections.create.url()}
-                indexRoute={sections.index}
+                createHref={SectionController.create.url()}
+                indexRoute={SectionController.index}
                 onReorder={handleReorder}
             />
         </AppLayout>

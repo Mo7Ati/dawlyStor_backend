@@ -1,7 +1,8 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { useEnums } from '@/hooks/use-enums';
 import { cn } from '@/lib/utils';
+import OrderStatusEnum from "@/wayfinder/App/Enums/OrderStatusEnum";
+import PaymentStatusEnum from "@/wayfinder/App/Enums/PaymentStatusEnum";
 
 type StatusType = 'orderStatus' | 'paymentStatus';
 
@@ -15,11 +16,10 @@ interface StatusBadgeProps {
  * Badge component that displays enum status with appropriate color
  */
 export function StatusBadge({ type, value, className }: StatusBadgeProps) {
-    const { getOrderStatus, getPaymentStatus } = useEnums();
 
     const status = type === 'orderStatus'
-        ? getOrderStatus(value)
-        : getPaymentStatus(value);
+        ? OrderStatusEnum[value as keyof typeof OrderStatusEnum]
+        : PaymentStatusEnum[value as keyof typeof PaymentStatusEnum];
 
     if (!status) {
         return (
@@ -67,15 +67,15 @@ export function StatusBadge({ type, value, className }: StatusBadgeProps) {
         }
     };
 
-    const variant = getBadgeVariant(status.color!);
-    const colorClasses = getColorClasses(status.color!);
+    // const variant = getBadgeVariant(status.color());
+    // const colorClasses = getColorClasses(status.color());
 
     return (
         <Badge
-            variant={variant}
-            className={cn(colorClasses, className)}
+            variant={'outline'}
+            className={cn('bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20', className)}
         >
-            {status.label}
+            {status}
         </Badge>
     );
 }

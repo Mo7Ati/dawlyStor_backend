@@ -40,7 +40,9 @@ export function useFilters({ indexRoute, initialKeys }: UseFiltersProps) {
     const reset = () => {
         setFilters({})
         router.get(indexRoute().url, {}, {
-            preserveState: true,
+            // Do not preserve component state when resetting filters so that
+            // components like the table search input are also cleared.
+            preserveState: false,
             preserveScroll: true,
         })
     }

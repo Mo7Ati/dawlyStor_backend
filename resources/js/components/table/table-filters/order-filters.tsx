@@ -1,16 +1,16 @@
 import FilterDropdown from '@/components/table/table-filters/filters-dropdown';
 import { Select, SelectValue, SelectTrigger, SelectItem, SelectContent } from '@/components/ui/select';
 import { useFilters } from '@/hooks/use-filters';
-import { useEnums } from '@/hooks/use-enums';
 import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { RouteQueryOptions } from '@/wayfinder';
 import { RouteDefinition } from '@/wayfinder';
+import OrderStatusEnum from "@/wayfinder/App/Enums/OrderStatusEnum";
+import PaymentStatusEnum from "@/wayfinder/App/Enums/PaymentStatusEnum";
 
 const OrderFilters = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get"> }) => {
     const { t: tForms } = useTranslation('forms');
     const { t: tTables } = useTranslation('tables');
-    const { orderStatus, paymentStatus } = useEnums();
 
     const {
         filters,
@@ -39,9 +39,9 @@ const OrderFilters = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions
                             <SelectItem value="all">
                                 {tForms('common.all')}
                             </SelectItem>
-                            {orderStatus.map((status) => (
-                                <SelectItem key={status.value} value={status.value}>
-                                    {status.label}
+                            {Object.values(OrderStatusEnum).map((status) => (
+                                <SelectItem key={status} value={status}>
+                                    {tTables(`order_status.${status}`)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -65,9 +65,9 @@ const OrderFilters = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions
                             <SelectItem value="all">
                                 {tForms('common.all')}
                             </SelectItem>
-                            {paymentStatus.map((status) => (
-                                <SelectItem key={status.value} value={status.value}>
-                                    {status.label}
+                            {Object.values(PaymentStatusEnum).map((status) => (
+                                <SelectItem key={status} value={status}>
+                                    {tTables(`payment_status.${status}`)}
                                 </SelectItem>
                             ))}
                         </SelectContent>

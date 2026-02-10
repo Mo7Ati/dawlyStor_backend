@@ -1,5 +1,4 @@
 import { Form, router } from '@inertiajs/react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Card,
@@ -25,13 +24,13 @@ import {
 } from '@/components/ui/select'
 import IsActive from '@/components/form/is-active'
 import FileUpload from '@/components/form/file-upload'
-import { create, index, update } from '@/routes/admin/stores'
-import { MultiSelect } from '@/components/ui/multi-select'
+import StoreController from '@/wayfinder/App/Http/Controllers/dashboard/admin/StoreController'
+import { App } from '@/wayfinder/types';
 
 
 interface StoreFormProps {
-    store: Store;
-    categories: StoreCategory[];
+    store: App.Models.Store;
+    categories: App.Models.StoreCategory[];
     type: 'create' | 'edit';
 }
 
@@ -43,8 +42,8 @@ export default function StoreForm({ store, categories, type }: StoreFormProps) {
             method={type === 'edit' ? 'put' : 'post'}
             action={
                 (type === 'edit' && store.id)
-                    ? update({ store: store.id })
-                    : create()
+                    ? StoreController.update.url({ store: store.id.toString() })
+                    : StoreController.store.url()
             }
         >
             {({ processing, errors }) => (
@@ -102,7 +101,7 @@ export default function StoreForm({ store, categories, type }: StoreFormProps) {
                                                         key={category.id}
                                                         value={String(category.id)}
                                                     >
-                                                        {category.name as string}
+                                                        {/* {category.name} */}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -221,7 +220,7 @@ export default function StoreForm({ store, categories, type }: StoreFormProps) {
 
                     <FormButtons
                         processing={processing}
-                        handleCancel={() => router.visit(index())}
+                        handleCancel={() => router.visit(StoreController.index.url())}
                         isEditMode={type === 'edit'}
                     />
                 </>

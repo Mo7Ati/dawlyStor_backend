@@ -6,16 +6,16 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { Category } from '@/types/dashboard'
+import { App } from '@/wayfinder/types';
 import FormButtons from '@/components/form/form-buttons'
 import { normalizeFieldValue } from '@/lib/utils'
 import TranslatableTabs from '@/components/ui/translatable-tabs'
 import IsActive from '@/components/form/is-active'
 import FileUpload from '@/components/form/file-upload'
-import categories from '@/routes/store/categories'
+import CategoryController from '@/wayfinder/App/Http/Controllers/dashboard/store/CategoryController'
 
 interface CategoryFormProps {
-    category: Category
+    category: App.Models.Category
     type: 'create' | 'edit'
 }
 
@@ -27,8 +27,8 @@ export default function CategoryForm({ category, type }: CategoryFormProps) {
             method={type === 'edit' ? 'put' : 'post'}
             action={
                 (type === 'edit' && category.id)
-                    ? categories.update.url({ category: Number(category.id) })
-                    : categories.store.url()
+                    ? CategoryController.update.url({ category: Number(category.id) })
+                    : CategoryController.store.url()
             }
         >
             {({ processing, errors }) => (
@@ -71,7 +71,7 @@ export default function CategoryForm({ category, type }: CategoryFormProps) {
 
                     <FormButtons
                         processing={processing}
-                        handleCancel={() => router.visit(categories.index.url())}
+                        handleCancel={() => router.visit(CategoryController.index.url())}
                         isEditMode={type === 'edit'}
                     />
                 </>

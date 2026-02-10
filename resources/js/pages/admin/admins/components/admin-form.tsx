@@ -7,8 +7,8 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { Admin, Role } from '@/types/dashboard'
-import adminRoutes from '@/routes/admin/admins'
+import { Role } from '@/types/dashboard'
+import AdminController from '@/wayfinder/App/Http/Controllers/dashboard/admin/AdminController'
 import RoleAssignmentCard from './role-assignment-card'
 import FormButtons from '@/components/form/form-buttons'
 import { Input } from '@/components/ui/input'
@@ -16,9 +16,10 @@ import { Label } from '@/components/ui/label'
 import InputError from '@/components/shared/input-error'
 import IsActiveFormField from '@/components/form/is-active'
 import { useState } from 'react'
+import { App } from "@/wayfinder/types";
 
 interface AdminFormProps {
-    admin: Admin
+    admin: App.Models.Admin
     roles: Role[]
     type: 'create' | 'edit'
 }
@@ -32,8 +33,8 @@ export default function AdminForm({ admin, roles, type }: AdminFormProps) {
             method={type === 'edit' ? 'put' : 'post'}
             action={
                 (type === 'edit' && admin.id)
-                    ? adminRoutes.update.url({ admin: admin.id })
-                    : adminRoutes.store.url()
+                    ? AdminController.update.url({ admin: admin.id.toString() })
+                    : AdminController.store.url()
             }
             transform={data => ({ ...data, roles: currentAdminRoles })}
         >
@@ -112,7 +113,7 @@ export default function AdminForm({ admin, roles, type }: AdminFormProps) {
 
                     <FormButtons
                         processing={processing}
-                        handleCancel={() => router.visit(adminRoutes.index.url())}
+                        handleCancel={() => router.visit(AdminController.index.url())}
                         isEditMode={type === 'edit'}
                     />
                 </>

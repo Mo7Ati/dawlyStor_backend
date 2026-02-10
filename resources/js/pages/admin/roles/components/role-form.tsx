@@ -1,5 +1,5 @@
 import { Form, router } from '@inertiajs/react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Card,
@@ -9,15 +9,13 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { GroupedPermissions, Permission, Role } from '@/types/dashboard'
-import rolesRoutes from '@/routes/admin/roles'
+import { GroupedPermissions, Role } from '@/types/dashboard'
 import FormButtons from '@/components/form/form-buttons'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
 import InputError from '@/components/shared/input-error'
 import PermissionList from './permission-list'
 import { Input } from '@/components/ui/input'
+import RoleController from '@/wayfinder/App/Http/Controllers/dashboard/admin/RoleController'
+import { Label } from '@/components/ui/label'
 
 
 interface RoleFormProps {
@@ -48,8 +46,8 @@ export default function RoleForm({ role, permissions, type }: RoleFormProps) {
                     method={type === 'edit' ? 'put' : 'post'}
                     action={
                         (type === 'edit' && role.id)
-                            ? rolesRoutes.update.url({ role: role.id })
-                            : rolesRoutes.store.url()
+                            ? RoleController.update.url({ role: role.id.toString() })
+                            : RoleController.store.url()
                     }
                     className="space-y-6"
                 >
@@ -84,7 +82,7 @@ export default function RoleForm({ role, permissions, type }: RoleFormProps) {
                             <CardFooter className="flex justify-end gap-2">
                                 <FormButtons
                                     processing={processing}
-                                    handleCancel={() => router.visit(rolesRoutes.index.url())}
+                                    handleCancel={() => router.visit(RoleController.index.url())}
                                     isEditMode={type === 'edit'}
                                 />
                             </CardFooter>

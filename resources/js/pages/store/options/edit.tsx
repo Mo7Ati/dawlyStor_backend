@@ -1,21 +1,21 @@
 import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem } from '@/types'
-import { Option } from '@/types/dashboard'
+import { App } from '@/wayfinder/types';
 import { useTranslation } from 'react-i18next'
 import OptionForm from './components/option-form'
-import options from '@/routes/store/options'
+import OptionController from '@/wayfinder/App/Http/Controllers/dashboard/store/OptionController'
 
-const OptionsEdit = ({ option }: { option: Option }) => {
+const OptionsEdit = ({ option }: { option: App.Models.Option }) => {
     const { t } = useTranslation('dashboard')
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('options.title'),
-            href: options.index.url(),
+            href: OptionController.index.url(),
         },
         {
             title: t('options.edit'),
-            href: options.edit.url({ option: Number(option.id) }),
+            href: OptionController.edit.url({ option: Number(option.id) }),
         },
     ]
 

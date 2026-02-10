@@ -4,7 +4,7 @@ import { SharedData, type BreadcrumbItem } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { DollarSign, Package, ShoppingCart, Store, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-
+import { ChartAreaInteractive } from '@/components/charts/orders-chart';
 
 
 export default function Dashboard() {
@@ -94,6 +94,7 @@ export default function Dashboard() {
                     })}
                 </div>
             </div> */}
+            <ChartAreaInteractive />
         </AppLayout>
     );
 }

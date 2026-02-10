@@ -2,8 +2,10 @@ import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem } from '@/types'
 import { useTranslation } from 'react-i18next'
 import RoleForm from './components/role-form'
-import rolesRoutes from '@/routes/admin/roles'
 import { GroupedPermissions, Role } from '@/types/dashboard'
+import RoleController from '@/wayfinder/App/Http/Controllers/dashboard/admin/RoleController'
+import { App } from '@/wayfinder/types';
+
 
 const RolesCreate = ({ role, permissions }: { role: Role; permissions: GroupedPermissions }) => {
     const { t } = useTranslation('dashboard');
@@ -11,11 +13,11 @@ const RolesCreate = ({ role, permissions }: { role: Role; permissions: GroupedPe
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('roles.title'),
-            href: rolesRoutes.index.url(),
+            href: RoleController.index.url(),
         },
         {
             title: t('roles.create'),
-            href: rolesRoutes.create.url(),
+            href: RoleController.create.url(),
         },
     ]
 

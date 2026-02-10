@@ -30,7 +30,7 @@ import { MetaType } from "@/types/dashboard";
 import DataTablePagination from "./data-table-pagination";
 import SearchInput from "./search-input";
 import { Button } from "@/components/ui/button";
-import { Plus, Settings2 } from "lucide-react";
+import { Eye, Plus, Settings2 } from "lucide-react";
 import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder";
 import { usePermissions } from "@/hooks/use-permissions";
 
@@ -78,8 +78,7 @@ export function DataTable<TData extends { id: number | string }, TValue>({
 
     return (
         <div className="space-y-4">
-            <div className="flex justify-between">
-
+            <div className="flex justify-between items-center">
                 <div id="create-button">
                     {createHref && (!model || hasPermission(`${model}.create`)) && (
                         <Button variant="outline" className="cursor-pointer" size="sm" onClick={() => router.visit(createHref || '', { preserveState: true, preserveScroll: true })}>
@@ -98,14 +97,13 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    className="ml-auto hidden h-8 lg:flex"
+                                    className="ml-auto flex h-8 lg:flex"
                                 >
-                                    <Settings2 />
-                                    View
+                                    <Eye />
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-[150px]">
-                                <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+                                <DropdownMenuLabel>View columns</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 {table
                                     .getAllColumns()

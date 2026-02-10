@@ -7,14 +7,15 @@ import { DataTable } from '@/components/table/data-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 import { StatusBadge } from '@/components/table/table-filters/status-badge';
-import orders from '@/routes/admin/orders';
+import OrderController from '@/wayfinder/App/Http/Controllers/dashboard/admin/OrderController';
 import OrderFilters from '@/components/table/table-filters/order-filters';
+import { App } from '@/wayfinder/types';
 
-const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> }) => {
+const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<App.Models.Order> }) => {
     const { t: tTables } = useTranslation('tables');
     const { t: tDashboard } = useTranslation('dashboard');
 
-    const columns: ColumnDef<Order>[] = [
+    const columns: ColumnDef<App.Models.Order>[] = [
         {
             id: "select",
             header: ({ table }) => (
@@ -39,7 +40,7 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
         {
             accessorKey: "id",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('orders.id') || 'ID'} indexRoute={orders.index} />
+                <DataTableColumnHeader column={column} title={tTables('orders.id') || 'ID'} indexRoute={OrderController.index} />
             ),
             enableHiding: false,
         },
@@ -64,14 +65,14 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
         {
             accessorKey: "total",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('orders.total') || 'Total'} indexRoute={orders.index} />
+                <DataTableColumnHeader column={column} title={tTables('orders.total') || 'Total'} indexRoute={OrderController.index} />
             ),
             cell: ({ row }) => `$${row.original.total.toFixed(2)}`,
         },
         {
             accessorKey: "created_at",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('orders.created_at') || 'Created At'} indexRoute={orders.index} />
+                <DataTableColumnHeader column={column} title={tTables('orders.created_at') || 'Created At'} indexRoute={OrderController.index} />
             ),
         },
     ];
@@ -79,7 +80,7 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: tDashboard('orders.title'),
-            href: orders.index.url(),
+            href: OrderController.index.url(),
         },
     ];
 
@@ -89,9 +90,9 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
                 columns={columns}
                 data={ordersData.data}
                 meta={ordersData.meta}
-                indexRoute={orders.index}
+                indexRoute={OrderController.index}
                 model="orders"
-                filters={<OrderFilters indexRoute={orders.index} />}
+                filters={<OrderFilters indexRoute={OrderController.index} />}
             />
         </AppLayout>
     )

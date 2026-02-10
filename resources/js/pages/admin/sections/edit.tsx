@@ -2,8 +2,9 @@ import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem } from '@/types'
 import { useTranslation } from 'react-i18next'
 import SectionForm from './components/section-form'
-import { Section } from '@/types/dashboard'
-import sections from '@/routes/admin/sections'
+import SectionController from '@/wayfinder/App/Http/Controllers/dashboard/admin/SectionController'
+import { SectionEnum } from '@/wayfinder/App/Enums/SectionEnum'
+import { App } from '@/wayfinder/types';
 
 const SectionsEdit = ({
     section,
@@ -12,22 +13,22 @@ const SectionsEdit = ({
     categories,
     stores,
 }: {
-    section: Section
-    sectionTypes: Record<string, string>
-    products?: Array<{ id: number | string; name: string | Record<string, string> }>
-    categories?: Array<{ id: number | string; name: string | Record<string, string> }>
-    stores?: Array<{ id: number | string; name: string | Record<string, string> }>
+    section: App.Models.Section
+    sectionTypes: typeof SectionEnum
+    products?: App.Models.Product[]
+    categories?: App.Models.Category[]
+    stores?: App.Models.Store[]
 }) => {
     const { t } = useTranslation('dashboard');
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('sections.title') || 'Sections',
-            href: sections.index.url(),
+            href: SectionController.index.url(),
         },
         {
             title: t('sections.edit') || 'Edit Section',
-            href: sections.edit.url({ section: section.id }),
+            href: SectionController.edit.url({ section: section.id }),
         },
     ]
 

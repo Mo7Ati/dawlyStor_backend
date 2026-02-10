@@ -25,7 +25,8 @@
         "previous": "السابق",
         "next": "التالي",
         "rows_per_page": "عدد الصفوف في الصفحة",
-        "showing": "عرض {from} إلى {to} من {total} عناصر",
+        "showing": "عرض {{from}} إلى {{to}} من {{total}} نتائج",
+        "per_page": "لكل صفحة",
         "all": "الكل",
         "page": "الصفحة"
     },

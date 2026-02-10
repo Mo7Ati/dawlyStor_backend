@@ -12,8 +12,8 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { useTranslation } from 'react-i18next';
-import settings from '@/routes/admin/settings';
-import { Admin } from '@/types/dashboard';
+import AdminSettingsController from '@/wayfinder/App/Http/Controllers/dashboard/admin/AdminSettingsController';
+import { App } from '@/wayfinder/types';
 
 
 
@@ -22,7 +22,7 @@ export default function Profile({
     mustVerifyEmail,
     status,
 }: {
-    admin: Admin;
+    admin: App.Models.Admin;
     mustVerifyEmail: boolean;
     status?: string;
 }) {
@@ -31,7 +31,7 @@ export default function Profile({
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('profile.page_title'),
-            href: settings.profile.url(),
+            href: AdminSettingsController.profile.url(),
         },
     ];
     return (
@@ -45,7 +45,7 @@ export default function Profile({
 
                     <Form
                         method="PUT"
-                        action={settings.profile.url()}
+                        action={AdminSettingsController.profileUpdate.url()}
                         options={{
                             preserveScroll: true,
                         }}

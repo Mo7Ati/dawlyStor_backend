@@ -25,7 +25,6 @@ export default function FilterDropdown(props: FilterDropdownProps) {
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="relative">
                     <Filter size={16} />
-                    {t('filters')}
                     {props.activeFiltersCount > 0 && (
                         <Badge
                             variant="default"

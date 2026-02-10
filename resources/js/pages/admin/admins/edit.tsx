@@ -1,21 +1,22 @@
 import AppLayout from '@/layouts/app-layout'
 import { BreadcrumbItem } from '@/types'
-import { Admin, PaginatedResponse, Role } from '@/types/dashboard'
 import { useTranslation } from 'react-i18next'
 import AdminForm from './components/admin-form'
-import adminRoutes from '@/routes/admin/admins'
+import AdminController from '@/wayfinder/App/Http/Controllers/dashboard/admin/AdminController'
+import { App } from "@/wayfinder/types";
+import { Role } from '@/types/dashboard';
 
-const AdminsEdit = ({ admin, roles }: { admin: Admin; roles: Role[] }) => {
+const AdminsEdit = ({ admin, roles }: { admin: App.Models.Admin; roles: Role[] }) => {
     const { t } = useTranslation('dashboard');
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: t('admins.title'),
-            href: adminRoutes.index.url(),
+            href: AdminController.index.url(),
         },
         {
             title: t('admins.edit'),
-            href: adminRoutes.edit.url({ admin: admin.id }),
+            href: AdminController.edit.url({ admin: admin.id.toString() }),
         },
     ];
 
