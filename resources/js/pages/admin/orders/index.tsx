@@ -9,6 +9,8 @@ import { DataTableColumnHeader } from '@/components/table/data-table-column-head
 import { StatusBadge } from '@/components/table/table-filters/status-badge';
 import orders from '@/routes/admin/orders';
 import OrderFilters from '@/components/table/table-filters/order-filters';
+import OrderStatusBadge from '@/pages/store/orders/components/order-status-badge';
+import PaymentStatusBadge from '@/pages/store/orders/components/payment-status-badge';
 
 const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> }) => {
     const { t: tTables } = useTranslation('tables');
@@ -54,12 +56,12 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
         {
             accessorKey: "status",
             header: tTables('orders.status'),
-            cell: ({ row }) => <StatusBadge type="orderStatus" value={row.original.status} />,
+            cell: ({ row }) => <OrderStatusBadge status={row.original.status} />,
         },
         {
             accessorKey: "payment_status",
             header: tTables('orders.payment_status'),
-            cell: ({ row }) => <StatusBadge type="paymentStatus" value={row.original.payment_status} />,
+            cell: ({ row }) => <PaymentStatusBadge status={row.original.payment_status} />,
         },
         {
             accessorKey: "total",

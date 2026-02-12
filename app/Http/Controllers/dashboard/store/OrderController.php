@@ -32,5 +32,33 @@ class OrderController extends Controller
             'orders' => OrderResource::collection($orders),
         ]);
     }
+
+    public function show(Request $request, $id)
+    {
+        // abort_unless($order->store_id === $store->id, 403);
+        $store = $request->user('store');
+
+        $order = Order::with(['customer', 'store', 'address', 'items.product'])->findOrFail($id);
+
+        return Inertia::render('store/orders/show', [
+            'order' => new OrderResource($order),
+        ]);
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        // abort_unless($order->store_id === $store->id, 403);
+
+        $store = $request->user('store');
+
+        $validated = $request->validate([
+            'status' => ['required', 'string'],
+        ]);
+
+        $order->status = $validated['status'];
+        $order->save();
+
+        return back()->with('success', __('orders.status_updated'));
+    }
 }
 

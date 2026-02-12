@@ -53,17 +53,13 @@ class HandleInertiaRequests extends Middleware
                 'ar' => "العربية",
                 'en' => "English"
             ],
-            'flash' => [
-                'success' => fn() => $request->session()->get('success'),
-                'error' => fn() => $request->session()->get('error'),
-            ],
             'currentLocale' => app()->getLocale(),
-            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'enums' => [
-                'orderStatus' => OrderStatusEnum::cases(),
-                'paymentStatus' => PaymentStatusEnum::cases(),
+                'orderStatus' => OrderStatusEnum::toArray(),
+                'paymentStatus' => PaymentStatusEnum::toArray(),
                 'permissions' => PermissionsEnum::toArray(),
             ],
+            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
 }

@@ -1,3 +1,5 @@
+import { PhpEnumCase } from "./enums";
+
 export type Locale = 'en' | 'ar';
 
 export interface PaginatedResponse<T> {
@@ -106,8 +108,8 @@ export type Store = {
 
 export type Order = {
     id: number | string;
-    status: string;
-    payment_status: string;
+    status: PhpEnumCase;
+    payment_status: PhpEnumCase;
     cancelled_reason?: string | null;
     customer_id?: number | string | null;
     customer_data?: Record<string, any> | null;

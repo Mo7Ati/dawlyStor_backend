@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout'
-import { BreadcrumbItem } from '@/types';
+import { BreadcrumbItem, SharedData } from '@/types';
 import { useTranslation } from 'react-i18next';
 import { ColumnDef } from "@tanstack/react-table"
 import { Order, PaginatedResponse, Store } from '@/types/dashboard';
@@ -8,11 +8,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
 import { StatusBadge } from '@/components/table/table-filters/status-badge';
 import orders from '@/routes/store/orders';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { router, usePage } from '@inertiajs/react';
 import OrderFilters from '@/components/table/table-filters/order-filters';
+import PaymentStatusBadge from './components/payment-status-badge';
 
 const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> }) => {
     const { t: tTables } = useTranslation('tables');
     const { t: tDashboard } = useTranslation('dashboard');
+
+    const orderStatus = usePage<SharedData>().props.enums.orderStatus;
+    console.log(ordersData.data[0]);
 
     const columns: ColumnDef<Order>[] = [
         {
@@ -42,6 +48,15 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
                 <DataTableColumnHeader column={column} title={tTables('orders.id') || 'ID'} indexRoute={orders.index} />
             ),
             enableHiding: false,
+            cell: ({ row }) => (
+                <button
+                    type="button"
+                    className="text-primary underline-offset-2 hover:underline"
+                    onClick={() => router.visit(orders.show({ order: row.original.id }).url)}
+                >
+                    #{row.original.id}
+                </button>
+            ),
         },
         {
             accessorKey: "customer.name",
@@ -50,12 +65,39 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
         {
             accessorKey: "status",
             header: tTables('orders.status'),
-            cell: ({ row }) => <StatusBadge type="orderStatus" value={row.original.status} />,
+            cell: ({ row }) => (
+                <Select
+                    defaultValue={row.original.status.value}
+                    onValueChange={(value) => {
+                        router.visit(
+                            orders.updateStatus({ order: Number(row.original.id) }, {
+                                query: { status: value },
+                            }).url,
+                            {
+                                method: 'patch',
+                                preserveScroll: true,
+                                preserveState: true,
+                            }
+                        );
+                    }}
+                >
+                    <SelectTrigger className="h-8 w-[140px]">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {orderStatus.map((status) => (
+                            <SelectItem key={status.value} value={status.value}>
+                                {status.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            ),
         },
         {
             accessorKey: "payment_status",
             header: tTables('orders.payment_status'),
-            cell: ({ row }) => <StatusBadge type="paymentStatus" value={row.original.payment_status} />,
+            cell: ({ row }) => <PaymentStatusBadge status={row.original.payment_status} />,
         },
         {
             accessorKey: "total",
@@ -86,7 +128,7 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
                 data={ordersData.data}
                 meta={ordersData.meta}
                 indexRoute={orders.index}
-                filters={<OrderFilters indexRoute={orders.index}/>}
+                filters={<OrderFilters indexRoute={orders.index} />}
             />
         </AppLayout>
     )

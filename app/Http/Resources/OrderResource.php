@@ -11,8 +11,8 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'status' => $this->status->label(),
-            'payment_status' => $this->payment_status->label(),
+            'status' => $this->status->model(),
+            'payment_status' => $this->payment_status->model(),
             'checkout_group_id' => $this->checkout_group_id,
             'cancelled_reason' => $this->cancelled_reason,
             'customer_id' => $this->customer_id,

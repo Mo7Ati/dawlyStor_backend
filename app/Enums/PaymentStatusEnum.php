@@ -44,7 +44,18 @@ enum PaymentStatusEnum: string
         return array_column(self::cases(), 'value');
     }
 
-    public function toArray(): array
+    public static function toArray(): array
+    {
+        return array_map(
+            fn(self $case) => [
+                'value' => $case->value,
+                'label' => $case->label(),
+            ],
+            self::cases()
+        );
+    }
+
+    public function model()
     {
         return [
             'value' => $this->value,

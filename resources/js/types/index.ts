@@ -1,5 +1,6 @@
 import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
+import type { Enums } from './enums';
 
 export interface Auth {
     user: User | null;
@@ -43,12 +44,7 @@ export interface SharedData {
     currentLocale: Locale;
     navigationItems: NavItem[];
     sidebarOpen: boolean;
-    // flash?: Flash;
-    enums: {
-        orderStatus: EnumOption[];
-        paymentStatus: EnumOption[];
-        permissions: EnumOption[];
-    };
+    enums: Enums;
     [key: string]: unknown;
 }
 

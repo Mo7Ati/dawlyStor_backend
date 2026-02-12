@@ -1,16 +1,17 @@
 import FilterDropdown from '@/components/table/table-filters/filters-dropdown';
 import { Select, SelectValue, SelectTrigger, SelectItem, SelectContent } from '@/components/ui/select';
 import { useFilters } from '@/hooks/use-filters';
-import { useEnums } from '@/hooks/use-enums';
 import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { RouteQueryOptions } from '@/wayfinder';
 import { RouteDefinition } from '@/wayfinder';
+import { SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 
 const OrderFilters = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get"> }) => {
     const { t: tForms } = useTranslation('forms');
     const { t: tTables } = useTranslation('tables');
-    const { orderStatus, paymentStatus } = useEnums();
+    const { orderStatus, paymentStatus } = usePage<SharedData>().props.enums;
 
     const {
         filters,
