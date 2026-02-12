@@ -5,11 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { ColumnDef } from "@tanstack/react-table"
 import { Section, PaginatedResponse } from '@/types/dashboard';
 import { ReorderableDataTable } from '@/components/table/reorderable-data-table';
-import { Checkbox } from '@/components/ui/checkbox';
 import sections from '@/routes/admin/sections';
 import { EditAction } from '@/components/table/column-actions/edit-action';
 import { DeleteAction } from '@/components/table/column-actions/delete-action-button';
-import { toast } from 'sonner';
 import IsActiveBadge from '@/components/table/badges/is-active-badge';
 
 const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: PaginatedResponse<Section>; sectionTypes: Record<string, string> }) => {
@@ -22,12 +20,6 @@ const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: Pag
             sections.reorder.url(),
             { sections: newOrder.map((section) => ({ id: section.id, order: section.order })) }, {
             preserveScroll: true,
-            onSuccess: () => {
-                toast.success(tDashboard('messages.updated_successfully') || 'Order updated successfully');
-            },
-            onError: () => {
-                toast.error('Failed to update order');
-            },
         });
     };
 
@@ -80,6 +72,7 @@ const SectionsIndex = ({ sections: sectionsData, sectionTypes }: { sections: Pag
                 model="sections"
                 createHref={sections.create.url()}
                 indexRoute={sections.index}
+                onRowClick={(section) => router.visit(sections.edit({ section: section.id }))}
                 onReorder={handleReorder}
             />
         </AppLayout>

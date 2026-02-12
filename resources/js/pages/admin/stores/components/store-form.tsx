@@ -130,12 +130,7 @@ export default function StoreForm({ store, categories, type }: StoreFormProps) {
                                         maxFiles={1}
                                         maxFileSize="5MB"
                                         error={errors.temp_ids}
-                                        files={store.logo ? store.logo.map((logo) => ({
-                                            source: String(logo.id) + '/' + logo.file_name,
-                                            options: {
-                                                type: 'local',
-                                            },
-                                        })) : []}
+                                        files={store.logo}
                                     />
                                 </CardContent>
                             </Card>

@@ -8,15 +8,11 @@ use App\Http\Resources\StoreCategoryResource;
 use App\Http\Resources\StoreResource;
 use App\Models\Store;
 use App\Models\StoreCategory;
-use App\Models\TempMedia;
-use App\Traits\MediaSyncTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class StoreController extends Controller
 {
-    use MediaSyncTrait;
     public function index(Request $request)
     {
         abort_unless($request->user('admin')->can('stores.index'), 403);
@@ -55,7 +51,7 @@ class StoreController extends Controller
         abort_unless($request->user('admin')->can('stores.create'), 403);
 
         $store = Store::create($request->validated());
-        $this->syncMedia($request, $store, 'logo');
+        syncMedia($request, $store, 'store-logos');
         return to_route('admin.stores.index')->with('success', __('messages.created_successfully'));
     }
 
@@ -78,7 +74,8 @@ class StoreController extends Controller
         $validated = $request->validated();
         $store = Store::findOrFail($id);
 
-        $this->syncMedia($request, $store, 'logo');
+        syncMedia($request, $store, 'store-logos');
+
         $store->update($validated);
 
         return redirect()

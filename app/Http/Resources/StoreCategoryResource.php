@@ -13,7 +13,7 @@ class StoreCategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'image_url' => "https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=",
+            'image' => $this->getFirstMediaUrl('store-categories'),
             'created_at' => $this->created_at?->format('Y-m-d'),
         ];
     }
@@ -24,16 +24,7 @@ class StoreCategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->getTranslations('name'),
             'description' => $this->getTranslations('description'),
-        ];
-    }
-
-
-    public function serializeForHomePage(): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'image_url' => "https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=",
+            'image' => $this->getMedia('store-categories'),
         ];
     }
 }

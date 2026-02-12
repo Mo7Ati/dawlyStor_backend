@@ -21,7 +21,9 @@ class ProductResource extends JsonResource
             'category_id' => $this->category_id,
             'is_active' => $this->is_active,
             'is_accepted' => $this->is_accepted,
-            'image_url' => "https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=",
+            'images' => $this->getMedia('product-images')
+                ->map(fn($media) => $media->getUrl())
+                ->toArray(),
             'quantity' => $this->quantity,
             'rating' => ['value' => '4.8', 'count' => '100',],
             'trending' => true,
@@ -41,6 +43,7 @@ class ProductResource extends JsonResource
             ...$this->toArray(request()),
             'name' => $this->getTranslations('name'),
             'description' => $this->getTranslations('description'),
+            'images' => $this->getMedia('product-images'),
         ];
     }
 }

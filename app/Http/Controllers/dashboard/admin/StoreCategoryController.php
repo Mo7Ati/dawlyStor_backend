@@ -40,7 +40,8 @@ class StoreCategoryController extends Controller
     {
         abort_unless($request->user('admin')->can(PermissionsEnum::STORE_CATEGORIES_CREATE->value), 403);
 
-        StoreCategory::create($request->validated());
+        $category = StoreCategory::create($request->validated());
+        syncMedia($request, $category, 'store-categories');
         return to_route('admin.store-categories.index')->with('success', __('messages.created_successfully'));
     }
 
@@ -60,6 +61,8 @@ class StoreCategoryController extends Controller
 
         $category = StoreCategory::findOrFail($id);
         $category->update($request->validated());
+
+        syncMedia($request, $category, 'store-categories');
 
         return redirect()
             ->route('admin.store-categories.index')

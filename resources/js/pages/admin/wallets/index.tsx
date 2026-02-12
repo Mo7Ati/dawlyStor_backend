@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { PaginatedResponse } from '@/types/dashboard';
 import { DataTable } from '@/components/table/data-table';
 import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
-import WalletController from '@/wayfinder/App/Http/Controllers/dashboard/admin/WalletController';
+import wallets from '@/routes/admin/wallets';
 
 export interface AdminWallet {
     id: number | string;
@@ -27,7 +27,7 @@ const WalletsIndex = ({ wallets: walletsData }: { wallets: PaginatedResponse<Adm
         {
             accessorKey: "id",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('wallets.id') || 'ID'} indexRoute={WalletController.index} />
+                <DataTableColumnHeader column={column} title={tTables('wallets.id') || 'ID'} indexRoute={wallets.index} />
             ),
             enableHiding: false,
         },
@@ -46,13 +46,13 @@ const WalletsIndex = ({ wallets: walletsData }: { wallets: PaginatedResponse<Adm
         {
             accessorKey: "balance",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('wallets.balance') || 'Balance'} indexRoute={WalletController.index} />
+                <DataTableColumnHeader column={column} title={tTables('wallets.balance') || 'Balance'} indexRoute={wallets.index} />
             ),
         },
         {
             accessorKey: "created_at",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('wallets.created_at') || 'Created At'} indexRoute={WalletController.index} />
+                <DataTableColumnHeader column={column} title={tTables('wallets.created_at') || 'Created At'} indexRoute={wallets.index} />
             ),
         },
     ];
@@ -60,7 +60,7 @@ const WalletsIndex = ({ wallets: walletsData }: { wallets: PaginatedResponse<Adm
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: tDashboard('wallets.title'),
-            href: WalletController.index.url(),
+            href: wallets.index.url(),
         },
     ];
 
@@ -70,7 +70,7 @@ const WalletsIndex = ({ wallets: walletsData }: { wallets: PaginatedResponse<Adm
                 columns={columns}
                 data={walletsData.data}
                 meta={walletsData.meta}
-                indexRoute={WalletController.index}
+                indexRoute={wallets.index}
                 model="wallets"
             />
         </AppLayout>

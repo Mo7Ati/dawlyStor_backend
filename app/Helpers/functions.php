@@ -3,6 +3,7 @@
 use App\Enums\PanelsEnum;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 function getPanel()
 {
@@ -46,4 +47,21 @@ function locale()
 function getByLocale($array)
 {
     return Arr::get($array, locale(), $array['en']);
+}
+function syncMedia($request, $model, $collection)
+{
+    $temp_ids = $request->input('temp_ids', null);
+
+    if ($temp_ids) {
+
+        $media_ids = is_array($temp_ids) ? $temp_ids : explode(',', $temp_ids);
+
+        Media::query()
+            ->whereIn('id', $media_ids)
+            ->get()
+            ->each(function ($media) use ($model, $collection) {
+                $media->move($model, $collection);
+                $media->delete();
+            });
+    }
 }

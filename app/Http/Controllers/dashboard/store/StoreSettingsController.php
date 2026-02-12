@@ -5,18 +5,14 @@ namespace App\Http\Controllers\dashboard\store;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\StoreRequest;
-use App\Http\Resources\StoreCategoryResource;
 use App\Http\Resources\StoreResource;
 use App\Models\StoreCategory;
-use App\Traits\MediaSyncTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class StoreSettingsController extends Controller
 {
-    use MediaSyncTrait;
-
     public function profile(Request $request)
     {
         return Inertia::render('store/settings/profile', [
@@ -36,7 +32,7 @@ class StoreSettingsController extends Controller
         $store = Auth::guard('store')->user();
         $store->update($data);
 
-        $this->syncMedia($request, $store, 'logo');
+        syncMedia($request, $store, 'store-logos');
 
         return redirect()->back();
     }

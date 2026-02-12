@@ -12,7 +12,6 @@ use App\Models\Addition;
 use App\Models\Category;
 use App\Models\Option;
 use App\Models\Product;
-use App\Traits\MediaSyncTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +19,6 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    use MediaSyncTrait;
-
     public function index(Request $request)
     {
         $products = Product::query()
@@ -65,7 +62,7 @@ class ProductController extends Controller
             $product->syncAdditions($request->input('additions', []));
             $product->syncOptions($request->input('options', []));
 
-            $this->syncMedia($request, $product, 'images');
+            syncMedia($request, $product, 'product-images');
         });
 
         return redirect()
@@ -101,7 +98,7 @@ class ProductController extends Controller
             );
             $product->syncAdditions($request->input('additions', []));
             $product->syncOptions($request->input('options', []));
-            $this->syncMedia($request, $product, 'images');
+            syncMedia($request, $product, 'product-images');
         });
 
         return redirect()

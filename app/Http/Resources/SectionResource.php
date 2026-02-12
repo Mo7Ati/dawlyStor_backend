@@ -97,7 +97,11 @@ class SectionResource extends JsonResource
             default => collect([]),
         };
 
-        return ProductResource::collection($products);
+        return [
+            'title' => getByLocale($this->data['title']),
+            'description' => getByLocale($this->data['description']),
+            'products' => ProductResource::collection($products),
+        ];
     }
 
     /**
@@ -119,9 +123,11 @@ class SectionResource extends JsonResource
             default => collect([]),
         };
 
-        return $categories->map(function ($category) {
-            return StoreCategoryResource::make($category)->serializeForHomePage();
-        })->toArray();
+        return [
+            'title' => getByLocale($this->data['title']),
+            'description' => getByLocale($this->data['description']),
+            'categories' => StoreCategoryResource::collection($categories),
+        ];
     }
 
     /**
@@ -144,7 +150,11 @@ class SectionResource extends JsonResource
             default => collect([]),
         };
 
-        return StoreResource::collection($stores);
+        return [
+            'title' => getByLocale($this->data['title']),
+            'description' => getByLocale($this->data['description']),
+            'stores' => StoreResource::collection($stores),
+        ];
     }
 
     /**

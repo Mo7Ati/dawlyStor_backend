@@ -14,6 +14,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import { Label } from '@/components/ui/label'
 import InputError from '@/components/shared/input-error'
 import { cn } from '@/lib/utils'
+import { Media } from '@/types/dashboard'
 
 // Register the plugins - must be called before using FilePond component
 registerPlugin(
@@ -29,18 +30,25 @@ interface FileUploadProps {
     acceptedFileTypes?: string[]
     maxFiles?: number
     maxFileSize?: string
-    files?: Array<{
-        source: string
-        options: {
-            type: 'input' | 'limbo' | 'local' | 'remote'
-            metadata?: {
-                date?: string,
-                name?: string,
-                size?: number,
-                type?: string,
-            },
-        }
-    }>
+    files?: Media[] | null
+    // files?: Array<{
+    //     source: string
+    //     options: {
+    //         type: 'input' | 'limbo' | 'local' | 'remote'
+    //         metadata?: {
+    //             date?: string,
+    //             name?: string,
+    //             size?: number,
+    //             type?: string,
+    //         },
+    //     }
+    // }>
+    // store.logo ? store.logo.map((logo) => ({
+    //     source: String(logo.id) + '/' + logo.file_name,
+    //     options: {
+    //         type: 'local',
+    //     },
+    // })) : []
     error?: string
     className?: string
     required?: boolean
@@ -66,7 +74,17 @@ export default function FileUpload({
     className,
     required = false,
 }: FileUploadProps) {
-    const [files, setFiles] = useState<any[]>(initialFiles);
+    const getInitialFiles = () => {
+        if (!initialFiles) return [];
+        return initialFiles.map((file) => ({
+            source: String(file.id) + '/' + file.file_name,
+            options: {
+                type: 'local',
+            },
+        }))
+    }
+
+    const [files, setFiles] = useState<any[]>(getInitialFiles);
     const [tempFileIds, setTempFileIds] = useState<string[]>([]);
 
     const handleProcessFile = useCallback((error: any, file: any) => {
@@ -80,7 +98,7 @@ export default function FileUpload({
     }, [tempFileIds])
 
     return (
-        <div className={cn('space-y-2', className)}>
+        <div className={cn('space-y-2', className, 'filepond-wrapper')}>
             {label && (
                 <Label htmlFor={name}>
                     {label}
@@ -97,7 +115,7 @@ export default function FileUpload({
                 maxFiles={maxFiles}
                 acceptedFileTypes={acceptedFileTypes}
                 server={{
-                    url: '/api/temp-uploads',
+                    url: '/temp-uploads',
                     process: {
                         url: '',
                         method: 'POST',
@@ -125,7 +143,7 @@ export default function FileUpload({
                     },
 
                     load: (source, load, error) => {
-                        fetch(`/api/temp-uploads/${source.split('/')[0]}/${source.split('/')[1]}`, {
+                        fetch(`/temp-uploads/${source.split('/')[0]}/${source.split('/')[1]}`, {
                             method: 'GET',
                             headers: {
                                 'X-CSRF-TOKEN': getCsrfToken(),
@@ -145,7 +163,7 @@ export default function FileUpload({
                     },
 
                     remove: (source, load, error) => {
-                        fetch(`/api/temp-uploads/${source}`, {
+                        fetch(`/temp-uploads/${source}`, {
                             method: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': getCsrfToken(),

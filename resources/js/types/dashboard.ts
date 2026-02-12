@@ -69,6 +69,7 @@ export type StoreCategory = {
     id: number | string;
     name: Record<Locale, string> | string;
     description?: Record<string, string> | string;
+    image: Media[] | null;
 }
 
 
@@ -151,19 +152,10 @@ export type Product = {
     store?: Store | null;
     category?: Category;
     images: Media[];
-    additions?: ProductAddition[];
-    options?: ProductOption[];
+    additions?: Addition[];
+    options?: Option[];
 }
 
-export type ProductAddition = {
-    addition_id: number | string;
-    price: number;
-}
-
-export type ProductOption = {
-    option_id: number | string;
-    price: number;
-}
 
 export interface Category {
     id: number | string
@@ -288,4 +280,10 @@ export enum PaymentStatus {
     PAID = 'paid',
     FAILED = 'failed',
     REFUNDED = 'refunded',
+}
+
+export enum TransactionType {
+    DEPOSIT_ORDER_TOTAL_IN_STORE_WALLET = 'ORDER_PAYMENT',
+    WITHDRAW_PLATFORM_FEE_FROM_STORE_WALLET = 'PLATFORM_SHARE',
+    DEPOSIT_STORE_SUBSCRIPTION_TO_PLATFORM_WALLET = 'STORE_SUBSCRIPTION',
 }

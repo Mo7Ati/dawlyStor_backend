@@ -305,3 +305,44 @@
         @apply bg-background text-foreground;
     }
 }
+
+
+
+
+.dark .filepond--root {
+    --filepond-background-color: hsl(var(--card));
+    --filepond-panel-background-color: hsl(var(--card));
+    --filepond-drop-label-color: hsl(var(--foreground));
+    --filepond-color-primary: hsl(var(--primary));
+    --filepond-color-secondary: hsl(var(--muted-foreground));
+}
+
+.dark .filepond--panel-root {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+}
+
+.dark .filepond--drop-label {
+    color: hsl(var(--foreground));
+}
+
+.dark .filepond--label-action {
+    color: hsl(var(--primary));
+}
+
+.dark .filepond--item-panel {
+    background-color: hsl(var(--muted));
+}
+
+.dark .filepond--file-info-main,
+.dark .filepond--file-info-sub {
+    color: hsl(var(--foreground));
+}
+
+.dark .filepond--file-action-button {
+    color: hsl(var(--foreground));
+}
+
+.dark .filepond--progress-indicator {
+    color: hsl(var(--primary));
+}

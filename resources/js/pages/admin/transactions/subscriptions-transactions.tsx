@@ -1,6 +1,4 @@
 import AppLayout from '@/layouts/app-layout'
-import TransactionController from '@/wayfinder/App/Http/Controllers/dashboard/admin/TransactionController'
-import React from 'react'
 import { AdminTransaction } from '.'
 import { PaginatedResponse } from '@/types/dashboard'
 import { DataTable } from '@/components/table/data-table'
@@ -8,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
 import { BreadcrumbItem } from '@/types'
+import transactions from '@/routes/admin/transactions'
 
 
 
@@ -19,7 +18,7 @@ const SubscriptionsTransactions = ({ transactions: transactionsData }: { transac
     const breadcrumbItems: BreadcrumbItem[] = [
         {
             title: tDashboard('nav_labels.subscriptions_transactions'),
-            href: TransactionController.subscriptionsTransactions.url(),
+            href: transactions.subscriptions.index.url(),
         },
     ];
 
@@ -27,7 +26,7 @@ const SubscriptionsTransactions = ({ transactions: transactionsData }: { transac
         {
             accessorKey: "id",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('transactions.id') || 'ID'} indexRoute={TransactionController.index} />
+                <DataTableColumnHeader column={column} title={tTables('transactions.id') || 'ID'} indexRoute={transactions.index} />
             ),
         },
         {
@@ -37,7 +36,7 @@ const SubscriptionsTransactions = ({ transactions: transactionsData }: { transac
         {
             accessorKey: "amount",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('transactions.amount') || 'Amount'} indexRoute={TransactionController.index} />
+                <DataTableColumnHeader column={column} title={tTables('transactions.amount') || 'Amount'} indexRoute={transactions.index} />
             ),
         },
         {
@@ -47,7 +46,7 @@ const SubscriptionsTransactions = ({ transactions: transactionsData }: { transac
         {
             accessorKey: "created_at",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('transactions.created_at') || 'Created At'} indexRoute={TransactionController.index} />
+                <DataTableColumnHeader column={column} title={tTables('transactions.created_at') || 'Created At'} indexRoute={transactions.index} />
             ),
         },
     ];
@@ -58,7 +57,7 @@ const SubscriptionsTransactions = ({ transactions: transactionsData }: { transac
                 columns={columns}
                 data={transactionsData.data}
                 meta={transactionsData.meta}
-                indexRoute={TransactionController.subscriptionsTransactions}
+                indexRoute={transactions.subscriptions.index}
                 model="transactions"
             />
         </AppLayout>

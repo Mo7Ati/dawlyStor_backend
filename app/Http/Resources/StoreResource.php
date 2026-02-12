@@ -25,7 +25,7 @@ class StoreResource extends JsonResource
             'rating' => ['value' => '4.8', 'count' => '100',],
             'created_at' => $this->created_at?->format('Y-m-d'),
             'category' => $this->whenLoaded('category', fn($category) => new StoreCategoryResource($category)),
-            'image_url' => "https://media.istockphoto.com/id/912819604/vector/storefront-flat-design-e-commerce-icon.jpg?s=612x612&w=0&k=20&c=_x_QQJKHw_B9Z2HcbA2d1FH1U1JVaErOAp2ywgmmoTI=",
+            'logo' => $this->getFirstMediaUrl('store-logos') ?? null,
             'products' => $this->whenLoaded('products', fn($products) => ProductResource::collection($products)),
             'categories' => $this->whenLoaded('categories', fn($categories) => CategoryResource::collection($categories)),
         ];
@@ -38,6 +38,7 @@ class StoreResource extends JsonResource
             'name' => $this->getTranslations('name'),
             'address' => $this->getTranslations('address'),
             'description' => $this->getTranslations('description'),
+            'logo' => $this->getMedia('store-logos'),
         ];
     }
 }

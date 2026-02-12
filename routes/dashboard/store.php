@@ -17,9 +17,6 @@ Route::prefix('store')
     ->group($settingsRoutes);
 
 
-
-
-
 Route::middleware(['auth:store'])
     ->prefix('store')
     ->name('store.')

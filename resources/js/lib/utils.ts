@@ -13,6 +13,7 @@ import products from '@/routes/admin/products';
 import roles from '@/routes/admin/roles';
 import storeCategories from '@/routes/admin/store-categories';
 import stores from '@/routes/admin/stores';
+import sections from '@/routes/admin/sections';
 
 // Store routes
 import storeOrders from '@/routes/store/orders';
@@ -21,6 +22,8 @@ import additions from '@/routes/store/additions';
 import options from '@/routes/store/options';
 import categories from '@/routes/store/categories';
 import settings from '@/routes/store/settings';
+import transactions from '@/routes/admin/transactions';
+import wallets from '@/routes/admin/wallets';
 
 
 
@@ -80,7 +83,7 @@ export function getAdminPanelNavItems(): NavGroup[] {
                 },
                 {
                     title: t('nav_labels.sections'),
-                    href: SectionController.index.url(),
+                    href: sections.index.url(),
                     icon: List,
                     visible: true,
                 }
@@ -137,19 +140,19 @@ export function getAdminPanelNavItems(): NavGroup[] {
             items: [
                 {
                     title: t('nav_labels.transactions'),
-                    href: TransactionController.index.url(),
+                    href: transactions.index.url(),
                     icon: Receipt,
                     visible: true,
                 },
                 {
                     title: t('nav_labels.wallets'),
-                    href: WalletController.index.url(),
+                    href: wallets.index.url(),
                     icon: Wallet,
                     visible: true,
                 },
                 {
                     title: t('nav_labels.subscriptions_transactions'),
-                    href: TransactionController.subscriptionsTransactions.url(),
+                    href: transactions.subscriptions.index.url(),
                     icon: Receipt,
                     visible: true,
                 },

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { type InputHTMLAttributes } from "react";
 import { XIcon } from "lucide-react";
-import { Dispatch, SetStateAction, forwardRef, useState } from "react";
+import { forwardRef, useState } from "react";
 
 type InputTagsProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> & {
     value: string[];

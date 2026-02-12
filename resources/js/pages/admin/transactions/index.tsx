@@ -5,9 +5,8 @@ import { ColumnDef } from "@tanstack/react-table"
 import { PaginatedResponse } from '@/types/dashboard';
 import { DataTable } from '@/components/table/data-table';
 import { DataTableColumnHeader } from '@/components/table/data-table-column-header';
-import TransactionController from '@/wayfinder/App/Http/Controllers/dashboard/admin/TransactionController';
-import TransactionTypeEnum from '@/wayfinder/App/Enums/TransactionTypeEnum';
-import { Badge } from '@/components/ui/badge';
+import { TransactionType } from '@/types/dashboard';
+import transactions from '@/routes/admin/transactions';
 
 
 export interface AdminTransaction {
@@ -28,9 +27,9 @@ const TransactionsIndex = ({ transactions: transactionsData }: { transactions: P
     const { t: tDashboard } = useTranslation('dashboard');
 
     const explanationLabel = (value: string) => {
-        const key = value === TransactionTypeEnum.DEPOSIT_ORDER_TOTAL_IN_STORE_WALLET ? 'ORDER_PAYMENT'
-            : value === TransactionTypeEnum.WITHDRAW_PLATFORM_FEE_FROM_STORE_WALLET ? 'PLATFORM_SHARE'
-                : value === TransactionTypeEnum.DEPOSIT_STORE_SUBSCRIPTION_TO_PLATFORM_WALLET ? 'STORE_SUBSCRIPTION'
+        const key = value === TransactionType.DEPOSIT_ORDER_TOTAL_IN_STORE_WALLET ? 'ORDER_PAYMENT'
+            : value === TransactionType.WITHDRAW_PLATFORM_FEE_FROM_STORE_WALLET ? 'PLATFORM_SHARE'
+                : value === TransactionType.DEPOSIT_STORE_SUBSCRIPTION_TO_PLATFORM_WALLET ? 'STORE_SUBSCRIPTION'
                     : value;
         return tTables(`transactions.explanation_${key}`) || value;
     };
@@ -39,7 +38,7 @@ const TransactionsIndex = ({ transactions: transactionsData }: { transactions: P
         {
             accessorKey: "id",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('transactions.id') || 'ID'} indexRoute={TransactionController.index} />
+                <DataTableColumnHeader column={column} title={tTables('transactions.id') || 'ID'} indexRoute={transactions.index} />
             ),
             enableHiding: false,
         },
@@ -54,7 +53,7 @@ const TransactionsIndex = ({ transactions: transactionsData }: { transactions: P
         {
             accessorKey: "amount",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('transactions.amount') || 'Amount'} indexRoute={TransactionController.index} />
+                <DataTableColumnHeader column={column} title={tTables('transactions.amount') || 'Amount'} indexRoute={transactions.index} />
             ),
         },
         {
@@ -64,7 +63,7 @@ const TransactionsIndex = ({ transactions: transactionsData }: { transactions: P
         {
             accessorKey: "created_at",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title={tTables('transactions.created_at') || 'Created At'} indexRoute={TransactionController.index} />
+                <DataTableColumnHeader column={column} title={tTables('transactions.created_at') || 'Created At'} indexRoute={transactions.index} />
             ),
         },
     ];
@@ -72,7 +71,7 @@ const TransactionsIndex = ({ transactions: transactionsData }: { transactions: P
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: tDashboard('transactions.title'),
-            href: TransactionController.index.url(),
+            href: transactions.index.url(),
         },
     ];
 
@@ -82,7 +81,7 @@ const TransactionsIndex = ({ transactions: transactionsData }: { transactions: P
                 columns={columns}
                 data={transactionsData.data}
                 meta={transactionsData.meta}
-                indexRoute={TransactionController.index}
+                indexRoute={transactions.index}
                 model="transactions"
             />
         </AppLayout>

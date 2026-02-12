@@ -8,7 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import { Addition, Category, Option, Product, ProductAddition, ProductOption } from '@/types/dashboard'
+import { Addition, Category, Option, Product } from '@/types/dashboard'
 import FormButtons from '@/components/form/form-buttons'
 import { normalizeFieldValue } from '@/lib/utils'
 import TranslatableTabs from '@/components/ui/translatable-tabs'
@@ -26,9 +26,7 @@ import IsActive from '@/components/form/is-active'
 import FileUpload from '@/components/form/file-upload'
 import products from '@/routes/store/products'
 import IsActiveFormField from '@/components/form/is-active'
-import { Repeater } from '@/components/shared/repeater'
 import MultiInput from '@/components/form/multi-input'
-// import { Repeater } from '@/components/shared/repeater'
 
 interface ProductFormProps {
     product: Product
@@ -41,8 +39,8 @@ interface ProductFormProps {
 export default function ProductForm({ product, categories, additionsData = [], optionsData = [], type }: ProductFormProps) {
     const { t } = useTranslation('forms');
 
-    const [additions, setAdditions] = useState<ProductAddition[]>(product.additions ?? []);
-    const [options, setOptions] = useState<ProductOption[]>(product.options ?? []);
+    const [additions, setAdditions] = useState<Addition[]>(product.additions ?? []);
+    const [options, setOptions] = useState<Option[]>(product.options ?? []);
     const [keywords, setKeywords] = useState<string[]>(product.keywords ?? []);
 
     return (
@@ -58,8 +56,8 @@ export default function ProductForm({ product, categories, additionsData = [], o
             }}
             transform={data => ({
                 ...data,
-                additions,
-                options,
+                // additions,
+                // options,
                 keywords,
             })}
         >
@@ -98,11 +96,11 @@ export default function ProductForm({ product, categories, additionsData = [], o
                                     <div>
                                         <MultiInput
                                             name="keywords"
-                                            label={t('products.keywords')}
+                                            // label={t('products.keywords')}
                                             placeholder={t('products.enter_keywords')}
                                             value={keywords}
                                             onChange={setKeywords}
-                                            error={errors.keywords}
+                                        // error={errors.keywords}
                                         />
                                     </div>
                                 </CardContent>
@@ -124,12 +122,7 @@ export default function ProductForm({ product, categories, additionsData = [], o
                                         maxFiles={10}
                                         maxFileSize="5MB"
                                         error={errors.temp_ids}
-                                        files={product.images ? product.images.map((image: any) => ({
-                                            source: String(image.id) + '/' + image.file_name,
-                                            options: {
-                                                type: 'local',
-                                            },
-                                        })) : []}
+                                        files={product.images}
                                     />
                                 </CardContent>
                             </Card>
@@ -235,138 +228,7 @@ export default function ProductForm({ product, categories, additionsData = [], o
                         </div>
                     </div>
 
-                    <div className='flex gap-4 mt-4 items-start'>
-                        <Card className='w-1/2 h-auto'>
-                            <CardHeader>
-                                <CardTitle>{t('products.additions')}</CardTitle>
-                                <CardDescription>
-                                    {t('products.additions_desc')}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className='min-h-fit'>
-                                <Repeater
-                                    name="additions[]"
-                                    value={additions}
-                                    onChange={(e) => setAdditions(e.target.value)}
-                                    createItem={() => ({
-                                        addition_id: "",
-                                        price: 0,
-                                    })}
-                                    renderRow={(item, index, update) => (
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <Select
-                                                value={String(item.addition_id)}
-                                                onValueChange={(v) =>
-                                                    update({ addition_id: v })
-                                                }
-                                                required
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder={t('products.select_addition')} />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {additionsData
-                                                        .filter(
-                                                            addition => {
-                                                                // Check if this addition is selected in any OTHER row (not current row)
-                                                                const isSelectedInOtherRow = additions.some(
-                                                                    (productAddition, idx) =>
-                                                                        idx !== index &&
-                                                                        productAddition.addition_id &&
-                                                                        String(productAddition.addition_id) === String(addition.id)
-                                                                )
-                                                                // Include if not selected in other rows
-                                                                return !isSelectedInOtherRow
-                                                            }
-                                                        )
-                                                        .map(addition => (
-                                                            <SelectItem key={addition.id} value={String(addition.id)}>
-                                                                {addition.name as string}
-                                                            </SelectItem>
-                                                        ))
-                                                    }
-                                                </SelectContent>
-                                            </Select>
-                                            <Input
-                                                required
-                                                type="number"
-                                                value={item.price}
-                                                onChange={(e) =>
-                                                    update({ price: Number(e.target.value) })
-                                                }
-                                            />
-                                        </div>
-                                    )}
-                                />
-                            </CardContent>
-                        </Card>
 
-
-                        {/* Options */}
-                        <Card className='w-1/2 h-auto'>
-                            <CardHeader>
-                                <CardTitle>{t('products.options')}</CardTitle>
-                                <CardDescription>
-                                    {t('products.options_desc')}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className='min-h-fit'>
-                                <Repeater
-                                    name="options[]"
-                                    value={options}
-                                    onChange={(e) => setOptions(e.target.value)}
-                                    createItem={() => ({
-                                        option_id: "",
-                                        price: 0,
-                                    })}
-                                    renderRow={(item, index, update) => (
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <Select
-                                                value={String(item.option_id)}
-                                                onValueChange={(v) =>
-                                                    update({ option_id: v })
-                                                }
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder={t('products.select_option')} />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {optionsData
-                                                        .filter(
-                                                            option => {
-                                                                // Check if this addition is selected in any OTHER row (not current row)
-                                                                const isSelectedInOtherRow = options.some(
-                                                                    (productOption, idx) =>
-                                                                        idx !== index &&
-                                                                        productOption.option_id &&
-                                                                        String(productOption.option_id) === String(option.id)
-                                                                )
-                                                                // Include if not selected in other rows
-                                                                return !isSelectedInOtherRow
-                                                            }
-                                                        )
-                                                        .map(option => (
-                                                            <SelectItem key={option.id} value={String(option.id)}>
-                                                                {option.name as string}
-                                                            </SelectItem>
-                                                        ))
-                                                    }
-                                                </SelectContent>
-                                            </Select>
-                                            <Input
-                                                type="number"
-                                                value={item.price}
-                                                onChange={(e) =>
-                                                    update({ price: Number(e.target.value) })
-                                                }
-                                            />
-                                        </div>
-                                    )}
-                                />
-                            </CardContent>
-                        </Card>
-
-                    </div>
 
                     <FormButtons
                         processing={processing}
@@ -379,3 +241,30 @@ export default function ProductForm({ product, categories, additionsData = [], o
     )
 }
 
+{/* <div className='flex gap-4 mt-4 items-start'>
+<Card className='w-1/2 h-auto'>
+    <CardHeader>
+        <CardTitle>{t('products.additions')}</CardTitle>
+        <CardDescription>
+            {t('products.additions_desc')}
+        </CardDescription>
+    </CardHeader>
+    <CardContent className='min-h-fit'>
+
+    </CardContent>
+</Card>
+
+
+<Card className='w-1/2 h-auto'>
+    <CardHeader>
+        <CardTitle>{t('products.options')}</CardTitle>
+        <CardDescription>
+            {t('products.options_desc')}
+        </CardDescription>
+    </CardHeader>
+    <CardContent className='min-h-fit'>
+
+    </CardContent>
+</Card>
+
+</div > */}
