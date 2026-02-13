@@ -12,9 +12,11 @@ class CustomerSeeder extends Seeder
 {
     public function run()
     {
-        Customer::create([
+        Customer::firstOrCreate([
+            'email' => 'customer@ps.com',
+        ], [
             'name' => 'Customer',
-            'email' => 'customer@example.com',
+            'phone_number' => '0123456789',
             'password' => Hash::make('password'),
             'is_active' => true,
         ]);
