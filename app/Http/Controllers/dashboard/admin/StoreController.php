@@ -15,7 +15,7 @@ class StoreController extends Controller
 {
     public function index(Request $request)
     {
-        abort_unless($request->user('admin')->can('stores.index'), 403);
+        $this->authorizeForUser($request->user('admin'), 'viewAny', Store::class);
 
         $stores = Store::query()
             ->with('category')
@@ -38,7 +38,7 @@ class StoreController extends Controller
 
     public function create()
     {
-        abort_unless(request()->user('admin')->can('stores.create'), 403);
+        $this->authorize('create', Store::class);
 
         return Inertia::render('admin/stores/create', [
             'store' => StoreResource::make(new Store())->serializeForForm(),
@@ -48,18 +48,18 @@ class StoreController extends Controller
 
     public function store(StoreRequest $request)
     {
-        abort_unless($request->user('admin')->can('stores.create'), 403);
+        $this->authorizeForUser($request->user('admin'), 'create', Store::class);
 
         $store = Store::create($request->validated());
         syncMedia($request, $store, 'store-logos');
-        return to_route('admin.stores.index')->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('admin.stores.index');
     }
 
     public function edit($id)
     {
-        abort_unless(request()->user('admin')->can('stores.update'), 403);
-
         $store = Store::findOrFail($id);
+        $this->authorize('update', $store);
         return Inertia::render('admin/stores/edit', [
             'store' => StoreResource::make($store)->serializeForForm(),
             'categories' => StoreCategoryResource::collection(StoreCategory::all()),
@@ -69,29 +69,26 @@ class StoreController extends Controller
 
     public function update($id, StoreRequest $request)
     {
-        abort_unless($request->user('admin')->can('stores.update'), 403);
-
         $validated = $request->validated();
         $store = Store::findOrFail($id);
+        $this->authorizeForUser($request->user('admin'), 'update', $store);
 
         syncMedia($request, $store, 'store-logos');
 
         $store->update($validated);
 
-        return redirect()
-            ->route('admin.stores.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('admin.stores.index');
     }
 
     public function destroy($id)
     {
-        abort_unless(request()->user('admin')->can('stores.destroy'), 403);
+        $store = Store::findOrFail($id);
+        $this->authorize('delete', $store);
+        $store->delete();
 
-        Store::destroy($id);
-
-        return redirect()
-            ->route('admin.stores.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('admin.stores.index');
     }
 }
 

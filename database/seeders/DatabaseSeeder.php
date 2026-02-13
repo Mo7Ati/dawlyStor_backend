@@ -17,24 +17,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin::create([
-        //     'name' => 'Admin',
-        //     'email' => 'admin@ps.com',
-        //     'password' => 'password',
-        //     'is_active' => true,
-        // ]);
-        // Admin::factory()->count(100)->create();
-        // StoreCategory::factory()->count(10)->create();
-        // Store::factory()->count(100)->create();
-        // Order::factory()->count(100)->create();
-        // Product::factory()->count(100)->create();
-        // $this->call([
-        //     StoreSeeder::class,
-        // ]);
-
         Platform::firstOrCreate(['id' => 1], ['name' => 'Platform']);
-
+        Admin::firstOrCreate([
+            'email' => 'admin@ps.com',
+        ], [
+            'name' => 'Admin',
+            'password' => 'password',
+            'is_active' => true,
+        ]);
         $this->call([
+            StoreSeeder::class,
             OrderSeeder::class,
         ]);
     }

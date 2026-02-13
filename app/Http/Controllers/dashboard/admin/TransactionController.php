@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\dashboard\admin;
 
+use App\Enums\PermissionsEnum;
 use App\Enums\TransactionTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TransactionResource;
@@ -13,7 +14,7 @@ class TransactionController extends Controller
 {
     public function index(Request $request)
     {
-        // abort_unless($request->user('admin')->can(PermissionsEnum::TRANSACTIONS_INDEX->value), 403);
+        $this->authorizeForUser($request->user('admin'), PermissionsEnum::TRANSACTIONS_INDEX->value);
 
         $transactions = Transaction::query()
             ->with(['wallet', 'payable', 'source'])
@@ -31,6 +32,8 @@ class TransactionController extends Controller
 
     public function subscriptionsTransactions(Request $request)
     {
+        $this->authorizeForUser($request->user('admin'), PermissionsEnum::TRANSACTIONS_INDEX->value);
+
         $transactions = Transaction::query()
             ->where('meta->type', TransactionTypeEnum::DEPOSIT_STORE_SUBSCRIPTION_TO_PLATFORM_WALLET->value)
             ->orderBy($request->get('sort', 'created_at'), $request->get('direction', 'desc'))

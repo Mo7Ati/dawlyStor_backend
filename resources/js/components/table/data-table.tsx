@@ -32,7 +32,7 @@ import SearchInput from "./search-input";
 import { Button } from "@/components/ui/button";
 import { Eye, Plus, Settings2 } from "lucide-react";
 import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder";
-import { usePermissions } from "@/hooks/use-permissions";
+import { usePermission } from "@/hooks/use-permission";
 
 interface DataTableProps<TData extends { id: number | string }, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -58,7 +58,9 @@ export function DataTable<TData extends { id: number | string }, TValue>({
     const [rowSelection, setRowSelection] = useState({});
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
-    const { hasPermission } = usePermissions();
+    const canCreate = !model || usePermission(`${model}.create`);
+    const canUpdate = !model || usePermission(`${model}.update`);
+
 
     const table = useReactTable({
         data,
@@ -80,7 +82,7 @@ export function DataTable<TData extends { id: number | string }, TValue>({
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <div id="create-button">
-                    {createHref && (!model || hasPermission(`${model}.create`)) && (
+                    {createHref && canCreate && (
                         <Button variant="outline" className="cursor-pointer" size="sm" onClick={() => router.visit(createHref || '', { preserveState: true, preserveScroll: true })}>
                             <Plus /> Create
                         </Button>
@@ -157,13 +159,13 @@ export function DataTable<TData extends { id: number | string }, TValue>({
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={(e) => {
-                                        if ((!model || hasPermission(`${model}.update`)) && onRowClick) {
+                                        if (canUpdate && onRowClick) {
                                             const target = e.target as HTMLElement;
                                             if (target.closest('button, a, [role="menuitem"]')) return;
                                             onRowClick?.(row.original);
                                         }
                                     }}
-                                    className={onRowClick && (!model || hasPermission(`${model}.update`)) ? "cursor-pointer" : ""}
+                                    className={onRowClick && canUpdate ? "cursor-pointer" : ""}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

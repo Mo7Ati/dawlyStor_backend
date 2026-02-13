@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -31,6 +32,20 @@ class Admin extends Authenticatable implements HasMedia
         if (!empty($value)) {
             $this->attributes['password'] = Hash::make($value);
         }
+    }
+
+    public function scopeApplyFilters(Builder $query, array $filters)
+    {
+        return $query
+            ->when(
+                isset($filters['is_active']),
+                fn($q) => $q->where('is_active', $filters['is_active'])
+            )
+            ->when(
+                isset($filters['tableSearch']),
+                fn($q) => $q->search($filters['tableSearch'])
+            )
+            ->orderBy($filters['sort'] ?? 'id', $filters['direction'] ?? 'desc');
     }
 
     public function scopeSearch($query, $search)

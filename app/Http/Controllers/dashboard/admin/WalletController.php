@@ -13,7 +13,7 @@ class WalletController extends Controller
 {
     public function index(Request $request)
     {
-        // abort_unless($request->user('admin')->can(PermissionsEnum::WALLETS_INDEX->value), 403);
+        $this->authorizeForUser($request->user('admin'), PermissionsEnum::WALLETS_INDEX->value);
 
         $wallets = Wallet::query()
             ->with(['holder'])

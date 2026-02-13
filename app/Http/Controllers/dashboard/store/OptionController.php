@@ -46,9 +46,8 @@ class OptionController extends Controller
 
         Option::create($validated);
 
-        return redirect()
-            ->route('store.options.index')
-            ->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('store.options.index');
     }
 
     public function edit(Request $request, Option $option)
@@ -77,9 +76,8 @@ class OptionController extends Controller
         $validated = $request->validated();
         $option->update($validated);
 
-        return redirect()
-            ->route('store.options.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('store.options.index');
     }
 
     public function destroy(Option $option)
@@ -93,9 +91,8 @@ class OptionController extends Controller
 
         $option->delete();
 
-        return redirect()
-            ->route('store.options.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('store.options.index');
     }
 }
 

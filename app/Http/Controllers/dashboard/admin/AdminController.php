@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\dashboard\admin;
 
-use App\Enums\PermissionsEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\AdminRequest;
 use App\Http\Resources\AdminResource;
@@ -16,15 +15,10 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        // dd($request->user('admin')->permissions);
-        abort_unless($request->user('admin')->can(PermissionsEnum::ADMINS_INDEX->value), 403);
+        $this->authorize('viewAny', Admin::class);
 
         $admins = Admin::query()
-            ->search($request->get('tableSearch'))
-            ->when($request->get('is_active') !== null, function ($query) use ($request) {
-                $query->where('is_active', $request->get('is_active'));
-            })
-            ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
+            ->applyFilters($request->all())
             ->paginate($request->get('per_page', 10))
             ->withQueryString();
 
@@ -34,7 +28,7 @@ class AdminController extends Controller
     }
     public function create()
     {
-        abort_unless(request()->user('admin')->can('admins.create'), 403);
+        $this->authorize('create', Admin::class);
 
         return Inertia::render('admin/admins/create', [
             'admin' => new AdminResource(new Admin()),
@@ -43,7 +37,7 @@ class AdminController extends Controller
     }
     public function store(AdminRequest $request)
     {
-        abort_unless($request->user('admin')->can('admins.create'), 403);
+        $this->authorizeForUser($request->user('admin'), 'create', Admin::class);
 
         $admin = Admin::create($request->validated());
         $admin->assignRole($request->get('roles', []));
@@ -53,9 +47,8 @@ class AdminController extends Controller
     }
     public function edit($id)
     {
-        abort_unless(request()->user('admin')->can('admins.update'), 403);
-
         $admin = Admin::with('roles')->findOrFail($id);
+        $this->authorize('update', $admin);
         return Inertia::render('admin/admins/edit', [
             'admin' => new AdminResource($admin),
             'roles' => RoleResource::collection(Role::all()),
@@ -63,24 +56,23 @@ class AdminController extends Controller
     }
     public function update($id, AdminRequest $request)
     {
-        abort_unless($request->user('admin')->can('admins.update'), 403);
-
         $admin = Admin::findOrFail($id);
+        $this->authorizeForUser($request->user('admin'), 'update', $admin);
         $admin->update($request->validated());
 
         $admin->syncRoles($request->get('roles', []));
 
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('admin.admins.index');
+
     }
     public function destroy($id)
     {
-        abort_unless(request()->user('admin')->can('admins.destroy'), 403);
+        $admin = Admin::findOrFail($id);
+        $this->authorize('delete', $admin);
 
-        Admin::destroy($id);
-        return redirect()
-            ->route('admin.admins.index')
-            ->with('success', __('messages.deleted_successfully'));
+        $admin->delete();
+
+        return Inertia::flash('success', __('messages.deleted_successfully'))->back();
     }
 }

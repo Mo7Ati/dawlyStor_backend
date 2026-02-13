@@ -58,7 +58,8 @@ class OrderController extends Controller
         $order->status = $validated['status'];
         $order->save();
 
-        return back()->with('success', __('orders.status_updated'));
+        Inertia::flash('success', __('orders.status_updated'));
+        return back();
     }
 }
 

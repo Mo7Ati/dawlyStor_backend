@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\dashboard\admin;
 
+use App\Enums\PermissionsEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\RoleRequest;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -16,7 +19,9 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        // abort_unless($request->user('admin')->can('roles.index'), 403);
+        if (!Auth::guard('admin')->user()->can(PermissionsEnum::ROLES_INDEX->value)) {
+            abort(403, 'You are not authorized to view this page');
+        }
 
         $roles = Role::withCount('permissions')
             ->when($request->get('tableSearch'), function ($query) use ($request) {
@@ -32,7 +37,9 @@ class RoleController extends Controller
 
     public function create()
     {
-        // abort_unless(request()->user('admin')->can('roles.create'), 403);
+        if (!Auth::guard('admin')->user()->can(PermissionsEnum::ROLES_CREATE->value)) {
+            abort(403, 'You are not authorized to view this page');
+        }
 
         $groupedPermissions = Permission::all()
             ->groupBy(fn($p) => explode('.', $p->name)[0] ?? 'other')
@@ -47,7 +54,9 @@ class RoleController extends Controller
 
     public function store(RoleRequest $request)
     {
-        // abort_unless($request->user('admin')->can('roles.create'), 403);
+        if (!Auth::guard('admin')->user()->can(PermissionsEnum::ROLES_CREATE->value)) {
+            abort(403, 'You are not authorized to view this page');
+        }
 
         $role = Role::create([
             'name' => $request->name,
@@ -56,14 +65,15 @@ class RoleController extends Controller
 
         $role->givePermissionTo($request->get('permissions', []));
 
-        return to_route('admin.roles.index')
-            ->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('admin.roles.index');
     }
 
     public function edit($id)
     {
-        // abort_unless(request()->user('admin')->can('roles.update'), 403);
-
+        if (!Auth::guard('admin')->user()->can(PermissionsEnum::ROLES_UPDATE->value)) {
+            abort(403, 'You are not authorized to view this page');
+        }
         $role = Role::with('permissions')->withCount('permissions')->findOrFail($id);
         $groupedPermissions = Permission::all()
             ->groupBy(fn($p) => explode('.', $p->name)[0] ?? 'other')
@@ -78,8 +88,9 @@ class RoleController extends Controller
 
     public function update($id, RoleRequest $request)
     {
-        // abort_unless($request->user('admin')->can('roles.update'), 403);
-
+        if (!Auth::guard('admin')->user()->can(PermissionsEnum::ROLES_UPDATE->value)) {
+            abort(403, 'You are not authorized to view this page');
+        }
         $role = Role::where('guard_name', 'admin')->findOrFail($id);
         $role->update([
             'name' => $request->name,
@@ -87,18 +98,19 @@ class RoleController extends Controller
 
         $role->syncPermissions($request->get('permissions', []));
 
-        return to_route('admin.roles.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('admin.roles.index');
     }
 
     public function destroy($id)
     {
-        // abort_unless(request()->user('admin')->can('roles.destroy'), 403);
-
+        if (!Auth::guard('admin')->user()->can(PermissionsEnum::ROLES_DESTROY->value)) {
+            abort(403, 'You are not authorized to view this page');
+        }
         $role = Role::where('guard_name', 'admin')->findOrFail($id);
         $role->delete();
 
-        return to_route('admin.roles.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('admin.roles.index');
     }
 }

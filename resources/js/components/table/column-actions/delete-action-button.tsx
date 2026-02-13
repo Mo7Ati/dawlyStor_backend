@@ -1,7 +1,7 @@
 import { router } from '@inertiajs/react';
 import { TrashIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePermissions } from '@/hooks/use-permissions';
+import { usePermission } from '@/hooks/use-permission';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,10 +23,9 @@ type DeleteActionButtonProps = {
 }
 
 export function DeleteAction({ deleteRoute, permission, className }: DeleteActionButtonProps) {
-    const { hasPermission } = usePermissions();
     const { t } = useTranslation('general');
 
-    if (permission && !hasPermission(permission)) {
+    if (permission && !usePermission(permission)) {
         return null;
     }
 

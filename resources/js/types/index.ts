@@ -4,7 +4,7 @@ import type { Enums } from './enums';
 
 export interface Auth {
     user: User | null;
-    permissions: Record<number, string> | string[];
+    permissions: string[];
 }
 
 export interface BreadcrumbItem {

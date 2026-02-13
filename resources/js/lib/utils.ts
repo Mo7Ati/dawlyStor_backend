@@ -1,4 +1,4 @@
-import { usePermissions } from '@/hooks/use-permissions';
+import { usePermission } from '@/hooks/use-permission';
 import { Locale, NavGroup, NavItem, PanelType } from '@/types';
 import { InertiaLinkProps } from '@inertiajs/react';
 import { type ClassValue, clsx } from 'clsx';
@@ -65,7 +65,6 @@ export function getPanelNavItems(panel: PanelType): NavGroup[] {
 
 export function getAdminPanelNavItems(): NavGroup[] {
     const { t } = useTranslation("common");
-    const { hasPermission } = usePermissions();
     return [
         {
             title: t('nav_groups.overview'),
@@ -74,7 +73,7 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.dashboard'),
                     href: '/admin',
                     icon: LayoutGrid,
-                    visible: hasPermission('dashboard.index'),
+                    visible: usePermission('dashboard.index'),
                 },
                 {
                     title: t('nav_labels.settings'),
@@ -86,7 +85,7 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.sections'),
                     href: sections.index.url(),
                     icon: List,
-                    visible: true,
+                    visible: usePermission('sections.index'),
                 }
             ],
         },
@@ -97,13 +96,13 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.admins'),
                     href: admins.index.url(),
                     icon: Users,
-                    visible: hasPermission('admins.index'),
+                    visible: usePermission('admins.index'),
                 },
                 {
                     title: t('nav_labels.roles'),
                     href: roles.index.url(),
                     icon: Shield,
-                    visible: hasPermission('roles.index'),
+                    visible: usePermission('roles.index'),
                 },
             ],
         },
@@ -114,25 +113,25 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.stores'),
                     href: stores.index.url(),
                     icon: Store,
-                    visible: hasPermission('stores.index'),
+                    visible: usePermission('stores.index'),
                 },
                 {
                     title: t('nav_labels.store_categories'),
                     href: storeCategories.index.url(),
                     icon: List,
-                    visible: hasPermission('store-categories.index'),
+                    visible: usePermission('store-categories.index'),
                 },
                 {
                     title: t('nav_labels.orders'),
                     href: orders.index.url(),
                     icon: ShoppingCart,
-                    visible: hasPermission('orders.index'),
+                    visible: usePermission('orders.index'),
                 },
                 {
                     title: t('nav_labels.products'),
                     href: products.index.url(),
                     icon: Package,
-                    visible: hasPermission('products.index'),
+                    visible: usePermission('products.index'),
                 },
             ],
         },
@@ -143,19 +142,19 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     title: t('nav_labels.transactions'),
                     href: transactions.index.url(),
                     icon: Receipt,
-                    visible: true,
+                    visible: usePermission('transactions.index'),
                 },
                 {
                     title: t('nav_labels.wallets'),
                     href: wallets.index.url(),
                     icon: Wallet,
-                    visible: true,
+                    visible: usePermission('wallets.index'),
                 },
                 {
                     title: t('nav_labels.subscriptions_transactions'),
                     href: transactions.subscriptions.index.url(),
                     icon: Receipt,
-                    visible: true,
+                    visible: usePermission('transactions.index'),
                 },
             ],
         }

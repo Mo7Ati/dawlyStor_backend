@@ -46,9 +46,8 @@ class AdditionController extends Controller
 
         Addition::create($validated);
 
-        return redirect()
-            ->route('store.additions.index')
-            ->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('store.additions.index');
     }
 
     public function edit(Request $request, Addition $addition)
@@ -77,9 +76,8 @@ class AdditionController extends Controller
         $validated = $request->validated();
         $addition->update($validated);
 
-        return redirect()
-            ->route('store.additions.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('store.additions.index');
     }
 
     public function destroy(Addition $addition)
@@ -93,9 +91,8 @@ class AdditionController extends Controller
 
         $addition->delete();
 
-        return redirect()
-            ->route('store.additions.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('store.additions.index');
     }
 }
 

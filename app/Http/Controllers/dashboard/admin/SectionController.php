@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\dashboard\admin;
 
 use App\Enums\HomePageSectionsType;
-use App\Enums\PermissionsEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\SectionRequest;
 use App\Http\Resources\SectionResource;
@@ -20,7 +19,7 @@ class SectionController extends Controller
 {
     public function index(Request $request)
     {
-        // abort_unless($request->user('admin')->can(PermissionsEnum::SECTIONS_INDEX->value), 403);
+        $this->authorizeForUser($request->user('admin'), 'viewAny', Section::class);
 
         $sections = Section::query()
             ->ordered()
@@ -44,7 +43,7 @@ class SectionController extends Controller
 
     public function create()
     {
-        // abort_unless(request()->user('admin')->can(PermissionsEnum::SECTIONS_CREATE->value), 403);
+        $this->authorize('create', Section::class);
 
         return Inertia::render('admin/sections/create', [
             'section' => SectionResource::make(new Section())->serializeForForm(),
@@ -57,19 +56,18 @@ class SectionController extends Controller
 
     public function store(SectionRequest $request)
     {
-
-        // abort_unless($request->user('admin')->can(PermissionsEnum::SECTIONS_CREATE->value), 403);
+        $this->authorizeForUser($request->user('admin'), 'create', Section::class);
 
         Section::create($request->validated());
 
-        return to_route('admin.sections.index')->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('admin.sections.index');
     }
 
     public function edit($id)
     {
-        // abort_unless(request()->user('admin')->can(PermissionsEnum::SECTIONS_UPDATE->value), 403);
-
         $section = Section::findOrFail($id);
+        $this->authorize('update', $section);
 
         return Inertia::render('admin/sections/edit', [
             'section' => SectionResource::make($section)->serializeForForm(),
@@ -82,30 +80,28 @@ class SectionController extends Controller
 
     public function update($id, SectionRequest $request)
     {
-        // abort_unless($request->user('admin')->can(PermissionsEnum::SECTIONS_UPDATE->value), 403);
-
         $section = Section::findOrFail($id);
+        $this->authorizeForUser($request->user('admin'), 'update', $section);
         $section->update($request->validated());
 
-        return redirect()
-            ->route('admin.sections.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('admin.sections.index');
     }
 
     public function destroy($id)
     {
-        // abort_unless(request()->user('admin')->can(PermissionsEnum::SECTIONS_DESTROY->value), 403);
+        $section = Section::findOrFail($id);
+        $this->authorize('delete', $section);
 
-        Section::forceDestroy($id);
+        $section->forceDelete();
 
-        return redirect()
-            ->route('admin.sections.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('admin.sections.index');
     }
 
     public function reorder(Request $request)
     {
-        // abort_unless($request->user('admin')->can(PermissionsEnum::SECTIONS_UPDATE->value), 403);
+        $this->authorizeForUser($request->user('admin'), 'reorder', Section::class);
 
         $request->validate([
             'sections' => ['required', 'array'],
@@ -119,8 +115,8 @@ class SectionController extends Controller
             }
         });
 
-        return to_route('admin.sections.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('admin.sections.index');
     }
 
 }

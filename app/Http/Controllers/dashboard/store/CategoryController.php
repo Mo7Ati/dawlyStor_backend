@@ -42,9 +42,8 @@ class CategoryController extends Controller
 
         $category = Category::create($validated);
 
-        return redirect()
-            ->route('store.categories.index')
-            ->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('store.categories.index');
     }
 
     public function edit(Request $request, int $id)
@@ -70,9 +69,8 @@ class CategoryController extends Controller
 
         $category->update($request->validated());
 
-        return redirect()
-            ->route('store.categories.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('store.categories.index');
     }
 
     public function destroy(Request $request, int $id)
@@ -84,9 +82,8 @@ class CategoryController extends Controller
             ->findOrFail($id)
             ->delete();
 
-        return redirect()
-            ->route('store.categories.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('store.categories.index');
     }
 }
 

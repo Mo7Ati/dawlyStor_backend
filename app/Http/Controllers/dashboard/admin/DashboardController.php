@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\dashboard\admin;
 
+use App\Enums\PermissionsEnum;
 use App\Http\Controllers\Controller;
 use App\Enums\OrderStatusEnum;
 use App\Models\Customer;
@@ -16,9 +17,7 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Dashboard access - allow if user has any admin permissions
-        // $user = $request->user('admin');
-        // abort_unless($user && ($user->hasAnyPermission(['dashboard.view', 'orders.index', 'products.index', 'stores.index', 'admins.index', 'roles.index']) || $user->roles()->count() > 0), 403);
+        $this->authorizeForUser($request->user('admin'), PermissionsEnum::DASHBOARD_INDEX->value);
 
         $stats = [
             'orders_count' => Order::count(),

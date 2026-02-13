@@ -65,9 +65,8 @@ class ProductController extends Controller
             syncMedia($request, $product, 'product-images');
         });
 
-        return redirect()
-            ->route('store.products.index')
-            ->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('store.products.index');
     }
 
 
@@ -101,9 +100,8 @@ class ProductController extends Controller
             syncMedia($request, $product, 'product-images');
         });
 
-        return redirect()
-            ->route('store.products.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('store.products.index');
     }
 
     public function destroy(int $id)
@@ -113,9 +111,8 @@ class ProductController extends Controller
             ->findOrFail($id)
             ->delete();
 
-        return redirect()
-            ->route('store.products.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('store.products.index');
     }
     private function formDependencies($store)
     {

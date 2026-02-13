@@ -34,6 +34,7 @@ class StoreSettingsController extends Controller
 
         syncMedia($request, $store, 'store-logos');
 
+        Inertia::flash('success', __('messages.updated_successfully'));
         return redirect()->back();
     }
 }

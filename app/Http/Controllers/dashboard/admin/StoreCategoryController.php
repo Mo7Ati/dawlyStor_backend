@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\dashboard\admin;
 
-use App\Enums\PermissionsEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\StoreCategoryRequest;
 use App\Http\Resources\StoreCategoryResource;
@@ -14,7 +13,7 @@ class StoreCategoryController extends Controller
 {
     public function index(Request $request)
     {
-        abort_unless($request->user('admin')->can(PermissionsEnum::STORE_CATEGORIES_INDEX->value), 403);
+        $this->authorizeForUser($request->user('admin'), 'viewAny', StoreCategory::class);
 
         $categories = StoreCategory::query()
             ->search($request->get('tableSearch'))
@@ -29,7 +28,7 @@ class StoreCategoryController extends Controller
 
     public function create()
     {
-        abort_unless(request()->user('admin')->can(PermissionsEnum::STORE_CATEGORIES_CREATE->value), 403);
+        $this->authorize('create', StoreCategory::class);
 
         return Inertia::render('admin/store-categories/create', [
             'category' => StoreCategoryResource::make(new StoreCategory())->serializeForForm(),
@@ -38,18 +37,19 @@ class StoreCategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        abort_unless($request->user('admin')->can(PermissionsEnum::STORE_CATEGORIES_CREATE->value), 403);
+        $this->authorizeForUser($request->user('admin'), 'create', StoreCategory::class);
 
         $category = StoreCategory::create($request->validated());
         syncMedia($request, $category, 'store-categories');
-        return to_route('admin.store-categories.index')->with('success', __('messages.created_successfully'));
+        Inertia::flash('success', __('messages.created_successfully'));
+        return to_route('admin.store-categories.index');
     }
 
     public function edit($id)
     {
-        abort_unless(request()->user('admin')->can(PermissionsEnum::STORE_CATEGORIES_UPDATE->value), 403);
-
         $category = StoreCategory::findOrFail($id);
+        $this->authorize('update', $category);
+
         return Inertia::render('admin/store-categories/edit', [
             'category' => StoreCategoryResource::make($category)->serializeForForm(),
         ]);
@@ -57,27 +57,24 @@ class StoreCategoryController extends Controller
 
     public function update($id, StoreCategoryRequest $request)
     {
-        abort_unless($request->user('admin')->can(PermissionsEnum::STORE_CATEGORIES_UPDATE->value), 403);
-
         $category = StoreCategory::findOrFail($id);
+        $this->authorizeForUser($request->user('admin'), 'update', $category);
         $category->update($request->validated());
 
         syncMedia($request, $category, 'store-categories');
 
-        return redirect()
-            ->route('admin.store-categories.index')
-            ->with('success', __('messages.updated_successfully'));
+        Inertia::flash('success', __('messages.updated_successfully'));
+        return to_route('admin.store-categories.index');
     }
 
     public function destroy($id)
     {
-        abort_unless(request()->user('admin')->can(PermissionsEnum::STORE_CATEGORIES_DESTROY->value), 403);
+        $category = StoreCategory::findOrFail($id);
+        $this->authorize('delete', $category);
+        $category->delete();
 
-        StoreCategory::destroy($id);
-
-        return redirect()
-            ->route('admin.store-categories.index')
-            ->with('success', __('messages.deleted_successfully'));
+        Inertia::flash('success', __('messages.deleted_successfully'));
+        return to_route('admin.store-categories.index');
     }
 }
 

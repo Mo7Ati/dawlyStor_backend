@@ -29,7 +29,7 @@ import SearchInput from "./search-input";
 import { Button } from "@/components/ui/button";
 import { Plus, Settings2, GripVertical } from "lucide-react";
 import { type RouteDefinition, type RouteQueryOptions } from "@/wayfinder";
-import { usePermissions } from "@/hooks/use-permissions";
+import { usePermission } from "@/hooks/use-permission";
 import {
     DndContext,
     closestCenter,
@@ -65,14 +65,12 @@ interface SortableTableRowProps<TData extends { id: number | string }> {
     row: any;
     onRowClick?: (row: TData) => void;
     model?: string;
-    hasPermission: (permission: string) => boolean;
 }
 
 function SortableTableRow<TData extends { id: number | string }>({
     row,
     onRowClick,
     model,
-    hasPermission,
 }: SortableTableRowProps<TData>) {
     const {
         attributes,
@@ -82,6 +80,8 @@ function SortableTableRow<TData extends { id: number | string }>({
         transition,
         isDragging,
     } = useSortable({ id: row.original.id });
+
+    const hasUpdatePermission = !model || usePermission(`${model}.update`);
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -96,10 +96,10 @@ function SortableTableRow<TData extends { id: number | string }>({
             data-state={row.getIsSelected() && "selected"}
             className={cn(
                 isDragging && "bg-muted",
-                onRowClick && (!model || hasPermission(`${model}.update`)) ? "cursor-pointer" : ""
+                onRowClick && hasUpdatePermission ? "cursor-pointer" : ""
             )}
             onClick={(e) => {
-                if ((!model || hasPermission(`${model}.update`)) && onRowClick) {
+                if (hasUpdatePermission && onRowClick) {
                     const target = e.target as HTMLElement;
                     if (target.closest('button, a, [role="menuitem"]')) return;
                     onRowClick?.(row.original);
@@ -148,8 +148,6 @@ export function ReorderableDataTable<TData extends { id: number | string }, TVal
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [localData, setLocalData] = useState<TData[]>(data);
 
-    const { hasPermission } = usePermissions();
-
     useEffect(() => {
         setLocalData(data);
     }, [data]);
@@ -179,6 +177,8 @@ export function ReorderableDataTable<TData extends { id: number | string }, TVal
         }
     };
 
+    const hasCreatePermission = !model || usePermission(`${model}.create`);
+
     const table = useReactTable({
         data: localData,
         columns: columnsWithDragHandle,
@@ -199,7 +199,7 @@ export function ReorderableDataTable<TData extends { id: number | string }, TVal
         <div className="space-y-4">
             <div className="flex justify-between">
                 <div id="create-button">
-                    {createHref && (!model || hasPermission(`${model}.create`)) && (
+                    {createHref && hasCreatePermission && (
                         <Button
                             variant="outline"
                             className="cursor-pointer"
@@ -293,7 +293,6 @@ export function ReorderableDataTable<TData extends { id: number | string }, TVal
                                             row={row}
                                             onRowClick={onRowClick}
                                             model={model}
-                                            hasPermission={hasPermission}
                                         />
                                     ))
                                 ) : (

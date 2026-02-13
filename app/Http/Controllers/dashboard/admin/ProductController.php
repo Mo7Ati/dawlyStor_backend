@@ -12,7 +12,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        abort_unless($request->user('admin')->can('products.index'), 403);
+        $this->authorizeForUser($request->user('admin'), 'viewAny', Product::class);
 
         $products = Product::query()
             ->with(['store', 'category'])

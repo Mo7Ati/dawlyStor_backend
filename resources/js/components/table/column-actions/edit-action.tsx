@@ -1,7 +1,7 @@
 import { router } from '@inertiajs/react';
 import { PencilIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { usePermissions } from '@/hooks/use-permissions';
+import { usePermission } from '@/hooks/use-permission';
 import { cn } from '@/lib/utils';
 
 type EditActionProps = {
@@ -11,9 +11,7 @@ type EditActionProps = {
 }
 
 export function EditAction({ editRoute, permission, className }: EditActionProps) {
-    const { hasPermission } = usePermissions();
-
-    if (permission && !hasPermission(permission)) {
+    if (permission && !usePermission(permission)) {
         return null;
     }
 
