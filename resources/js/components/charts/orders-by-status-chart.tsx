@@ -1,102 +1,94 @@
-import * as React from 'react';
-import { Cell, Pie, PieChart } from 'recharts';
+"use client"
+
+import { Cell, Pie, PieChart } from "recharts"
+
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from '@/components/ui/chart';
-import { useTranslation } from 'react-i18next';
+    ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
+    type ChartConfig,
+} from "@/components/ui/chart"
 
-export type OrdersByStatusPoint = {
-  status: string;
-  label: string;
-  count: number;
-};
-
-const STATUS_COLORS = [
-  'hsl(var(--chart-1))',
-  'hsl(var(--chart-2))',
-  'hsl(var(--chart-3))',
-  'hsl(var(--chart-4))',
-  'hsl(var(--chart-5))',
-  'hsl(var(--chart-6))',
-];
-
-interface OrdersByStatusChartProps {
-  data: OrdersByStatusPoint[];
+export interface OrderStatusChartPoint {
+    status: string
+    label: string
+    count: number
 }
 
-export function OrdersByStatusChart({ data }: OrdersByStatusChartProps) {
-  const { t } = useTranslation('dashboard');
+const CHART_COLORS = [
+    "var(--chart-1)",
+    "var(--chart-2)",
+    "var(--chart-3)",
+    "var(--chart-4)",
+    "var(--chart-5)",
+] as const
 
-  const chartConfig = React.useMemo<ChartConfig>(() => {
-    const config: ChartConfig = {
-      count: { label: 'Count' },
-    };
-    data.forEach((item, i) => {
-      config[item.status] = { label: item.label, color: STATUS_COLORS[i % STATUS_COLORS.length] };
-    });
-    return config;
-  }, [data]);
+export interface OrdersByStatusChartProps {
+    data: OrderStatusChartPoint[]
+    title?: string
+    description?: string
+}
 
-  const total = data.reduce((sum, d) => sum + d.count, 0);
-  const chartData = data.filter((d) => d.count > 0);
+export function OrdersByStatusChart({
+    data,
+    title = "Orders by Status",
+    description = "Distribution of orders by status",
+}: OrdersByStatusChartProps) {
+    const chartConfig = data.reduce<ChartConfig>((acc, item, index) => {
+        acc[item.status] = {
+            label: item.label,
+            color: CHART_COLORS[index % CHART_COLORS.length],
+        }
+        return acc
+    }, {})
 
-  if (chartData.length === 0) {
+    const total = data.reduce((sum, d) => sum + d.count, 0)
+    const displayData = data.filter((d) => d.count > 0)
+
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('charts.orders_by_status_title')}</CardTitle>
-          <CardDescription>{t('charts.orders_by_status_description')}</CardDescription>
-        </CardHeader>
-        <CardContent className="flex h-[250px] items-center justify-center text-muted-foreground">
-          {t('charts.no_orders_data')}
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t('charts.orders_by_status_title')}</CardTitle>
-        <CardDescription>{t('charts.orders_by_status_description')}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square h-[250px]">
-          <PieChart>
-            <ChartTooltip content={<ChartTooltipContent nameKey="status" hideLabel />} />
-            <Pie
-              data={chartData}
-              dataKey="count"
-              nameKey="label"
-              innerRadius={60}
-              strokeWidth={2}
-              paddingAngle={2}
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={entry.status} fill={STATUS_COLORS[index % STATUS_COLORS.length]} />
-              ))}
-            </Pie>
-            <ChartLegend content={<ChartLegendContent nameKey="label" />} />
-          </PieChart>
-        </ChartContainer>
-        {total > 0 && (
-          <p className="text-center text-sm text-muted-foreground mt-2">
-            Total: {total.toLocaleString()} orders
-          </p>
-        )}
-      </CardContent>
-    </Card>
-  );
+        <Card>
+            <CardHeader>
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[300px]">
+                    <PieChart>
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent nameKey="status" hideLabel />}
+                        />
+                        <Pie
+                            data={displayData}
+                            dataKey="count"
+                            nameKey="status"
+                            innerRadius={60}
+                            strokeWidth={2}
+                        >
+                            {displayData.map((entry) => (
+                                <Cell
+                                    key={entry.status}
+                                    fill={`var(--color-${entry.status})`}
+                                    stroke={`var(--color-${entry.status})`}
+                                />
+                            ))}
+                        </Pie>
+                        <ChartLegend content={<ChartLegendContent nameKey="status" />} />
+                    </PieChart>
+                </ChartContainer>
+                {total === 0 && (
+                    <p className="text-muted-foreground text-center text-sm">No orders yet</p>
+                )}
+            </CardContent>
+        </Card>
+    )
 }

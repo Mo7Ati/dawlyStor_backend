@@ -10,7 +10,13 @@
     "revenue": "إجمالي الإيرادات",
     "revenue_description": "جميع الإيرادات",
     "stores": "إجمالي المتاجر",
-    "stores_description": "المتاجر النشطة"
+    "stores_description": "المتاجر النشطة",
+    "order_revenue": "إجمالي إيرادات الطلبات",
+    "platform_commission": "إجمالي عمولة المنصة",
+    "subscription_revenue": "إجمالي إيرادات الاشتراكات",
+    "average_order_value": "متوسط قيمة الطلب",
+    "new_this_month": "{{count}} جديد هذا الشهر",
+    "new_this_month_amount": "{{amount}} جديد هذا الشهر"
   },
   "charts": {
     "orders_over_time_title": "الطلبات والإيرادات",
@@ -24,6 +30,10 @@
     "orders_by_status_description": "توزيع الطلبات حسب الحالة",
     "revenue_by_store_title": "الإيرادات حسب المتجر",
     "revenue_by_store_description": "أفضل المتاجر حسب الإيرادات (آخر 90 يوم)",
+    "order_revenue_title": "إيرادات الطلبات",
+    "order_revenue_description": "إيرادات الطلبات المدفوعة (آخر 30 يومًا)",
+    "subscription_revenue_title": "إيرادات الاشتراكات",
+    "subscription_revenue_description": "إيرادات اشتراكات المتاجر (آخر 30 يومًا)",
     "no_orders_data": "لا توجد بيانات طلبات بعد",
     "no_revenue_data": "لا توجد بيانات إيرادات بعد"
   },

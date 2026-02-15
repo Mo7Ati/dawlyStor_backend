@@ -19,6 +19,11 @@ class DatabaseSeeder extends Seeder
             SuperAdminsSeeder::class,
             CustomerSeeder::class,
             StoreSeeder::class,
+            StoresOverTimeSeeder::class,
+            OrderSeeder::class,
+            BetaMarketExtraSeeder::class,
+            TransactionSeeder::class,
+            PlatformCommissionSeeder::class,
         ]);
     }
 }

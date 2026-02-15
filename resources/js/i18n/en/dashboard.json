@@ -10,7 +10,13 @@
     "revenue": "Total Revenue",
     "revenue_description": "All time revenue",
     "stores": "Total Stores",
-    "stores_description": "Active stores"
+    "stores_description": "Active stores",
+    "order_revenue": "Total Order Revenue",
+    "platform_commission": "Total Platform Commission",
+    "subscription_revenue": "Total Subscription Revenue",
+    "average_order_value": "Average Order Value",
+    "new_this_month": "{{count}} new this month",
+    "new_this_month_amount": "{{amount}} new this month"
   },
   "charts": {
     "orders_over_time_title": "Orders & Revenue",
@@ -24,6 +30,10 @@
     "orders_by_status_description": "Distribution of orders by status",
     "revenue_by_store_title": "Revenue by Store",
     "revenue_by_store_description": "Top stores by revenue (last 90 days)",
+    "order_revenue_title": "Order Revenue",
+    "order_revenue_description": "Revenue from paid orders (last 30 days)",
+    "subscription_revenue_title": "Subscription Revenue",
+    "subscription_revenue_description": "Revenue from store subscriptions (last 30 days)",
     "no_orders_data": "No order data yet",
     "no_revenue_data": "No revenue data yet"
   },

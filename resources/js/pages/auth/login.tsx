@@ -57,15 +57,6 @@ export default function Login({
                             <div className="grid gap-2">
                                 <div className="flex justify-between">
                                     <Label htmlFor="password">{t('password')}</Label>
-                                    {canResetPassword && (
-                                        <TextLink
-                                            href={`/${panel}/forgot-password`}
-                                            className="text-sm"
-                                            tabIndex={5}
-                                        >
-                                            {t('forgot_password')}
-                                        </TextLink>
-                                    )}
                                 </div>
                                 <Input
                                     id="password"
@@ -99,15 +90,6 @@ export default function Login({
                                 {t('login')}
                             </Button>
                         </div>
-
-                        {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                {t('dont_have_account')}{' '}
-                                <TextLink href={`/${panel}/register`} tabIndex={5}>
-                                    {t('sign_up')}
-                                </TextLink>
-                            </div>
-                        )}
                     </>
                 )}
             </Form>

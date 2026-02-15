@@ -7,18 +7,16 @@ use Laravel\Fortify\Features;
 
 $settingsRoutes = require base_path('routes/settings.php');
 
-Route::get('/', function () {
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+// Route::get('/', function () {
+//     return Inertia::render('welcome', [
+//         'canRegister' => Features::enabled(Features::registration()),
+//     ]);
+// })->name('home');
 
 
 
 Route::middleware(['auth:store'])->group(function () {
-    Route::get('store', function () {
-        return Inertia::render('store/dashboard');
-    })->name('store.dashboard');
+    Route::get('store', [App\Http\Controllers\dashboard\store\DashboardController::class, 'index'])->name('store.dashboard');
 });
 
 Route::prefix('temp-uploads')

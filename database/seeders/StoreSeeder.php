@@ -373,6 +373,11 @@ class StoreSeeder extends Seeder
                     $storeName = $this->getEnglishTranslation($store, 'name');
                     $productData = $this->getProductDataForStore($storeCategoryName, $storeName);
                     foreach ($productData as $index => $product) {
+                        $productCreatedAt = now()
+                            ->subDays(rand(0, 29))
+                            ->subHours(rand(0, 23))
+                            ->subMinutes(rand(0, 59));
+
                         Product::create([
                             'uuid' => (string) Str::uuid(),
                             'name' => $product['name'],
@@ -385,6 +390,8 @@ class StoreSeeder extends Seeder
                             'quantity' => $product['quantity'],
                             'is_active' => true,
                             'is_accepted' => true,
+                            'created_at' => $productCreatedAt,
+                            'updated_at' => $productCreatedAt,
                         ]);
                     }
 
