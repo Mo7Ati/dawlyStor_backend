@@ -29,7 +29,7 @@ class StripeWebhookController extends Controller
     {
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
-        $webhookSecret = config('cashier.webhook.secret');
+        $webhookSecret = config('checkout.webhook_secret');
 
         // 1. Verify the webhook signature
         try {

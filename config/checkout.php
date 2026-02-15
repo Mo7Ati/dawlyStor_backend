@@ -34,4 +34,5 @@ return [
     */
     'currency' => env('CHECKOUT_CURRENCY', 'usd'),
 
+    'webhook_secret' => env('CHECKOUT_WEBHOOK_SECRET'),
 ];
