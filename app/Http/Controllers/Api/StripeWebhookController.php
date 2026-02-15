@@ -47,6 +47,13 @@ class StripeWebhookController extends Controller
             return response()->json(['error' => 'Invalid payload'], 400);
         }
 
+        // Log every webhook event
+        Log::info('Stripe webhook received', [
+            'event_id' => $event->id ?? null,
+            'event_type' => $event->type,
+            'object_id' => $event->data->object->id ?? null,
+        ]);
+
         // 2. Handle the event
         switch ($event->type) {
             case 'checkout.session.completed':
@@ -58,7 +65,7 @@ class StripeWebhookController extends Controller
                 break;
 
             default:
-                // Log::info("Stripe webhook received unhandled event: {$event->type}");
+                Log::info('Stripe webhook unhandled event type', ['event_type' => $event->type]);
                 break;
         }
 

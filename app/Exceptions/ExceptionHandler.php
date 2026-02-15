@@ -20,14 +20,6 @@ class ExceptionHandler
      */
     public function handleApiException(Throwable $e): JsonResponse
     {
-        // Log detailed exception if needed
-        Log::error('API Exception: ' . $e->getMessage(), [
-            // 'file' => $e->getFile(),
-            // 'line' => $e->getLine(),
-            // 'trace' => $e->getTraceAsString(),
-            'request' => request()
-        ]);
-
         // Handle Laravel Authentication Exceptions
         if ($e instanceof AuthenticationException || $e->getMessage() == 'Route [login] not defined.')
             return $this->apiResponse($e, 'unauthenticated', 401, 401);
