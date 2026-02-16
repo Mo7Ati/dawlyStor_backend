@@ -72,6 +72,10 @@ class Store extends Authenticatable implements HasMedia, Wallet
             });
         });
     }
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 
     public function category()
     {
