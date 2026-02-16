@@ -14,6 +14,7 @@ class StoreController extends Controller
     public function index()
     {
         $stores = Store::with('category')
+            ->active()
             ->category(request()->get('category'))
             ->search(request()->get('search'))
             ->paginate(9);
