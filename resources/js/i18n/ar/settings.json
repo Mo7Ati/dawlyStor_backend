@@ -5,7 +5,8 @@
         "profile": "الملف الشخصي",
         "password": "كلمة المرور",
         "two_factor_auth": "التحقق من الهوية",
-        "appearance": "المظهر"
+        "appearance": "المظهر",
+        "platform_fees": "رسوم المنصة"
     },
     "profile": {
         "title": "الملف الشخصي",
@@ -71,5 +72,15 @@
         "light": "فاتح",
         "dark": "داكن",
         "system": "نظام"
+    },
+    "platform_fees": {
+        "page_title": "رسوم المنصة",
+        "heading_title": "رسوم المنصة",
+        "heading_description": "تعيين العمولة ورسوم التوصيل والضريبة للمنصة.",
+        "commission_percentage": "العمولة (%)",
+        "delivery_fee": "رسوم التوصيل",
+        "tax_percentage": "الضريبة (%)",
+        "save": "حفظ",
+        "saved": "تم الحفظ"
     }
 }

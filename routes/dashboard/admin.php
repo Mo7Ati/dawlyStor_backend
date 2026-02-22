@@ -50,5 +50,10 @@ Route::middleware(['auth:admin'])
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/profile', [AdminSettingsController::class, 'profile'])->name('profile');
             Route::put('/profile', [AdminSettingsController::class, 'profileUpdate'])->name('profile.update');
+
+            // platform fees routes
+            Route::get('/platform-fees', [AdminSettingsController::class, 'platformFees'])->name('platform-fees');
+            Route::put('/platform-fees', [AdminSettingsController::class, 'platformFeesUpdate'])->name('platform-fees.update');
+
         });
     });

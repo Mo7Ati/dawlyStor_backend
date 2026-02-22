@@ -4,7 +4,9 @@ namespace App\Http\Controllers\dashboard\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\AdminProfileUpdateRequest;
+use App\Http\Requests\Settings\PlatformFeesUpdateRequest;
 use App\Http\Resources\AdminResource;
+use App\Settings\PaymentsSettings;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,23 +45,30 @@ class AdminSettingsController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Show the platform fees (commission, delivery fee, tax) settings page.
      */
-    // public function destroy(Request $request): RedirectResponse
-    // {
-    //     $request->validate([
-    //         'password' => ['required', 'current_password'],
-    //     ]);
+    public function platformFees(PaymentsSettings $paymentsSettings): Response
+    {
+        return Inertia::render('admin/settings/platform-fees', [
+            'settings' => [
+                'platform_fee_percentage' => $paymentsSettings->platform_fee_percentage,
+                'delivery_fee' => $paymentsSettings->delivery_fee,
+                'tax_percentage' => $paymentsSettings->tax_percentage,
+            ],
+        ]);
+    }
 
-    //     $user = $request->user();
+    /**
+     * Update the platform fees settings.
+     */
+    public function platformFeesUpdate(PlatformFeesUpdateRequest $request, PaymentsSettings $paymentsSettings): RedirectResponse
+    {
+        $paymentsSettings->platform_fee_percentage = (float) $request->validated('platform_fee_percentage');
+        $paymentsSettings->delivery_fee = (float) $request->validated('delivery_fee');
+        $paymentsSettings->tax_percentage = (float) $request->validated('tax_percentage');
+        $paymentsSettings->save();
 
-    //     Auth::logout();
-
-    //     $user->delete();
-
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     return redirect('/');
-    // }
+        Inertia::flash('success', __('settings.platform_fees.saved'));
+        return to_route('admin.settings.platform-fees');
+    }
 }

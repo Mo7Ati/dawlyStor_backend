@@ -5,7 +5,8 @@
         "profile": "Profile",
         "password": "Password",
         "two_factor_auth": "Two-Factor Authentication",
-        "appearance": "Appearance"
+        "appearance": "Appearance",
+        "platform_fees": "Platform fees"
     },
     "profile": {
         "title": "Profile",
@@ -71,5 +72,15 @@
         "light": "Light",
         "dark": "Dark",
         "system": "System"
+    },
+    "platform_fees": {
+        "page_title": "Platform fees",
+        "heading_title": "Platform fees",
+        "heading_description": "Set commission, delivery fee and tax for the platform.",
+        "commission_percentage": "Commission (%)",
+        "delivery_fee": "Delivery fee",
+        "tax_percentage": "Tax (%)",
+        "save": "Save",
+        "saved": "Saved"
     }
 }

@@ -9,7 +9,7 @@ import sections from '@/routes/admin/sections';
 import { usePermission } from '@/hooks/use-permission';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutGrid, List, Monitor, Package, Receipt, Settings, Shield, ShoppingCart, Store, Users, Wallet } from 'lucide-react';
+import { LayoutGrid, List, Monitor, Package, Percent, Receipt, Settings, Shield, ShoppingCart, Store, Users, Wallet } from 'lucide-react';
 import { NavGroup, NavItem } from '@/types';
 import wallets from '@/routes/admin/wallets';
 import transactions from '@/routes/admin/transactions';
@@ -133,6 +133,11 @@ export function getAdminSettingsNavItems(): NavItem[] {
             title: t('sections.appearance'),
             href: '/admin/settings/appearance',
             icon: Monitor,
+        },
+        {
+            title: t('sections.platform_fees'),
+            href: '/admin/settings/platform-fees',
+            icon: Percent,
         },
     ];
 }
