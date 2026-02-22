@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $sections = Section::active()->orderBy('order')->get();
+        $sections = Section::active()->ordered()->get();
 
         return successResponse(
             SectionResource::collection($sections),

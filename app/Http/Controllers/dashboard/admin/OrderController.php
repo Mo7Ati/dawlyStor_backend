@@ -17,15 +17,8 @@ class OrderController extends Controller
 
         $orders = Order::query()
             ->with(['customer', 'store'])
-            ->search($request->get('tableSearch'))
-            ->when($request->get('status'), function ($query) use ($request) {
-                $query->where('status', $request->get('status'));
-            })
-            ->when($request->get('payment_status'), function ($query) use ($request) {
-                $query->where('payment_status', $request->get('payment_status'));
-            })
-            ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
-            ->paginate($request->get('per_page', 10))
+            ->applyFilters($request)
+            ->paginate($request->input('per_page', 10))
             ->withQueryString();
 
         return Inertia::render('admin/orders/index', [

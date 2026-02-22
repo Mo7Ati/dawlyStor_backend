@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Spatie\Translatable\HasTranslations;
 
 class Option extends Model
@@ -44,8 +45,16 @@ class Option extends Model
         });
     }
 
-    public function scopeActive($query)
+    public function scopeActive($query, $value = true)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', $value);
+    }
+
+    public function scopeApplyFilters($query, Request $request)
+    {
+        return $query
+            ->when($request->input('search'), fn($q, $search) => $q->search($search))
+            ->when($request->filled('is_active'), fn($q) => $q->active($request->input('is_active')))
+            ->orderBy($request->input('sort', 'id'), $request->input('direction', 'desc'));
     }
 }

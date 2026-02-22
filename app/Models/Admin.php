@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Spatie\MediaLibrary\HasMedia;
@@ -34,30 +35,22 @@ class Admin extends Authenticatable implements HasMedia
         }
     }
 
-    public function scopeApplyFilters(Builder $query, array $filters)
-    {
-        return $query
-            ->when(
-                isset($filters['is_active']),
-                fn($q) => $q->where('is_active', $filters['is_active'])
-            )
-            ->when(
-                isset($filters['tableSearch']),
-                fn($q) => $q->search($filters['tableSearch'])
-            )
-            ->orderBy($filters['sort'] ?? 'id', $filters['direction'] ?? 'desc');
-    }
-
     public function scopeSearch($query, $search)
     {
-        return $query->when($search, function ($query) use ($search) {
-            $query->where('name', 'LIKE', "%{$search}%")
-                ->orWhere('email', 'LIKE', "%{$search}%");
-        });
+        return $query->where('name', 'LIKE', "%{$search}%")
+            ->orWhere('email', 'LIKE', "%{$search}%");
     }
 
-    public function scopeActive($query)
+    public function scopeActive($query, $value = true)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', $value);
     }
+    public function scopeApplyFilters(Builder $query, Request $request)
+    {
+        return $query
+            ->when($request->filled('is_active'), fn($q) => $q->active($request->input('is_active')))
+            ->when($request->input('search'), fn($q, $search) => $q->search($search))
+            ->orderBy($request->input('sort', 'id'), $request->input('direction', 'desc'));
+    }
+
 }

@@ -16,7 +16,7 @@ class ProductController extends Controller
 
         $products = Product::query()
             ->with(['store', 'category'])
-            ->applyFilters($request->all())
+            ->applyFilters($request)
             ->paginate($request->get('per_page', 10))
             ->withQueryString();
 

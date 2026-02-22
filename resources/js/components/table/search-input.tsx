@@ -6,7 +6,7 @@ import { type RouteDefinition, type RouteQueryOptions } from '@/wayfinder';
 const SearchInput = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions) => RouteDefinition<"get"> }) => {
     const url = new URL(window.location.href);
     const firstRender = useRef(true);
-    const [search, setSearch] = useState(url.searchParams.get('tableSearch') || '');
+    const [search, setSearch] = useState(url.searchParams.get('search') || '');
 
     useEffect(() => {
         if (firstRender.current) {
@@ -18,7 +18,7 @@ const SearchInput = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions)
             router.get(
                 indexRoute({
                     mergeQuery: {
-                        tableSearch: search || undefined,
+                        search: search || undefined,
                         page: 1,
                     },
                 }).url,
@@ -37,7 +37,7 @@ const SearchInput = ({ indexRoute }: { indexRoute: (options?: RouteQueryOptions)
     return (
         <>
             <Input
-                name="tableSearch"
+                name="search"
                 type="text"
                 value={search}
                 placeholder={'search ...'}

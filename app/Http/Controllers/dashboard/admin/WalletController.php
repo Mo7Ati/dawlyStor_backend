@@ -17,7 +17,6 @@ class WalletController extends Controller
 
         $wallets = Wallet::query()
             ->with(['holder'])
-            ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
             ->paginate($request->get('per_page', 10))
             ->withQueryString();
 

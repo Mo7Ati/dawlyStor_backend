@@ -29,8 +29,6 @@ class CheckoutController extends Controller
             $result = $this->checkoutService->checkout($customer, $request->validated());
             return successResponse([
                 'checkout_url' => $result['checkout_url'],
-                // 'order_ids' => $result['order_ids'],
-                // 'checkout_group_id' => $result['checkout_group_id'],
             ], 'Checkout session created successfully.');
 
         } catch (ValidationException $e) {
@@ -41,7 +39,6 @@ class CheckoutController extends Controller
             return errorResponse('Payment service is currently unavailable. Please try again.', 503);
 
         } catch (\Throwable $e) {
-            dd($e);
             report($e);
             return errorResponse('Something went wrong during checkout. Please try again.', 500);
         }

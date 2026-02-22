@@ -9,9 +9,13 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function show($id)
+    public function show($slug)
     {
-        $product = Product::with(['store', 'category', 'additions', 'options'])->findOrFail($id);
+        $product = Product::with(['store', 'category', 'additions', 'options'])
+            ->accepted()
+            ->active()
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         return successResponse(
             ProductResource::make($product),

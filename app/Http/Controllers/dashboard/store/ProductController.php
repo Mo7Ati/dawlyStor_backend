@@ -24,7 +24,7 @@ class ProductController extends Controller
         $products = Product::query()
             ->with(['category'])
             ->forAuthStore()
-            ->applyFilters($request->all())
+            ->applyFilters($request)
             ->paginate($request->get('per_page', 10))
             ->withQueryString();
 

@@ -16,9 +16,8 @@ class StoreCategoryController extends Controller
         $this->authorizeForUser($request->user('admin'), 'viewAny', StoreCategory::class);
 
         $categories = StoreCategory::query()
-            ->search($request->get('tableSearch'))
-            ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
-            ->paginate($request->get('per_page', 10))
+            ->applyFilters($request)
+            ->paginate($request->input('per_page', 10))
             ->withQueryString();
 
         return Inertia::render('admin/store-categories/index', [
@@ -40,14 +39,18 @@ class StoreCategoryController extends Controller
         $this->authorizeForUser($request->user('admin'), 'create', StoreCategory::class);
 
         $category = StoreCategory::create($request->validated());
+
         syncMedia($request, $category, 'store-categories');
+
         Inertia::flash('success', __('messages.created_successfully'));
+
         return to_route('admin.store-categories.index');
     }
 
     public function edit($id)
     {
         $category = StoreCategory::findOrFail($id);
+
         $this->authorize('update', $category);
 
         return Inertia::render('admin/store-categories/edit', [
@@ -58,22 +61,28 @@ class StoreCategoryController extends Controller
     public function update($id, StoreCategoryRequest $request)
     {
         $category = StoreCategory::findOrFail($id);
+
         $this->authorizeForUser($request->user('admin'), 'update', $category);
+
         $category->update($request->validated());
 
         syncMedia($request, $category, 'store-categories');
 
         Inertia::flash('success', __('messages.updated_successfully'));
+
         return to_route('admin.store-categories.index');
     }
 
     public function destroy($id)
     {
         $category = StoreCategory::findOrFail($id);
+
         $this->authorize('delete', $category);
+
         $category->delete();
 
         Inertia::flash('success', __('messages.deleted_successfully'));
+
         return to_route('admin.store-categories.index');
     }
 }

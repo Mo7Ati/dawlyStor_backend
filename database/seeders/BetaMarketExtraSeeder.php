@@ -40,6 +40,7 @@ class BetaMarketExtraSeeder extends Seeder
         if (! $category) {
             $category = Category::create([
                 'name' => ['en' => 'General', 'ar' => 'عام'],
+                'slug' => Str::slug('General'),
                 'description' => ['en' => 'General products', 'ar' => 'منتجات عامة'],
                 'store_id' => $store->id,
                 'is_active' => true,
@@ -80,6 +81,7 @@ class BetaMarketExtraSeeder extends Seeder
             Product::create([
                 'uuid' => (string) Str::uuid(),
                 'name' => $template['name'],
+                'slug' => Str::slug($template['name']['en']),
                 'description' => $template['description'],
                 'price' => $template['price'],
                 'compare_price' => $template['price'] * (1 + rand(5, 25) / 100),

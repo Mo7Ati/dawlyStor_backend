@@ -18,9 +18,6 @@ class TransactionController extends Controller
 
         $transactions = Transaction::query()
             ->with(['wallet', 'payable', 'source'])
-            ->when($request->get('explanation'), function ($query) use ($request) {
-                $query->whereJsonContains('meta->type', $request->get('explanation'));
-            })
             ->orderBy($request->get('sort', 'created_at'), $request->get('direction', 'desc'))
             ->paginate($request->get('per_page', 10))
             ->withQueryString();

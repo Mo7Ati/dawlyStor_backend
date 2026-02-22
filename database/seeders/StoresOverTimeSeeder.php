@@ -19,7 +19,7 @@ class StoresOverTimeSeeder extends Seeder
     public function run(): void
     {
         $category = StoreCategory::query()->first();
-        if (! $category) {
+        if (!$category) {
             $this->command->warn('No store category found. Run StoreSeeder first.');
 
             return;
@@ -68,6 +68,7 @@ class StoresOverTimeSeeder extends Seeder
 
             $store = Store::create([
                 'name' => $name,
+                'slug' => $slug,
                 'address' => ['en' => 'Demo Address ' . ($i + 1), 'ar' => 'عنوان تجريبي ' . ($i + 1)],
                 'description' => ['en' => 'Demo store created for chart data.', 'ar' => 'متجر تجريبي لبيانات الرسوم.'],
                 'email' => $email,
@@ -84,6 +85,7 @@ class StoresOverTimeSeeder extends Seeder
 
             $cat = Category::create([
                 'name' => ['en' => 'General', 'ar' => 'عام'],
+                'slug' => Str::slug('General'),
                 'description' => ['en' => 'General products', 'ar' => 'منتجات عامة'],
                 'store_id' => $store->id,
                 'is_active' => true,
@@ -102,6 +104,7 @@ class StoresOverTimeSeeder extends Seeder
             foreach ($products as $p) {
                 $product = new Product([
                     'name' => $p['name'],
+                    'slug' => Str::slug($p['name']['en']),
                     'description' => ['en' => 'Demo product', 'ar' => 'منتج تجريبي'],
                     'price' => $p['price'],
                     'compare_price' => $p['price'] * 1.2,

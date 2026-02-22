@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->json('name');
+            $table->string('slug')->unique();
             $table->json('address');
             $table->json('description')->nullable();
             $table->json('keywords')->nullable();

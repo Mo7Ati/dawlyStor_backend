@@ -24,13 +24,14 @@ class RoleController extends Controller
         }
 
         $roles = Role::withCount('permissions')
-            ->when($request->get('tableSearch'), function ($query) use ($request) {
-                $query->where('name', 'LIKE', "%{$request->get('tableSearch')}%");
+            ->when($request->get('search'), function ($query) use ($request) {
+                $query->where('name', 'LIKE', "%{$request->get('search')}%");
             })
             ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
             ->paginate($request->get('per_page', 10))
             ->withQueryString();
-        return Inertia::render('admin/roles/index', [
+
+            return Inertia::render('admin/roles/index', [
             'roles' => RoleResource::collection($roles),
         ]);
     }

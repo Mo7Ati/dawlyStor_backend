@@ -17,13 +17,13 @@ Route::prefix('customer')
         Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
         // Products
-        Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
 
 
         // Stores
         Route::prefix('stores')->group(function () {
             Route::get('/', [StoreController::class, 'index'])->name('stores.index');
-            Route::get('{id}', [StoreController::class, 'show'])->name('stores.show');
+            Route::get('/{slug}', [StoreController::class, 'show'])->name('stores.show');
         });
 
         // Store Categories

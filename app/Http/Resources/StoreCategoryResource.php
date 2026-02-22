@@ -12,9 +12,11 @@ class StoreCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'slug' => $this->slug,
             'description' => $this->description,
             'image' => $this->getFirstMediaUrl('store-categories'),
             'created_at' => $this->created_at?->format('Y-m-d'),
+            'stores_count' => $this->whenCounted('stores', fn($count) => $count),
         ];
     }
 

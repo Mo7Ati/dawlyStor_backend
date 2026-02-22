@@ -56,7 +56,7 @@ class CustomerController extends Controller
         $customer = auth('sanctum')->user();
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('customers')->ignore($customer->id)],
             'phone_number' => ['required', 'string', 'max:255', Rule::unique('customers')->ignore($customer->id)],
         ]);
