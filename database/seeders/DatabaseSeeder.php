@@ -17,13 +17,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionsSeeder::class,
             SuperAdminsSeeder::class,
-            // CustomerSeeder::class,
+                // CustomerSeeder::class,
             StoreSeeder::class,
-            StoresOverTimeSeeder::class,
-            OrderSeeder::class,
-            BetaMarketExtraSeeder::class,
-            TransactionSeeder::class,
-            PlatformCommissionSeeder::class,
+            // StoresOverTimeSeeder::class,
+            // OrderSeeder::class,
+            // BetaMarketExtraSeeder::class,
+            // TransactionSeeder::class,
+            // PlatformCommissionSeeder::class,
         ]);
     }
 }
