@@ -11,15 +11,10 @@ class StoreCategoryController extends Controller
 {
     public function index()
     {
-        $categories = StoreCategory::all();
+        $categories = StoreCategory::withCount('stores')->get();
 
         return successResponse(
-            $categories->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                ];
-            })->toArray(),
+            StoreCategoryResource::collection($categories),
             __('messages.store_categories_fetched_successfully'),
         );
     }

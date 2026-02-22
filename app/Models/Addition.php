@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Spatie\Translatable\HasTranslations;
 
 class Addition extends Model
@@ -41,12 +42,18 @@ class Addition extends Model
 
     public function scopeSearch($query, $search)
     {
-        return $query->when($search, function ($query) use ($search) {
-            $query->where('name', 'LIKE', "%{$search}%");
-        });
+        return $query->where('name', 'LIKE', "%{$search}%");
     }
-    public function scopeActive($query)
+    public function scopeActive($query, $value = true)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', $value);
+    }
+
+    public function scopeApplyFilters($query, Request $request)
+    {
+        return $query
+            ->when($request->input('search'), fn($q, $search) => $q->search($search))
+            ->when($request->filled('is_active'), fn($q) => $q->active($request->input('is_active')))
+            ->orderBy($request->input('sort', 'id'), $request->input('direction', 'desc'));
     }
 }

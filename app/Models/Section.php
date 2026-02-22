@@ -6,6 +6,7 @@ use App\Enums\HomePageSectionsType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Spatie\Translatable\HasTranslations;
 
 class Section extends Model
@@ -33,12 +34,24 @@ class Section extends Model
         });
     }
 
-    public function scopeActive(Builder $query): Builder
+    public function scopeActive(Builder $query, $value = true): Builder
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', $value);
     }
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('order');
+    }
+    public function scopeType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeApplyFilters($query, Request $request)
+    {
+        return $query
+            ->when($request->input('type'), fn($q, $type) => $q->type($type))
+            ->when($request->filled('is_active'), fn($q) => $q->active($request->input('is_active')))
+            ->orderBy($request->input('sort', 'id'), $request->input('direction', 'desc'));
     }
 }

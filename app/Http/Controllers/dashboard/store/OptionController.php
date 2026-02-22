@@ -7,22 +7,17 @@ use App\Http\Requests\Dashboard\OptionRequest;
 use App\Http\Resources\OptionResource;
 use App\Models\Option;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class OptionController extends Controller
 {
     public function index(Request $request)
     {
-        $store = $request->user('store');
-
         $options = Option::query()
-            ->where('store_id', $store->id)
-            ->search($request->get('tableSearch'))
-            ->when($request->get('is_active') !== null, function ($query) use ($request) {
-                $query->where('is_active', $request->get('is_active'));
-            })
-            ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
-            ->paginate($request->get('per_page', 10))
+            ->where('store_id', Auth::guard('store')->id())
+            ->applyFilters($request)
+            ->paginate($request->input('per_page', 10))
             ->withQueryString();
 
         return Inertia::render('store/options/index', [
@@ -39,10 +34,9 @@ class OptionController extends Controller
 
     public function store(OptionRequest $request)
     {
-        $store = $request->user('store');
 
         $validated = $request->validated();
-        $validated['store_id'] = $store->id;
+        $validated['store_id'] = Auth::guard('store')->id();
 
         Option::create($validated);
 
@@ -50,46 +44,35 @@ class OptionController extends Controller
         return to_route('store.options.index');
     }
 
-    public function edit(Request $request, Option $option)
+    public function edit(Request $request, $id)
     {
-        $store = $request->user('store');
-
-        // Ensure the option belongs to the store
-        if ($option->store_id !== $store->id) {
-            abort(403);
-        }
+        $option = Option::query()
+            ->where('store_id', Auth::guard('store')->id())
+            ->findOrFail($id);
 
         return Inertia::render('store/options/edit', [
             'option' => OptionResource::make($option)->serializeForForm(),
         ]);
     }
 
-    public function update(OptionRequest $request, Option $option)
+    public function update(OptionRequest $request, $id)
     {
-        $store = $request->user('store');
-
-        // Ensure the option belongs to the store
-        if ($option->store_id !== $store->id) {
-            abort(403);
-        }
-
-        $validated = $request->validated();
-        $option->update($validated);
+        Option::query()
+            ->where('store_id', Auth::guard('store')->id())
+            ->findOrFail($id)
+            ->update($request->validated());
 
         Inertia::flash('success', __('messages.updated_successfully'));
         return to_route('store.options.index');
     }
 
-    public function destroy(Option $option)
+    public function destroy(Request $request, $id)
     {
-        $store = request()->user('store');
 
-        // Ensure the option belongs to the store
-        if ($option->store_id !== $store->id) {
-            abort(403);
-        }
-
-        $option->delete();
+        Option::query()
+            ->where('store_id', Auth::guard('store')->id())
+            ->findOrFail($id)
+            ->delete();
 
         Inertia::flash('success', __('messages.deleted_successfully'));
         return to_route('store.options.index');

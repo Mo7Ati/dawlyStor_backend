@@ -56,7 +56,7 @@ class StoreSeeder extends Seeder
 
             $createdStoreCategories = [];
             foreach ($storeCategories as $index => $categoryData) {
-                $storeCategory = StoreCategory::create($categoryData);
+                $storeCategory = StoreCategory::create([...$categoryData, 'slug' => Str::slug($categoryData['name']['en'])]);
                 $createdStoreCategories[] = $storeCategory;
             }
 
@@ -335,6 +335,7 @@ class StoreSeeder extends Seeder
                     $storeData = $storesData[$storeIndex];
                     $store = Store::create([
                         'name' => $storeData[0],
+                        'slug' => Str::slug($storeData[0]['en']),
                         'address' => $storeData[1],
                         'description' => $storeData[2],
                         'email' => $storeData[3],
@@ -358,6 +359,7 @@ class StoreSeeder extends Seeder
                     foreach ($categoryNames as $catName) {
                         $category = Category::create([
                             'name' => $catName,
+                            'slug' => Str::slug($catName['en']),
                             'description' => [
                                 'en' => 'Browse our selection of ' . strtolower($catName['en']) . ' products.',
                                 'ar' => 'تصفح مجموعتنا من منتجات ' . strtolower($catName['ar']) . '.',
@@ -381,6 +383,7 @@ class StoreSeeder extends Seeder
                         Product::create([
                             'uuid' => (string) Str::uuid(),
                             'name' => $product['name'],
+                            'slug' => Str::slug($product['name']['en']),
                             'description' => $product['description'],
                             'price' => $product['price'],
                             'compare_price' => $product['compare_price'],
@@ -574,7 +577,7 @@ class StoreSeeder extends Seeder
 
         // Return products based on store category
         $baseProducts = $productsMap[$storeCategoryName] ?? [];
-        
+
         // Return first 10 products (or all if less than 10)
         return array_slice($baseProducts, 0, 10);
     }

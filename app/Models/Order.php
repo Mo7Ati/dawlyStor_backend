@@ -6,6 +6,7 @@ use App\Enums\OrderStatusEnum;
 use App\Enums\PaymentStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Order extends Model
 {
@@ -72,19 +73,35 @@ class Order extends Model
 
     public function scopeSearch($query, $search)
     {
-        return $query->when($search, function ($query) use ($search) {
-            $query->where('id', 'LIKE', "%{$search}%")
-                ->orWhere('status', 'LIKE', "%{$search}%")
-                ->orWhere('payment_status', 'LIKE', "%{$search}%")
-                ->orWhereHas('customer', function ($q) use ($search) {
-                    $q->where('name', 'LIKE', "%{$search}%")
-                        ->orWhere('email', 'LIKE', "%{$search}%")
-                        ->orWhere('phone_number', 'LIKE', "%{$search}%");
-                })
-                ->orWhereHas('store', function ($q) use ($search) {
-                    $q->where('email', 'LIKE', "%{$search}%")
-                        ->orWhere('phone', 'LIKE', "%{$search}%");
-                });
-        });
+        return $query
+            ->where('id', 'LIKE', "%{$search}%")
+            ->orWhere('status', 'LIKE', "%{$search}%")
+            ->orWhere('payment_status', 'LIKE', "%{$search}%")
+            ->orWhereHas('customer', function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('phone_number', 'LIKE', "%{$search}%");
+            })
+            ->orWhereHas('store', function ($q) use ($search) {
+                $q->where('email', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%");
+            });
+    }
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+    public function scopePaymentStatus($query, $payment_status)
+    {
+        return $query->where('payment_status', $payment_status);
+    }
+
+    public function scopeApplyFilters($query, Request $request)
+    {
+        return $query
+            ->when($request->input('search'), fn($q, $search) => $q->search($search))
+            ->when($request->input('status'), fn($q, $status) => $q->status($status))
+            ->when($request->input('payment_status'), fn($q, $payment_status) => $q->paymentStatus($payment_status))
+            ->orderBy($request->input('sort', 'id'), $request->input('direction', 'desc'));
     }
 }

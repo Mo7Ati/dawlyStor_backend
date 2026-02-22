@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -17,6 +18,7 @@ class Product extends Model implements HasMedia
 
     protected $fillable = [
         'name',
+        'slug',
         'description',
         'keywords',
         'price',
@@ -42,6 +44,7 @@ class Product extends Model implements HasMedia
             if (is_null($model->store_id) && auth()->guard('store')->check()) {
                 $model->store_id = auth()->guard('store')->id();
             }
+            $model->slug = Str::slug($model->name['en']);
         });
     }
 
@@ -91,42 +94,41 @@ class Product extends Model implements HasMedia
         return $query->where('store_id', auth()->guard('store')->id());
     }
 
-    public function scopeApplyFilters(Builder $query, array $filters)
+    public function scopeApplyFilters(Builder $query, Request $request)
     {
         return $query
-            ->when(
-                isset($filters['is_active']),
-                fn($q) => $q->where('is_active', $filters['is_active'])
-            )
-            ->when(
-                isset($filters['is_accepted']),
-                fn($q) => $q->where('is_accepted', $filters['is_accepted'])
-            )
-            ->when(
-                isset($filters['tableSearch']),
-                fn($q) => $q->search($filters['tableSearch'])
-            )
-            ->when(
-                isset($filters['category_id']),
-                fn($q) => $q->where('category_id', $filters['category_id'])
-            )
-            ->orderBy($filters['sort'] ?? 'id', $filters['direction'] ?? 'desc');
+            ->when($request->filled('is_active'), fn($q) => $q->active($request->input('is_active')))
+            ->when($request->filled('is_accepted'), fn($q) => $q->accepted($request->input('is_accepted')))
+            ->when($request->input('search'), fn($q, $search) => $q->search($search))
+            ->when($request->input('category'), fn($q, $category) => $q->category($category))
+            ->when($request->float('minPrice'), fn($q, $minPrice) => $q->where('price', '>=', $minPrice))
+            ->when($request->float('maxPrice'), fn($q, $maxPrice) => $q->where('price', '<=', $maxPrice))
+            ->orderBy($request->input('sort', 'id'), $request->input('direction', 'desc'));
     }
 
-    public function scopeAccepted($query)
+    public function scopeAccepted($query, $value = true)
     {
-        return $query->where('is_accepted', true);
+        return $query->where('is_accepted', $value);
     }
-    public function scopeActive($query)
+    public function scopeActive($query, $value = true)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', $value);
     }
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'LIKE', "%{$search}%")
-            ->orWhere('description', 'LIKE', "%{$search}%")
-            ->orWhere('keywords', 'LIKE', "%{$search}%");
+        return $query->whereAny([
+            'name',
+            'description',
+            'keywords',
+        ], 'LIKE', "%{$search}%");
+    }
+
+    public function scopeCategory(Builder $query, $category_slug): Builder
+    {
+        return $query->whereHas('category', function ($query) use ($category_slug) {
+            $query->where('slug', $category_slug);
+        });
     }
 
     public function syncAdditions(array $additions = []): void

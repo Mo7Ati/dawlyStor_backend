@@ -23,16 +23,8 @@ class SectionController extends Controller
 
         $sections = Section::query()
             ->ordered()
-            ->when($request->get('tableSearch'), function ($query) use ($request) {
-                $query->where('type', 'like', '%' . $request->get('tableSearch') . '%');
-            })
-            ->when($request->get('type'), function ($query) use ($request) {
-                $query->where('type', $request->get('type'));
-            })
-            ->when($request->get('is_active') !== null, function ($query) use ($request) {
-                $query->where('is_active', $request->get('is_active'));
-            })
-            ->paginate($request->get('per_page', 10))
+            ->applyFilters($request)
+            ->paginate($request->input('per_page', 10))
             ->withQueryString();
 
         return Inertia::render('admin/sections/index', [

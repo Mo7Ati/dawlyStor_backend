@@ -7,6 +7,7 @@ use App\Http\Requests\Dashboard\AdditionRequest;
 use App\Http\Resources\AdditionResource;
 use App\Models\Addition;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AdditionController extends Controller
@@ -17,12 +18,8 @@ class AdditionController extends Controller
 
         $additions = Addition::query()
             ->where('store_id', $store->id)
-            ->search($request->get('tableSearch'))
-            ->when($request->get('is_active') !== null, function ($query) use ($request) {
-                $query->where('is_active', $request->get('is_active'));
-            })
-            ->orderBy($request->get('sort', 'id'), $request->get('direction', 'desc'))
-            ->paginate($request->get('per_page', 10))
+            ->applyFilters($request)
+            ->paginate($request->input('per_page', 10))
             ->withQueryString();
 
         return Inertia::render('store/additions/index', [
@@ -50,46 +47,36 @@ class AdditionController extends Controller
         return to_route('store.additions.index');
     }
 
-    public function edit(Request $request, Addition $addition)
+    public function edit(Request $request, $id)
     {
-        $store = $request->user('store');
-
-        // Ensure the addition belongs to the store
-        if ($addition->store_id !== $store->id) {
-            abort(403);
-        }
+        $addition = Addition::query()
+            ->where('store_id', Auth::guard('store')->id())
+            ->findOrFail($id);
 
         return Inertia::render('store/additions/edit', [
             'addition' => AdditionResource::make($addition)->serializeForForm(),
         ]);
     }
 
-    public function update(AdditionRequest $request, Addition $addition)
+    public function update(AdditionRequest $request, $id)
     {
-        $store = $request->user('store');
+        $addition = Addition::query()
+            ->where('store_id', Auth::guard('store')->id())
+            ->findOrFail($id);
 
-        // Ensure the addition belongs to the store
-        if ($addition->store_id !== $store->id) {
-            abort(403);
-        }
-
-        $validated = $request->validated();
-        $addition->update($validated);
+        $addition->update($request->validated());
 
         Inertia::flash('success', __('messages.updated_successfully'));
         return to_route('store.additions.index');
     }
 
-    public function destroy(Addition $addition)
+    public function destroy(Request $request, $id)
     {
-        $store = request()->user('store');
+        $addition = Addition::query()
+            ->where('store_id', Auth::guard('store')->id())
+            ->findOrFail($id)
+            ->delete();
 
-        // Ensure the addition belongs to the store
-        if ($addition->store_id !== $store->id) {
-            abort(403);
-        }
-
-        $addition->delete();
 
         Inertia::flash('success', __('messages.deleted_successfully'));
         return to_route('store.additions.index');

@@ -18,8 +18,8 @@ class AdminController extends Controller
         $this->authorize('viewAny', Admin::class);
 
         $admins = Admin::query()
-            ->applyFilters($request->all())
-            ->paginate($request->get('per_page', 10))
+            ->applyFilters($request)
+            ->paginate($request->input('per_page', 10))
             ->withQueryString();
 
         return Inertia::render('admin/admins/index', [
@@ -40,6 +40,7 @@ class AdminController extends Controller
         $this->authorizeForUser($request->user('admin'), 'create', Admin::class);
 
         $admin = Admin::create($request->validated());
+
         $admin->assignRole($request->get('roles', []));
 
         Inertia::flash('success', __('messages.created_successfully'));
@@ -48,7 +49,9 @@ class AdminController extends Controller
     public function edit($id)
     {
         $admin = Admin::with('roles')->findOrFail($id);
+
         $this->authorize('update', $admin);
+
         return Inertia::render('admin/admins/edit', [
             'admin' => new AdminResource($admin),
             'roles' => RoleResource::collection(Role::all()),

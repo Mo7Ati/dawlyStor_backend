@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->uuid();
 
             $table->json('name');
+            $table->string('slug');
             $table->json('description')->nullable();
             $table->json('keywords')->nullable();
 
@@ -28,6 +29,8 @@ return new class extends Migration {
             $table->boolean('is_accepted')->default(false);
 
             $table->unsignedSmallInteger('quantity')->default(0);
+
+            $table->unique(['store_id', 'slug']);
 
             $table->timestamps();
         });

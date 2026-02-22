@@ -14,12 +14,10 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $storeId = Auth::guard('store')->id();
-
         $categories = Category::query()
-            ->where('store_id', $storeId)
-            ->applyFilters($request->all())
-            ->paginate($request->get('per_page', 10))
+            ->where('store_id', Auth::guard('store')->id())
+            ->applyFilters($request)
+            ->paginate($request->input('per_page', 10))
             ->withQueryString();
 
         return Inertia::render('store/categories/index', [
@@ -40,7 +38,7 @@ class CategoryController extends Controller
         $validated = $request->validated();
         $validated['store_id'] = $storeId;
 
-        $category = Category::create($validated);
+        Category::create($validated);
 
         Inertia::flash('success', __('messages.created_successfully'));
         return to_route('store.categories.index');
@@ -48,10 +46,8 @@ class CategoryController extends Controller
 
     public function edit(Request $request, int $id)
     {
-        $storeId = Auth::guard('store')->id();
-
         $category = Category::query()
-            ->where('store_id', $storeId)
+            ->where('store_id', Auth::guard('store')->id())
             ->findOrFail($id);
 
         return Inertia::render('store/categories/edit', [
@@ -75,10 +71,8 @@ class CategoryController extends Controller
 
     public function destroy(Request $request, int $id)
     {
-        $storeId = Auth::guard('store')->id();
-
         Category::query()
-            ->where('store_id', $storeId)
+            ->where('store_id', Auth::guard('store')->id())
             ->findOrFail($id)
             ->delete();
 

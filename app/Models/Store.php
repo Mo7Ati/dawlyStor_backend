@@ -6,7 +6,9 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Traits\HasWallet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\MediaLibrary\HasMedia;
@@ -19,6 +21,7 @@ class Store extends Authenticatable implements HasMedia, Wallet
 
     protected $fillable = [
         'name',
+        'slug',
         'address',
         'description',
         'keywords',
@@ -44,6 +47,13 @@ class Store extends Authenticatable implements HasMedia, Wallet
 
     public array $translatable = ['name', 'description', 'address'];
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->slug = Str::slug($model->name['en']);
+        });
+    }
+
     public function setPasswordAttribute($value)
     {
         if (!empty($value)) {
@@ -51,31 +61,6 @@ class Store extends Authenticatable implements HasMedia, Wallet
         }
     }
 
-    public function scopeSearch($query, $search)
-    {
-        return $query->when($search, function ($query) use ($search) {
-            $query->whereAny([
-                'name',
-                'description',
-                'address',
-                'keywords',
-                'social_media',
-            ], 'like', "%{$search}%");
-        });
-    }
-    public function scopeCategory($query, $category)
-    {
-        return $query->when($category, function ($query) use ($category) {
-            $query->whereHas('category', function ($query) use ($category) {
-                $query->whereLike('name', "%{$category}%")
-                    ->orWhereLike('description', "%{$category}%");
-            });
-        });
-    }
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
 
     public function category()
     {
@@ -98,4 +83,39 @@ class Store extends Authenticatable implements HasMedia, Wallet
         return $this->hasMany(Category::class);
     }
 
+    public function scopeSearch($query, $search)
+    {
+        return $query->whereAny([
+            'name',
+            'description',
+            'address',
+            'keywords',
+            'social_media',
+        ], 'like', "%{$search}%");
+    }
+    public function scopeCategory($query, $category)
+    {
+        return $query->whereHas('category', function ($query) use ($category) {
+            $query->where('slug', $category);
+        });
+    }
+    public function scopeActive($query, $value = true)
+    {
+        return $query->where('is_active', $value);
+    }
+
+    /**
+     * Apply filters to the query (scope – call as applyFilters($request)).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Request  $request
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeApplyFilters($query, Request $request)
+    {
+        return $query
+            ->when($request->input('search'), fn($q, $search) => $q->search($search))
+            ->when($request->input('category'), fn($q, $category) => $q->category($category))
+            ->when($request->filled('is_active'), fn($q) => $q->active($request->input('is_active')));
+    }
 }
