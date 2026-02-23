@@ -17,7 +17,7 @@ class BecomeVendorController extends Controller
      */
     public function store(BecomeVendorRequest $request): JsonResponse
     {
-        $password = Str::password(12);
+        $password = Str::password(12 , symbols: false);
 
         $store = Store::create([
             'name' => $request->name,
