@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ProductController;
@@ -15,6 +16,9 @@ Route::prefix('customer')
     ->group(function () {
         // Home
         Route::get('/home', [HomeController::class, 'index'])->name('home.index');
+
+        // Contact
+        Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
         // Products
         Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');

@@ -17,7 +17,8 @@
         "categories": "الفئات",
         "subscription": "الاشتراك",
         "subscriptions_transactions": "معاملات الاشتراك",
-        "sections": "أقسام الصفحة الرئيسية"
+        "sections": "أقسام الصفحة الرئيسية",
+        "contact_messages": "رسائل الاتصال"
     },
     "nav_groups": {
         "overview": "نظرة عامة",

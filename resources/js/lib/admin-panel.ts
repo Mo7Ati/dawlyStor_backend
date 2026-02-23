@@ -9,7 +9,7 @@ import sections from '@/routes/admin/sections';
 import { usePermission } from '@/hooks/use-permission';
 import { useTranslation } from 'react-i18next';
 
-import { LayoutGrid, List, Monitor, Package, Percent, Receipt, Settings, Shield, ShoppingCart, Store, Users, Wallet } from 'lucide-react';
+import { LayoutGrid, List, Mail, Monitor, Package, Percent, Receipt, Settings, Shield, ShoppingCart, Store, Users, Wallet } from 'lucide-react';
 import { NavGroup, NavItem } from '@/types';
 import wallets from '@/routes/admin/wallets';
 import transactions from '@/routes/admin/transactions';
@@ -40,7 +40,13 @@ export function getAdminPanelNavItems(): NavGroup[] {
                     href: sections.index.url(),
                     icon: List,
                     visible: usePermission('sections.index'),
-                }
+                },
+                {
+                    title: t('nav_labels.contact_messages') || 'Contact messages',
+                    href: '/admin/contact-messages',
+                    icon: Mail,
+                    visible: true,
+                },
             ],
         },
         {

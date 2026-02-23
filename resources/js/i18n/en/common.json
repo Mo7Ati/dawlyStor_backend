@@ -17,7 +17,8 @@
         "categories": "Categories",
         "subscription": "Subscription",
         "subscriptions_transactions": "Subscriptions Transactions",
-        "sections": "Homepage Sections"
+        "sections": "Homepage Sections",
+        "contact_messages": "Contact messages"
     },
     "nav_groups": {
         "overview": "Overview",

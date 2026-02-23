@@ -48,5 +48,6 @@
   "additions": {"title":"الإضافات","create":"إنشاء إضافة","edit":"تعديل إضافة"},
   "options": {"title":"الخيارات","create":"إنشاء خيار","edit":"تعديل خيار"},
   "categories": {"title":"الفئات","create":"إنشاء فئة","edit":"تعديل فئة"},
-  "sections": {"title":"الأقسام","create":"إنشاء قسم","edit":"تعديل قسم"}
+  "sections": {"title":"الأقسام","create":"إنشاء قسم","edit":"تعديل قسم"},
+  "contact_messages": {"title":"رسائل الاتصال","name":"الاسم","email":"البريد","subject":"الموضوع","message":"الرسالة","read":"مقروء","unread":"غير مقروء","replied":"تم الرد","created_at":"تاريخ الإنشاء","message_detail":"تفاصيل الرسالة","mark_as_read":"تحديد كمقروء","reply_via_email":"الرد عبر البريد","reply_message":"ردك","reply_placeholder":"اكتب ردك للعميل...","send_reply":"إرسال الرد","sending":"جاري الإرسال...","replied_on":"تم الرد في"}
 }

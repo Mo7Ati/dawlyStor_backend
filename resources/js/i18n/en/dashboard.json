@@ -48,5 +48,6 @@
   "additions": {"title":"Additions","create":"Create Addition","edit":"Edit Addition"},
   "options": {"title":"Options","create":"Create Option","edit":"Edit Option"},
   "categories": {"title":"Categories","create":"Create Category","edit":"Edit Category"},
-  "sections": {"title":"Sections","create":"Create Section","edit":"Edit Section"}
+  "sections": {"title":"Sections","create":"Create Section","edit":"Edit Section"},
+  "contact_messages": {"title":"Contact messages","name":"Name","email":"Email","subject":"Subject","message":"Message","read":"Read","unread":"Unread","replied":"Replied","created_at":"Created","message_detail":"Message detail","mark_as_read":"Mark as read","reply_via_email":"Reply via email","reply_message":"Your reply","reply_placeholder":"Type your reply to the customer...","send_reply":"Send reply","sending":"Sending...","replied_on":"Replied on"}
 }

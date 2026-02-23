@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\dashboard\admin\AdminController;
 use App\Http\Controllers\dashboard\admin\AdminSettingsController;
+use App\Http\Controllers\dashboard\admin\ContactMessageController;
 use App\Http\Controllers\dashboard\admin\DashboardController;
 use App\Http\Controllers\dashboard\admin\OrderController;
 use App\Http\Controllers\dashboard\admin\ProductController;
@@ -46,6 +47,11 @@ Route::middleware(['auth:admin'])
 
         Route::post('sections/reorder', [SectionController::class, 'reorder'])->name('sections.reorder');
 
+        // Contact messages (from public contact form)
+        Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('/contact-messages/{contact_message}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::patch('/contact-messages/{contact_message}/read', [ContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-as-read');
+        Route::post('/contact-messages/{contact_message}/reply', [ContactMessageController::class, 'reply'])->name('contact-messages.reply');
 
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/profile', [AdminSettingsController::class, 'profile'])->name('profile');

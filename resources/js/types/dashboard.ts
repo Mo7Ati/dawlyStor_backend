@@ -289,3 +289,16 @@ export enum TransactionType {
     WITHDRAW_PLATFORM_FEE_FROM_STORE_WALLET = 'PLATFORM_SHARE',
     DEPOSIT_STORE_SUBSCRIPTION_TO_PLATFORM_WALLET = 'STORE_SUBSCRIPTION',
 }
+
+export type ContactMessage = {
+    id: number | string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    subject: string;
+    message: string;
+    read_at: string | null;
+    replied_at: string | null;
+    created_at: string;
+    updated_at: string;
+};
