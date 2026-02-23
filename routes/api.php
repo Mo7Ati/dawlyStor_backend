@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\BecomeVendorController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\CustomerController;
@@ -19,6 +20,11 @@ Route::prefix('customer')
 
         // Contact
         Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+        // Become a vendor (public form: name + email)
+        Route::post('/become-vendor', [BecomeVendorController::class, 'store'])
+            ->middleware('throttle:5,1')
+            ->name('become-vendor.store');
 
         // Products
         Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');

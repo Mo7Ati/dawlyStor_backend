@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard\store;
 
 use App\Enums\OrderStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreResource;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Store;
@@ -15,7 +16,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $store = $request->user('store');
-        if (! $store instanceof Store) {
+        if (!$store instanceof Store) {
             return Inertia::render('store/dashboard', [
                 'stats' => $this->emptyStats(),
                 'chartData' => $this->emptyChartData(),
@@ -36,6 +37,7 @@ class DashboardController extends Controller
                 'productsOverTime' => $productsOverTime,
                 'ordersByStatus' => $ordersByStatus,
             ],
+            'store' => StoreResource::make($store),
         ]);
     }
 
@@ -67,8 +69,8 @@ class DashboardController extends Controller
         }
         return [
             'ordersAndRevenuesOverTime' => $days90,
-            'orderRevenueOverTime' => array_map(fn ($r) => ['period' => $r['period'], 'label' => $r['label'], 'value' => $r['value']], $days30),
-            'productsOverTime' => array_map(fn ($r) => ['period' => $r['period'], 'label' => $r['label'], 'count' => $r['count']], $days30),
+            'orderRevenueOverTime' => array_map(fn($r) => ['period' => $r['period'], 'label' => $r['label'], 'value' => $r['value']], $days30),
+            'productsOverTime' => array_map(fn($r) => ['period' => $r['period'], 'label' => $r['label'], 'count' => $r['count']], $days30),
             'ordersByStatus' => $statuses,
         ];
     }

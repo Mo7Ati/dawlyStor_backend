@@ -1,6 +1,6 @@
 import HeadingSmall from '@/components/shared/heading-small'
-import React, { useState } from 'react'
-import { Form, router } from '@inertiajs/react'
+import { useState } from 'react'
+import { Form } from '@inertiajs/react'
 import AppLayout from '@/layouts/app-layout'
 import { useTranslation } from 'react-i18next'
 import { type BreadcrumbItem } from '@/types'
@@ -18,12 +18,13 @@ import {
 import TranslatableTabs from '@/components/ui/translatable-tabs'
 import MultiInput from '@/components/form/multi-input'
 import FileUpload from '@/components/form/file-upload'
-import FormButtons from '@/components/form/form-buttons'
 import { normalizeFieldValue } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { Transition } from '@headlessui/react'
 import SettingsLayout from '@/layouts/settings/layout'
 import settings from '@/routes/store/settings'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Link } from '@inertiajs/react';
 
 interface StoreProfileSettingsProps {
     store: Store
@@ -51,7 +52,16 @@ const StoreProfileSettings = ({ store, storeCategories }: StoreProfileSettingsPr
                         title={tSettings('profile.heading_title')}
                         description={tSettings('profile.heading_description')}
                     />
-
+                    {store.needs_profile_completion && (
+                        <Alert className="border-yellow-300 bg-yellow-50 text-yellow-900 shadow-sm">
+                            <AlertTitle className="font-semibold">
+                                Complete your profile
+                            </AlertTitle>
+                            <AlertDescription className="mt-1 gap-3">
+                                <p>Please complete your profile to start shipping with us.</p>
+                            </AlertDescription>
+                        </Alert>
+                    )}
                     <Form
                         method="PUT"
                         action={settings.profile.url()}

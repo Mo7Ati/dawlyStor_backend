@@ -3,10 +3,11 @@ import { OrdersAndRevenuesOverTimeChart, type OrdersAndRevenuesOverTimePoint } f
 import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
+import { BreadcrumbItem, SharedData } from '@/types';
 import { Banknote, Package, ShoppingCart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Area, AreaChart } from 'recharts';
+import { Store } from '@/types/dashboard';
 
 interface StatItem {
     total: number;
@@ -42,6 +43,7 @@ interface StoreDashboardStats {
 interface StoreDashboardProps {
     stats?: StoreDashboardStats;
     chartData?: StoreChartData;
+    store: Store;
 }
 
 const defaultStats: StoreDashboardStats = {
@@ -82,7 +84,7 @@ function formatCurrency(amount: number): string {
     }).format(amount);
 }
 
-export default function Dashboard({ stats: statsProp, chartData: chartDataProp }: StoreDashboardProps) {
+export default function Dashboard({ stats: statsProp, chartData: chartDataProp, store }: StoreDashboardProps) {
     const { t } = useTranslation('dashboard');
     const stats = statsProp ?? defaultStats;
     const chartData = chartDataProp ?? emptyChartData();
@@ -111,37 +113,37 @@ export default function Dashboard({ stats: statsProp, chartData: chartDataProp }
         formatValue: (n: number) => string;
         formatNewThisMonth: (n: number) => string;
     }> = [
-        {
-            key: 'orders',
-            titleKey: 'stats.orders',
-            icon: ShoppingCart,
-            descColor: 'text-blue-600 dark:text-blue-400',
-            chartConfig: { trend: { color: 'hsl(217 91% 60%)' } },
-            chartColorId: 'fillStoreOrders',
-            formatValue: formatNumber,
-            formatNewThisMonth: (n) => t('stats.new_this_month', { count: n }),
-        },
-        {
-            key: 'order_revenue',
-            titleKey: 'stats.order_revenue',
-            icon: Banknote,
-            descColor: 'text-violet-600 dark:text-violet-400',
-            chartConfig: { trend: { color: 'hsl(263 70% 50%)' } },
-            chartColorId: 'fillStoreOrderRevenue',
-            formatValue: formatCurrency,
-            formatNewThisMonth: (n) => t('stats.new_this_month_amount', { amount: formatCurrency(n) }),
-        },
-        {
-            key: 'products',
-            titleKey: 'stats.products',
-            icon: Package,
-            descColor: 'text-sky-600 dark:text-sky-400',
-            chartConfig: { trend: { color: 'hsl(199 89% 48%)' } },
-            chartColorId: 'fillStoreProducts',
-            formatValue: formatNumber,
-            formatNewThisMonth: (n) => t('stats.new_this_month', { count: n }),
-        },
-    ];
+            {
+                key: 'orders',
+                titleKey: 'stats.orders',
+                icon: ShoppingCart,
+                descColor: 'text-blue-600 dark:text-blue-400',
+                chartConfig: { trend: { color: 'hsl(217 91% 60%)' } },
+                chartColorId: 'fillStoreOrders',
+                formatValue: formatNumber,
+                formatNewThisMonth: (n) => t('stats.new_this_month', { count: n }),
+            },
+            {
+                key: 'order_revenue',
+                titleKey: 'stats.order_revenue',
+                icon: Banknote,
+                descColor: 'text-violet-600 dark:text-violet-400',
+                chartConfig: { trend: { color: 'hsl(263 70% 50%)' } },
+                chartColorId: 'fillStoreOrderRevenue',
+                formatValue: formatCurrency,
+                formatNewThisMonth: (n) => t('stats.new_this_month_amount', { amount: formatCurrency(n) }),
+            },
+            {
+                key: 'products',
+                titleKey: 'stats.products',
+                icon: Package,
+                descColor: 'text-sky-600 dark:text-sky-400',
+                chartConfig: { trend: { color: 'hsl(199 89% 48%)' } },
+                chartColorId: 'fillStoreProducts',
+                formatValue: formatNumber,
+                formatNewThisMonth: (n) => t('stats.new_this_month', { count: n }),
+            },
+        ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs} title={t('title')}>

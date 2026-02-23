@@ -30,6 +30,11 @@ class StoreSettingsController extends Controller
     {
         $data = $request->validated();
         $store = Auth::guard('store')->user();
+
+        if (!$store->profile_completed_at) {
+            $data['profile_completed_at'] = now();
+        }
+
         $store->update($data);
 
         syncMedia($request, $store, 'store-logos');

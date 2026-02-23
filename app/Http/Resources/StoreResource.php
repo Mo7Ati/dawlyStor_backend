@@ -23,6 +23,8 @@ class StoreResource extends JsonResource
             'delivery_time' => $this->delivery_time,
             'delivery_area_polygon' => $this->delivery_area_polygon,
             'is_active' => $this->is_active,
+            'profile_completed_at' => $this->profile_completed_at?->toIso8601String(),
+            'needs_profile_completion' => !$this->resource->hasCompletedProfile(),
             'rating' => ['value' => '4.8', 'count' => '100',],
             'created_at' => $this->created_at?->format('Y-m-d'),
             'category' => $this->whenLoaded('category', fn($category) => new StoreCategoryResource($category)),

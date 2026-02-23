@@ -33,6 +33,7 @@ class Store extends Authenticatable implements HasMedia, Wallet
         'delivery_time',
         'delivery_area_polygon',
         'is_active',
+        'profile_completed_at',
     ];
 
     protected $casts = [
@@ -42,6 +43,7 @@ class Store extends Authenticatable implements HasMedia, Wallet
         'keywords' => 'array',
         'social_media' => 'array',
         'delivery_area_polygon' => 'json',
+        'profile_completed_at' => 'datetime',
     ];
 
 
@@ -50,8 +52,15 @@ class Store extends Authenticatable implements HasMedia, Wallet
     protected static function booted()
     {
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->name['en']);
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->name['en'] ?? $model->name ?? '');
+            }
         });
+    }
+
+    public function hasCompletedProfile(): bool
+    {
+        return $this->profile_completed_at !== null;
     }
 
     public function setPasswordAttribute($value)

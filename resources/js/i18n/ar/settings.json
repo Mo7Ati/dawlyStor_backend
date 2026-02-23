@@ -14,6 +14,8 @@
         "page_title": "إعدادات الملف الشخصي",
         "heading_title": "معلومات الملف الشخصي",
         "heading_description": "تحديث اسمك وعنوان بريدك الإلكتروني",
+        "complete_profile_required": "أكمل ملفك الشخصي",
+        "complete_profile_description": "يرجى إكمال جميع الحقول المطلوبة أدناه قبل إضافة المنتجات أو إدارة متجرك.",
         "name": "الاسم",
         "email_address": "عنوان البريد الإلكتروني",
         "email_address_placeholder": "عنوان البريد الإلكتروني",

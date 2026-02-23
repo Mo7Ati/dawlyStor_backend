@@ -9,16 +9,17 @@ use App\Http\Controllers\dashboard\store\OrderController;
 use App\Http\Controllers\dashboard\store\ProductController;
 use App\Http\Controllers\dashboard\store\SubscriptionController;
 use App\Http\Controllers\dashboard\store\TransactionController;
+use App\Http\Middleware\EnsureStoreProfileComplete;
 use Illuminate\Support\Facades\Route;
 
 // settings routes
 Route::prefix('store')
     ->name('store.')
-    ->middleware(['auth:store'])
+    ->middleware(['auth:store', EnsureStoreProfileComplete::class])
     ->group($settingsRoutes);
 
 
-Route::middleware(['auth:store'])
+Route::middleware(['auth:store', EnsureStoreProfileComplete::class])
     ->prefix('store')
     ->name('store.')
     ->group(function () {

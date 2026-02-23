@@ -100,6 +100,8 @@ export type Store = {
     delivery_time: number;
     delivery_area_polygon?: any;
     is_active: boolean;
+    profile_completed_at?: string | null;
+    needs_profile_completion: boolean;
     created_at?: string;
     updated_at?: string;
     category?: StoreCategory;
