@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\StoreCategoryController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StripeWebhookController;
@@ -60,6 +61,12 @@ Route::prefix('customer')
 
             // Checkout
             Route::post('/checkout', [CheckoutController::class, 'store'])->name('customer.checkout');
+
+            // Wishlist
+            Route::get('/wishlist', [WishlistController::class, 'index'])->name('customer.wishlist.index');
+            Route::post('/wishlist', [WishlistController::class, 'store'])->name('customer.wishlist.store');
+            Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('customer.wishlist.destroy');
+            Route::post('/wishlist/sync', [WishlistController::class, 'sync'])->name('customer.wishlist.sync');
 
         });
 

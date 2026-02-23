@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -163,6 +164,14 @@ class Product extends Model implements HasMedia
             return round((($this->compare_price - $this->price) / $this->compare_price) * 100);
         }
         return null;
+    }
+
+    /**
+     * Customers who have this product in their wishlist.
+     */
+    public function wishlistedByCustomers(): BelongsToMany
+    {
+        return $this->belongsToMany(Customer::class, 'wishlist_items', 'product_id', 'customer_id');
     }
 
 }
