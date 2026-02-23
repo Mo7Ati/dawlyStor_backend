@@ -53,7 +53,13 @@ class Store extends Authenticatable implements HasMedia, Wallet
     {
         static::creating(function ($model) {
             if (empty($model->slug)) {
-                $model->slug = Str::slug($model->name['en'] ?? $model->name ?? '');
+                $model->slug = Str::slug($model->getTranslation('name', 'en'));
+            }
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->getTranslation('name', 'en'));
             }
         });
     }

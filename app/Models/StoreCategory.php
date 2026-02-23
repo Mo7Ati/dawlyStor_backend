@@ -29,7 +29,13 @@ class StoreCategory extends Model implements HasMedia
     protected static function booted()
     {
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->name['en']);
+            $model->slug = Str::slug($model->getTranslation('name', 'en'));
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->getTranslation('name', 'en'));
+            }
         });
     }
 

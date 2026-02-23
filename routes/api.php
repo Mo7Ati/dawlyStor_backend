@@ -27,7 +27,7 @@ Route::prefix('customer')
             ->name('become-vendor.store');
 
         // Products
-        Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('stores/{store_slug}/products/{product_slug}', [ProductController::class, 'show'])->name('products.show');
 
 
         // Stores

@@ -77,7 +77,7 @@ class SectionResource extends JsonResource
         $limit = 8;
 
         $products_query = Product::query()
-            ->with(['store:id,name'])
+            ->with(['store:id,name,slug'])
             ->active()
             ->accepted();
 

@@ -44,7 +44,13 @@ class Product extends Model implements HasMedia
             if (is_null($model->store_id) && auth()->guard('store')->check()) {
                 $model->store_id = auth()->guard('store')->id();
             }
-            $model->slug = Str::slug($model->name['en']);
+            $model->slug = Str::slug($model->getTranslation('name', 'en'));
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->getTranslation('name', 'en'));
+            }
         });
     }
 

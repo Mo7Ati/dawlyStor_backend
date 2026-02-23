@@ -34,7 +34,13 @@ class Category extends Model implements HasMedia
     {
         static::creating(function ($model) {
             $model->store_id = auth()->guard('store')->id();
-            $model->slug = Str::slug($model->name['en']);
+            $model->slug = Str::slug($model->getTranslation('name', 'en'));
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name')) {
+                $model->slug = Str::slug($model->getTranslation('name', 'en'));
+            }
         });
     }
     public function products()
