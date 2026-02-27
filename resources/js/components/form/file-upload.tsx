@@ -31,24 +31,6 @@ interface FileUploadProps {
     maxFiles?: number
     maxFileSize?: string
     files?: Media[] | null
-    // files?: Array<{
-    //     source: string
-    //     options: {
-    //         type: 'input' | 'limbo' | 'local' | 'remote'
-    //         metadata?: {
-    //             date?: string,
-    //             name?: string,
-    //             size?: number,
-    //             type?: string,
-    //         },
-    //     }
-    // }>
-    // store.logo ? store.logo.map((logo) => ({
-    //     source: String(logo.id) + '/' + logo.file_name,
-    //     options: {
-    //         type: 'local',
-    //     },
-    // })) : []
     error?: string
     className?: string
     required?: boolean

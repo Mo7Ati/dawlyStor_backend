@@ -59,24 +59,24 @@ class StoreRequest extends FormRequest
             'delivery_time' => ['required', 'integer', 'min:1'],
 
             'is_active' => ['nullable', 'boolean'],
-            'temp_ids' => [
-                Rule::requiredIf(function () use ($id) {
-                    if ($id) {
-                        $store = Store::find($id);
-                        return !$store->getFirstMedia('logo');
-                    }
-                    return true;
-                }),
-                function (string $attribute, mixed $value, Closure $fail) use ($id) {
-                    if ($value) {
-                        $ids = explode(',', $value);
-                        $media = Media::whereIn('id', $ids)->get();
-                        if ($media->count() !== count($ids)) {
-                            $fail(__('validation.exists', ['attribute' => $attribute]));
-                        }
-                    }
-                },
-            ],
+            // 'temp_ids' => [
+            //     Rule::requiredIf(function () use ($id) {
+            //         if ($id) {
+            //             $store = Store::find($id);
+            //             return !$store->getFirstMedia('logo');
+            //         }
+            //         return true;
+            //     }),
+            //     function (string $attribute, mixed $value, Closure $fail) use ($id) {
+            //         if ($value) {
+            //             $ids = explode(',', $value);
+            //             $media = Media::whereIn('id', $ids)->get();
+            //             if ($media->count() !== count($ids)) {
+            //                 $fail(__('validation.exists', ['attribute' => $attribute]));
+            //             }
+            //         }
+            //     },
+            // ],
         ];
     }
 

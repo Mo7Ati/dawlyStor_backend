@@ -24,8 +24,6 @@ import sections from '@/routes/admin/sections'
 import IsActiveFormField from '@/components/form/is-active'
 import TranslatableTabs from '@/components/ui/translatable-tabs'
 import { normalizeFieldValue } from '@/lib/utils'
-import { Icon } from '@/components/shared/icon'
-import { IconPicker } from '@/components/ui/icon-picker'
 
 interface SectionFormProps {
     section: Section;
@@ -54,8 +52,6 @@ export default function SectionForm({
             setSectionData([]);
         }
     }, [sectionType, type]);
-
-    console.log(sectionData);
 
     return (
         <Form

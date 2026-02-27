@@ -63,8 +63,6 @@ export default function SubscriptionIndex({ store, plans }: SubscriptionIndexPro
     const { t } = useTranslation('subscription');
     const { post, processing } = useForm();
 
-    console.log(store);
-
     const breadcrumbs: BreadcrumbItem[] = [
         {
             href: '/store/subscription',

@@ -48,19 +48,6 @@ class ProductRequest extends FormRequest
             'quantity' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
 
-            'temp_ids' => [
-                'nullable',
-                function (string $attribute, mixed $value, Closure $fail) {
-                    if ($value) {
-                        $ids = explode(',', $value);
-                        $media = Media::whereIn('id', $ids)->get();
-                        if ($media->count() !== count($ids)) {
-                            $fail(__('validation.exists', ['attribute' => $attribute]));
-                        }
-                    }
-                },
-            ],
-
             'additions' => ['nullable', 'array'],
             'additions.*.addition_id' => [
                 'required_with:additions.*',

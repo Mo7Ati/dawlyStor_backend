@@ -18,7 +18,6 @@ const OrdersIndex = ({ orders: ordersData }: { orders: PaginatedResponse<Order> 
     const { t: tDashboard } = useTranslation('dashboard');
 
     const orderStatus = usePage<SharedData>().props.enums.orderStatus;
-    console.log(ordersData.data[0]);
 
     const columns: ColumnDef<Order>[] = [
         {

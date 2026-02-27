@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/select'
 import IsActive from '@/components/form/is-active'
 import FileUpload from '@/components/form/file-upload'
-import { create, index, update } from '@/routes/admin/stores'
+import { store as storeRoute, index, update } from '@/routes/admin/stores'
 import { MultiSelect } from '@/components/ui/multi-select'
 
 
@@ -44,7 +44,7 @@ export default function StoreForm({ store, categories, type }: StoreFormProps) {
             action={
                 (type === 'edit' && store.id)
                     ? update({ store: store.id })
-                    : create()
+                    : storeRoute()
             }
         >
             {({ processing, errors }) => (

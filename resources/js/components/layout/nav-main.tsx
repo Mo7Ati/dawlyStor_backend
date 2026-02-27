@@ -11,7 +11,6 @@ import { Link, usePage } from '@inertiajs/react';
 
 export function NavMain({ groups = [] }: { groups: NavGroup[] }) {
     const page = usePage();
-    console.log(groups);
     return (
         <>
             {
