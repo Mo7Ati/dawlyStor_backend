@@ -55,7 +55,7 @@ class ExceptionHandler
         $response = [
             'status' => false,
             'data' => null,
-            'message' => __('messages.' . $message),
+            'message' => $message,
             'error_code' => $code,
         ];
 

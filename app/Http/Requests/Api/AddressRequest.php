@@ -34,11 +34,6 @@ class AddressRequest extends FormRequest
         return [
             'name.required' => 'Address name is required.',
             'location.required' => 'Location is required.',
-            // 'location.lat.required' => 'Latitude is required.',
-            // 'location.lat.between' => 'Latitude must be between -90 and 90.',
-            // 'location.lng.required' => 'Longitude is required.',
-            // 'location.lng.between' => 'Longitude must be between -180 and 180.',
-            // 'location.address.required' => 'Address text is required.',
         ];
     }
 }

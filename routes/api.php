@@ -67,11 +67,7 @@ Route::prefix('customer')
             Route::post('/wishlist', [WishlistController::class, 'store'])->name('customer.wishlist.store');
             Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy'])->name('customer.wishlist.destroy');
             Route::post('/wishlist/sync', [WishlistController::class, 'sync'])->name('customer.wishlist.sync');
-
         });
-
-
-        // Route::post('locale')
     });
 
 
