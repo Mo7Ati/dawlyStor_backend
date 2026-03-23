@@ -79,6 +79,7 @@ export type Media = {
     id: number | string;
     name: string;
     url: string;
+    original_url: string;
     type: string;
     uuid: string;
     size: number;

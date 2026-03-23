@@ -56,15 +56,13 @@ export default function FileUpload({
     className,
     required = false,
 }: FileUploadProps) {
-    const getInitialFiles = () => {
+    const getInitialFiles = useCallback(() => {
         if (!initialFiles) return [];
         return initialFiles.map((file) => ({
-            source: String(file.id) + '/' + file.file_name,
-            options: {
-                type: 'local',
-            },
+            source: file.original_url,
+            options: { type: 'local' },
         }))
-    }
+    }, [initialFiles])
 
     const [files, setFiles] = useState<any[]>(getInitialFiles);
     const [tempFileIds, setTempFileIds] = useState<string[]>([]);
@@ -125,7 +123,10 @@ export default function FileUpload({
                     },
 
                     load: (source, load, error) => {
-                        fetch(`/temp-uploads/${source.split('/')[0]}/${source.split('/')[1]}`, {
+                        const url = source.startsWith('http')
+                            ? source
+                            : `/temp-uploads/${source.split('/')[0]}/${source.split('/')[1]}`;
+                        fetch(url, {
                             method: 'GET',
                             headers: {
                                 'X-CSRF-TOKEN': getCsrfToken(),
