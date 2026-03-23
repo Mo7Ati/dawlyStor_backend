@@ -66,7 +66,7 @@ class TempUploadController extends Controller
             return response()->json(['error' => 'File not found'], 404);
         }
 
-        return response()->file($Media->getPath());
+        return redirect($Media->getUrl());
     }
 
 
