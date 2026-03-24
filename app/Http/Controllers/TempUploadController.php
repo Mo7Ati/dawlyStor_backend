@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class TempUploadController extends Controller
@@ -61,9 +60,7 @@ class TempUploadController extends Controller
             return response()->json(['success' => false, 'message' => 'File not found'], 404);
         }
 
-        return response()->file($Media->getPath(), [
-            'Content-Disposition' => 'inline; filename="' . $Media->file_name . '"',
-        ]);
+        return $Media->toInlineResponse(request());
     }
 
 
