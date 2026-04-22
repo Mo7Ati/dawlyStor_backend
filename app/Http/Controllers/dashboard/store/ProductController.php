@@ -55,7 +55,7 @@ class ProductController extends Controller
                     'images',
                 ]) + [
                     'store_id' => $store->id,
-                    'is_accepted' => false,
+                    'is_accepted' => true,
                 ]
             );
 

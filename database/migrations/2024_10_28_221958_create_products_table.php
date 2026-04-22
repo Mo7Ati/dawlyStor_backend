@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->double('compare_price')->nullable();
 
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_accepted')->default(false);
+            $table->boolean('is_accepted')->default(true);
 
             $table->unsignedSmallInteger('quantity')->default(0);
 
